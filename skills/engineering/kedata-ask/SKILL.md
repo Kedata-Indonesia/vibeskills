@@ -1,0 +1,116 @@
+---
+name: kedata-ask
+description: "Use this skill when the user does not know where the codebase currently stands in the Kedata delivery pipeline, or asks 'what should I do next?', 'where is this project at?', or is new to the repo. It inspects which approved artifacts exist, tells the user which pipeline step the codebase is at, what must happen next, and which skill to run."
+version: 1.0.0
+author: Kedata Indonesia
+---
+
+# Skill: Kedata Ask — Where Is This Codebase?
+
+## Purpose
+Orient anyone — a new developer, a returning user, or an agent in a fresh session — who does not know where the codebase currently stands in the Kedata delivery pipeline. This skill **inspects the approved artifacts on disk** (no guessing), maps what exists to the pipeline stage, and answers three questions: *where is this codebase right now, what is the next step, and which skill should be used?* It is the map of the pipeline: it does not create anything, it tells you where you are and what to run next.
+
+**The pipeline this skill navigates (one skill per artifact / activity):**
+
+| # | Stage | Produces / Does | Skill to run |
+|---|-------|-----------------|--------------|
+| 1 | Requirements | `PRD.md` (interview) | `kedata-prd` |
+| 2 | Design | `DESIGN_BRIEF.md` (reads PRD.md, interview) | `kedata-design-brief` |
+| — | Mockups | designer/LLM produces mockups from the brief | *external* |
+| 3 | Planning | `IMPLEMENTATION_PLAN.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
+| 4 | Contracts | `API_CONTRACTS.md` + `DATA_CATALOG.md` + `ENVIRONMENT_VARIABLES.md` (reads PRD + plan) | `kedata-contracts` |
+| 5 | Engineering session | Loads the baseline rules (reads all artifacts once per session) | `kedata-system` |
+| 6 | Implementation | Write code per the chosen stack (plan §4) | `kedata-backend-*` / `kedata-frontend-*` |
+| 7 | Review | Review the code against the artifacts before merge | `kedata-review` |
+| 8 | Repo communication | Open PR/MR, link issues, GitHub/GitLab | `kedata-repo` |
+
+Artifacts are checked at `docs/<FILE>.md` first, then root `<FILE>.md`.
+
+## When to Use
+* User command: `/kedata-ask`
+* Autonomous trigger: When the user says "what should I do next?", "where is this project at?", "what's the status of this repo?", "I'm new here — what has been done?", or asks which skill to use; at the start of any session where the repo state is unknown.
+
+## Prerequisites & Context Gathering
+Before reporting, the agent MUST inspect the repo (do NOT ask the user — the artifacts answer):
+
+1. **Check which pipeline artifacts exist** (`docs/` first, then root):
+   * `PRD.md`
+   * `DESIGN_BRIEF.md`
+   * `IMPLEMENTATION_PLAN.md`
+   * `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md`
+2. **Check for code:** backend/frontend directories, `go.mod` / `package.json` / `pyproject.toml` / `Cargo.toml`, `src/` or `app/` folders.
+3. **If `IMPLEMENTATION_PLAN.md` exists, read §4** to learn the chosen stack (e.g. "Go + Nuxt") — this determines which backend/frontend skill to recommend.
+4. **If code exists, check repo state:** uncommitted changes (`git status`), open PR/MR (`gh pr list` / `glab mr list`), unpushed commits (`git log origin/<branch>..HEAD`).
+5. Ask the user for clarification ONLY IF:
+   * The repo has none of the artifacts AND no code — confirm whether this is a brand-new project (→ start at stage 1) or a repo we are joining mid-stream (→ check for a remote/other branch).
+   * The user has a specific goal in mind (e.g. "I want to add a feature") that contradicts the artifact-derived next step — report both, then follow their goal.
+
+## Execution Workflow
+
+### Step 1: Inspect
+* Run the artifact checks above and record found/missing for each.
+* Read the plan §4 stack if the plan exists.
+
+### Step 2: Map to Stage
+Find the **furthest completed stage** by the presence of its artifact (each stage's artifact must exist to count as done):
+* No `PRD.md` → stage 1 not started (or PRD update needed).
+* `PRD.md` only → stages 1 done; next is 2.
+* `PRD.md` + `DESIGN_BRIEF.md` → next is mockups / stage 3.
+* `PRD.md` + `DESIGN_BRIEF.md` + `IMPLEMENTATION_PLAN.md` → next is stage 4 (contracts).
+* All four artifacts (PRD, brief, plan, contracts) → planning complete; next is engineering (stages 5–6).
+* Code present → engineering in progress; next is review (stage 7) then repo (stage 8).
+* Open PR/MR → stage 8 in progress; remaining work is review/merge.
+
+### Step 3: Report Status
+Present a compact status report (see Example Output Structure below):
+* **Pipeline position** — which stage the codebase is at, with evidence (artifacts found/missing).
+* **Next step** — exactly what must happen next.
+* **Skill to use** — the skill to run for the next step, and its command.
+* **Blockers / notes** — e.g. contracts missing before coding can start; stack not decided in the plan; mockups not produced.
+
+### Step 4: Hand-Off
+* If the next skill is not installed, tell the user how to install it: `npx skills@latest add canggihpw/kedata-skills -s <skill>`.
+* End with a clear, single next action — not a list of options.
+
+## Constraints & Guardrails
+* **DO NOT** guess the pipeline position — base it on the artifacts actually on disk.
+* **DO NOT** create, modify, or fill any artifact — this skill only inspects and reports.
+* **DO NOT** re-interview the user for requirements — that is what the artifact-producing skills do.
+* **DO NOT** recommend a stack-specific skill unless the plan §4 says that stack.
+* **DO NOT** dump the whole pipeline table unless the user asks — keep the report to where they are, what's next, and what to run.
+* Keep the report short and decisive: position, next step, skill, blockers.
+
+## Example Output Structure
+
+## 📍 Where this codebase is
+
+**Stage 4 of 8 — Planning done, contracts not yet drafted.**
+
+| Artifact | Status |
+|----------|--------|
+| `docs/PRD.md` | ✅ found |
+| `docs/DESIGN_BRIEF.md` | ✅ found |
+| `docs/IMPLEMENTATION_PLAN.md` | ✅ found (§4: Go + Nuxt 3, MongoDB Atlas) |
+| `docs/API_CONTRACTS.md` | ❌ missing |
+| `docs/DATA_CATALOG.md` | ❌ missing |
+| `docs/ENVIRONMENT_VARIABLES.md` | ❌ missing |
+| Code | ❌ none yet |
+
+## ➡️ Next step
+Draft the engineering contracts — the backend and frontend cannot start without them.
+
+**Run:** `/kedata-contracts` (reads PRD.md + IMPLEMENTATION_PLAN.md, interviews you, produces API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md).
+
+**Not installed?** `npx skills@latest add canggihpw/kedata-skills -s kedata-contracts`
+
+## ⚠️ Blockers
+- None — this is the correct next step.
+
+---
+
+### Another example — engineering in progress
+**Stage 6 of 8 — Implementation in progress.**
+
+- `docs/IMPLEMENTATION_PLAN.md` ✅ · contracts ✅ · Go code present in `backend/`, no frontend yet
+- Stack from plan §4: Go + Gin backend, Nuxt frontend
+- Next: implement the frontend → **run `/kedata-frontend-nuxt`**; after both sides are done, run `/kedata-review` before opening the PR, then `/kedata-repo` to open the MR/PR.

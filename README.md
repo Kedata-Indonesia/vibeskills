@@ -20,6 +20,7 @@ npx skills@latest add /path/to/kedata-skills
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
+| `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-backend-go` | backend | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
@@ -37,6 +38,7 @@ npx skills@latest add /path/to/kedata-skills
 
 For a new feature, run skills in order:
 
+0. **Don't know where the codebase is?** Start with `/kedata-ask` — it inspects the artifacts and tells you the current stage + next step + which skill to run.
 1. `/kedata-prd` — draft the PRD before coding
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(designer creates mockups — external)*
