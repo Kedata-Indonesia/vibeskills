@@ -1,7 +1,7 @@
 ---
 name: kedata-prd
 description: Use this skill to interview the user deeply and draft a Product Requirements Document in Kedata's house format. The PRD is the first source of truth for the implementation plan, API contracts, data model, review, and PR skills. Trigger when the user says "draft a PRD", "write a product spec", or starts a new product / feature without a PRD on file.
-version: 1.2.0
+version: 1.3.0
 author: Kedata Indonesia
 ---
 
@@ -10,7 +10,7 @@ author: Kedata Indonesia
 ## Purpose
 Produce a Product Requirements Document in Kedata's house format through a **structured deep interview**. The PRD is the **first and primary source of truth** for the entire delivery pipeline: `kedata-system` (implementation baseline), `kedata-backend` / `kedata-frontend` (stack standards), `kedata-review` (verification criteria), and `kedata-pr` (PR description). A weak PRD propagates weakness everywhere.
 
-The differentiator of this skill is **the grilling**: the agent does not fill a template from what the user volunteers. It interviews domain by domain, asks follow-ups until answers are specific and decision-ready, surfaces assumptions, forces priorities, and records every open question. The template below is the *output*; the interview is the *method*.
+The differentiator of this skill is **the grilling**: the agent does not fill a template from what the user volunteers. It interviews domain by domain, asks follow-ups until answers are specific and decision-ready, surfaces assumptions, forces priorities, systematically breaks the product with **edge-case probing**, and records every open question. The template below is the *output*; the interview is the *method*.
 
 ## When to Use
 * User command: `/kedata-prd`
@@ -23,7 +23,7 @@ Before the interview starts, the agent MUST:
    * Issue / task description: read the full issue, note its key/number (e.g. `KEP-123`), and copy any existing acceptance criteria.
    * Reference docs: `docs/DEVELOPMENT_PLAN.md`, `docs/API_CONTRACTS.md`, `docs/DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` — reuse conventions, don't reinvent them.
 2. **Frame the interview with the user (2 minutes max):**
-   * "I'll interview you domain by domain — problem, users, scope, flows, data, API, non-functional, delivery. Answer briefly; I'll follow up where I need depth. At the end you'll have a complete PRD and we'll review it for sign-off."
+   * "I'll interview you domain by domain — problem, users, scope, flows, data, API, edge cases, non-functional, delivery. Answer briefly; I'll follow up where I need depth. At the end you'll have a complete PRD and we'll review it for sign-off."
    * Agree on session budget: full grill (45-60 min) vs focused grill (15-20 min, e.g. single feature).
 
 ## Interview Protocol (How to Grill)
@@ -32,7 +32,7 @@ Before the interview starts, the agent MUST:
 1. **One domain at a time.** Ask 3-5 starter questions, wait for answers, then follow up. Never dump the whole questionnaire at once.
 2. **Follow up until you hit bedrock.** A "bedrock" answer is specific, quantified, and decision-ready. If an answer is vague ("the user can manage stuff"), grill: *"What exactly can they do? Where does the button live? What happens if they make a mistake?"*
 3. **Use the 5 Whys** on problem statements — keep asking *"why is that a problem?"* until you reach the root cause worth building.
-4. **Probe boundaries.** For every feature: *"What happens when it's empty? When it fails? When two people do it at once? When input is invalid or malicious?"*
+4. **Probe boundaries on every answer.** For every feature, flow, or field: *"What happens when it's empty? When it fails? When two people do it at once? When input is invalid or malicious?"* Edge cases are not a separate concern — they are the difference between a demo and a product.
 5. **Force priorities.** *"If you had to cut 50% of these features, which survive?"* — this is how MVP is decided, not by listing everything.
 6. **Quantify everything.** Users, scale, latency, file sizes, team size, time. Estimates beat absolutes ("~250 users" beats "some users").
 7. **Surface the non-obvious.** Ask about non-goals, failure modes, admin needs, and content/ownership rules the user may not think to mention.
@@ -76,6 +76,7 @@ Grill follow-ups:
 - "Is there a super-admin / seeded account? Who can never be demoted?"
 - "What can a persona see but NOT do? (read-only surfaces)"
 - "What about anonymous/guest access — what's public?"
+- **Edge cases:** "What happens when a user is banned while logged in? While mid-submission? What happens to their content — deleted, orphaned, or hidden?"
 
 **Bedrock signal:** you can write the Personas & Roles table (§4) with core needs per persona and explicit role rules.
 
@@ -113,7 +114,7 @@ Grill follow-ups:
 - "Who sees what on each screen — what's hidden per role?"
 - "What notifications exist and who receives them (in-app, email)?"
 - "What about the edge cases: duplicates, deleted items, offline, slow network?"
-- "Is there a state machine to document? (e.g., draft → pending → approved → rejected — who can trigger each transition?)"
+- "Is there a state machine to document? (e.g., draft → pending → approved → rejected — who can trigger each transition? What are the ILLEGAL transitions and what happens if attempted?)"
 
 **Bedrock signal:** §6 user flows are mapped with happy path + failure states; §8 features carry notes about states.
 
@@ -134,6 +135,7 @@ Grill follow-ups:
 - "What happens to children when a parent is deleted (cascade, soft delete, orphan)?"
 - "Is any data imported from an existing system (Obsidian vault, CSV, legacy DB)? What's the mapping?"
 - "What's the content format — markdown, rich text, files? Size limits?"
+- **Edge cases:** "What happens to references that point at a deleted or never-created record (broken links, orphans)? Is there validation? Auto-stub? Cleanup job?"
 
 **Bedrock signal:** §10 data model lists entities with fields, types, required flags, indexes, and relationships — matching the chosen DB (§7).
 
@@ -153,10 +155,39 @@ Grill follow-ups:
 - "Any webhooks, background jobs, or async processing?"
 - "Are there rate limits or abuse concerns on any endpoint?"
 - "What does the API contract need that Swagger must document?" (→ feeds `kedata-backend`)
+- **Edge cases:** "What happens on idempotent retries (double-submit, network retry)? Timeouts? Partial failures in multi-step operations (are they transactional)? What's the status code for each failure mode?"
 
 **Bedrock signal:** §9 API overview lists endpoint / method / auth / description for every feature; §12 lists integrations with env vars.
 
-### Step 7: Domain 7 — Non-Functional Requirements
+### Step 7: Domain 7 — Edge Cases (Cross-Cutting Sweep)
+**Goal:** deliberately break the product before it ships. For EVERY feature, entity, and flow already discussed, run the edge-case checklist below. This is the step that turns a PRD into a spec a reviewer and QA can verify against.
+
+Frame: *"Now the expensive part — let's try to break the product. For each feature we listed, I'll ask a few boundary questions. Answer briefly; where you don't know, we mark it open in the register."*
+
+**The Edge-Case Checklist** — apply to each feature/entity/flow; pick the 3-6 questions that apply (do NOT mechanically ask all 16 for a typo-fix feature):
+
+| # | Category | Probe |
+|---|----------|-------|
+| 1 | **Empty states** | What does the screen/API show when there is no data? (first-run, zero search results, cleared list, brand-new account) |
+| 2 | **Null & missing** | Which fields can be empty or absent? What is the default? Does any logic break on null? |
+| 3 | **Duplicates** | What happens on duplicate submissions, titles, emails, or tags? Auto-detect, warn, block, or allow with flag? |
+| 4 | **Concurrency** | Two users editing/submitting the same record at once — last-write-wins, optimistic locking, conflict detection with rebase? |
+| 5 | **Deletion & cascades** | Delete a parent — what happens to children, related records, history? Hard vs soft delete? Who can delete what? |
+| 6 | **Invalid input** | What validation exists — formats, lengths, allowed characters, type coercion? Client-only or server-enforced too? |
+| 7 | **Boundary values** | Min/max on numbers, string length limits, pagination caps, upload size limits — what happens exactly AT the limit and PAST it? |
+| 8 | **Permissions boundaries** | What happens when a user without role X calls endpoint Y — explicit 403 or silently filtered data? What is public vs private per field? |
+| 9 | **Failure & retries** | What happens on timeout or 5xx? Is the operation retried? Are writes idempotent? What error message does the user see? |
+| 10 | **Offline / slow network** | Degraded mode, optimistic UI, cached reads? What breaks and what must never break? |
+| 11 | **State-machine transitions** | For each status field: which transitions are legal? What is an illegal transition and what happens if attempted (blocked, 409, ignored)? |
+| 12 | **Security abuse** | Malicious input — XSS, path traversal, huge payloads, rate-limit bypass, mass assignment. Where are the boundaries? |
+| 13 | **Unicode / special chars** | Titles, names, IDs with unicode, emoji, markdown injection, reserved characters in slugs/paths? |
+| 14 | **Scale extremes** | What happens at maximum volume (10k records, 5000 graph nodes, 50MB zip)? Degrades gracefully or falls over? |
+| 15 | **Cross-entity orphans** | References pointing to deleted/missing records — broken links, dangling FKs. Validation? Auto-stub? Cleanup? |
+| 16 | **Time & scheduling** | Timezones, DST, expiry, TTL, scheduled jobs — what happens at boundaries (midnight, year rollover, token expiry mid-action)? |
+
+**Bedrock signal:** every P0 feature/entity has its edge cases recorded — either resolved into acceptance criteria (§5) or the §18 register, or explicitly flagged as an open question (§16). The user should feel mildly exhausted and significantly more confident.
+
+### Step 8: Domain 8 — Non-Functional Requirements
 **Goal:** performance, security, responsive, availability targets — with implementation notes.
 
 Starter questions:
@@ -175,7 +206,7 @@ Grill follow-ups:
 
 **Bedrock signal:** §11 NFRs have targets AND implementation notes, and reference the real deployment target.
 
-### Step 8: Domain 8 — Delivery & Risk
+### Step 9: Domain 9 — Delivery & Risk
 **Goal:** milestones, team, and the risks worth writing down.
 
 Starter questions:
@@ -192,12 +223,12 @@ Grill follow-ups:
 
 **Bedrock signal:** §13 milestones are ordered with deliverables; §15 risks have mitigations; the failure criteria from Domain 1 is honored.
 
-### Step 9: Draft & Self-Check
+### Step 10: Draft & Self-Check
 * Fill every section of the template below from the interview answers — no empty placeholders; "N/A" with a one-line reason where a section doesn't apply.
 * Save to: **`docs/PRD.md`** (preferred — what `kedata-backend` reads). If no `docs/` dir, save to root `PRD.md` and note the location in §17.
 * Set §17 Document Info: status `Draft`, version `0.1`, issue key(s), owner.
 * Run the PRD self-check — ALL must pass before presenting:
-  - [ ] All 17 sections filled (or explicitly "N/A" with reason)
+  - [ ] All 18 sections filled (or explicitly "N/A" with reason)
   - [ ] Every persona in §4 has core needs and role rules
   - [ ] Every user story has acceptance criteria
   - [ ] Every feature row in §8 maps to an endpoint in §9 and an entity in §10 (no orphans)
@@ -206,10 +237,11 @@ Grill follow-ups:
   - [ ] Every env var referenced anywhere appears in §12
   - [ ] Response envelope convention noted in §9
   - [ ] §7 tech stack fully confirmed by the user (no unconfirmed defaults)
+  - [ ] **§18 edge-case register covers every P0 feature (at minimum); each entry has expected behavior decided OR is flagged open in §16**
   - [ ] §16 Decisions Record lists every assumption made and every open question
 
-### Step 10: Review & Sign-Off
-* Present the PRD to the user with a tight summary: what was decided, the 3-5 riskiest assumptions, and the open questions.
+### Step 11: Review & Sign-Off
+* Present the PRD to the user with a tight summary: what was decided, the 3-5 riskiest assumptions, the most dangerous edge cases, and the open questions.
 * **Do not proceed to implementation until the user approves it.** On approval, update §17: status `Approved`, version `1.0`, approver + date.
 * Hand off: "PRD approved. Next: run `/kedata-system`, then `/kedata-backend` or `/kedata-frontend` to implement."
 
@@ -224,6 +256,7 @@ Grill follow-ups:
 | §10 Data Model | `docs/DATA_CATALOG.md` | `kedata-backend` |
 | §11 NFRs | Performance/security targets | `kedata-backend`, `kedata-review` |
 | §12 Integrations & Env Vars | `ENVIRONMENT_VARIABLES.md`, `.env.example` | `kedata-backend`, `kedata-system` |
+| **§18 Edge Cases register** | **Test plan seed, boundary/negative test cases** | **`kedata-review` (testing checks), QA** |
 | §16 Decisions Record | Future change requests | All — prevents re-litigating settled decisions |
 | §17 Sign-off status | Readiness gate | All downstream skills — a Draft PRD must never be implemented |
 
@@ -231,11 +264,12 @@ Grill follow-ups:
 * **DO NOT** write code, design API contracts, or start the implementation plan while the PRD status is `Draft` — requirements must be approved first.
 * **DO NOT** accept vague answers — grill until they are specific and quantified. Vague in, vague product.
 * **DO NOT** dump the full questionnaire at once — one domain, 3-5 questions, follow up, move on.
+* **DO NOT** skip the edge-case sweep (Step 7) for any P0 feature — "we'll handle it later" is how edge cases become production incidents.
 * **DO NOT** invent a tech stack, acceptance criteria, or success metrics — confirm each with the user.
 * **DO NOT** leave assumptions silent — every assumption you make goes into §16 Decisions Record.
 * **DO NOT** let the code drift from the PRD: if scope changes during implementation, update the PRD FIRST, then the implementation plan.
 * **DO NOT** rewrite an existing PRD from scratch — interview against the gaps and bump the version.
-* **DO NOT** renumber the 17 sections — the numbering is a stable contract downstream references depend on.
+* **DO NOT** renumber the 18 sections — the numbering is a stable contract downstream references depend on.
 
 ## Example Output Structure
 The reference PRD that defines "complete" for Kedata is the Nalarela PRD (`rangkuman-buku-prod/docs/PRD.md`). Study its depth: personas, numbered FRs (FR1.1, FR2.2…), NFRs with implementation notes, entity schema, milestones mapped to features, and a Decisions Record. Your output should reach similar specificity for the interviewed product. The house skeleton:
@@ -266,7 +300,7 @@ What happens today that is slow/manual/broken — with the cost of leaving it un
   - [ ] AC1 … / AC2 … / AC3 …
 
 ## 6. User Flows
-Happy path diagrams + failure/edge paths; state transitions per entity.
+Happy path diagrams + failure/edge paths; state transitions per entity (including illegal transitions).
 
 ## 7. Tech Stack
 | Layer | Technology | Version | Confirmed |
@@ -309,3 +343,12 @@ Every assumption (A1, A2…) and open question (Q1, Q2…) from the interview, w
 | Issue key(s) | KEP-123 |
 | Approver + date | [Name, date] |
 | PRD file location | `docs/PRD.md` |
+
+## 18. Edge Cases Register
+The output of the Step 7 sweep — one row per (feature/entity, edge case). This is the seed for the test plan and the `kedata-review` testing checks.
+
+| Feature / Entity | Edge Case | Expected Behavior | Status |
+|------------------|-----------|-------------------|--------|
+| Submission form | Duplicate title submitted | Warn contributor, flag for moderator (FR2.7) | Decided |
+| Book delete | Book referenced by 3 related books | Block delete; show referencing books (or soft-delete + mark broken) | Open → Q7 |
+| Edit (User role) | Content changed since base revision | Prompt rebase: reload diff, apply onto latest (FR3b.4) | Decided |
