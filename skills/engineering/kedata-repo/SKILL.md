@@ -74,7 +74,7 @@ Add password reset flow for users who forgot their passwords.
 - [ ] Hotfix
 
 ## Mandatory Checks
-- [x] Code follows project conventions (`docs/DEVELOPMENT_PLAN.md`)
+- [x] Code follows the implementation plan (docs/IMPLEMENTATION_PLAN.md) and contracts
 - [x] Swagger annotations added to all new/modified endpoints
 - [x] `make swagger` runs without errors
 - [x] `docs/swagger.json` updated and committed

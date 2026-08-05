@@ -19,7 +19,7 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. §1 architecture (monolith vs split — where does the Go service live?), §3 deployment platform, §4 stack (confirm Go + Gin + chosen DB), §6 API endpoints (the exact list to build), §7 data model, §8 env vars, §10 DoD. **If missing, STOP — backend work requires the approved implementation plan.**
 2. **`PRD.md`** — §7 tech stack, §9 API overview, §10 data model, §18 edge cases — context, not re-interview.
 3. **Contracts:** `API_CONTRACTS.md` (request/response shapes + status codes — the source of truth), `DATA_CATALOG.md` (schema — update first for new schema), `ENVIRONMENT_VARIABLES.md` (config).
-4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md`, `DEVELOPMENT_PLAN.md` — reuse, never a requirement.
+4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
 
 **Stack discipline — READ, never decide:** confirm Go + Gin + DB from plan §4 / PRD §7. If the artifacts don't specify, STOP and escalate: "The stack was not locked in the implementation plan."
 

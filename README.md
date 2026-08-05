@@ -20,7 +20,7 @@ npx skills@latest add /path/to/kedata-skills
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
-| `kedata-contracts` | engineering | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
+| `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-backend-go` | backend | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
 | `kedata-backend-python` | backend | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
@@ -60,8 +60,8 @@ skills/
 │       └── agents/
 │           └── openai.yaml       # optional — display metadata
 ├── frontend/               # language-specific frontend skills
-├── engineering/            # cross-cutting engineering skills (system, contracts, review, pr)
-└── product/                # product-team skills (prd, design-brief, implementation-plan)
+├── engineering/            # cross-cutting engineering skills (system, review, repo)
+└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.

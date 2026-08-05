@@ -28,8 +28,9 @@ Before writing any code, the agent MUST read the relevant approved artifacts IN 
 1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. The engineering contract: §1 architecture decision (monolith vs split), §2 repo/workspace layout, §3 deployment platform (VM vs Cloud Run) + constraints, §4 supporting architecture (DB, auth, storage, testing), §5 task breakdown (the task being worked), §6 endpoints, §7 data model, §8 env vars, §9 dependencies/milestones, §10 DoD. **If this is missing, STOP — engineering cannot start without an approved implementation plan.**
 2. **`PRD.md`** — check `docs/` first, then root. Features with priorities (§8), acceptance criteria (§5), API overview (§9), data model (§10), edge cases (§18) — the *why* behind the plan.
 3. **`DESIGN_BRIEF.md`** — check `docs/` first, then root. Visual identity, screens (§5), components (§6), states (§8) — the visual contract for FE work. If missing, note it and proceed (FE follows the plan + mockups).
-4. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
-5. **Optional hints only:** repo docs that exist from prior iterations (`DEVELOPMENT_PLAN.md`, `API_CONTRACTS.md`, `DATA_CATALOG.md`) — reuse conventions, never a requirement.
+4. **Contracts — `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md`** — check `docs/` first, then root. The exact endpoint shapes, entity schemas, and config the code must match. **If these are missing, STOP and escalate — code cannot be written against a contract that doesn't exist.**
+5. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
+6. **Optional hints only:** any other repo docs that exist from prior iterations — reuse conventions, never a requirement.
 
 **Stack resolution — READ the decided stack, never decide it here.**
 1. **The stack is decided UPSTREAM, not here.** The product team locked it in the PRD §7 (tech stack table) and the implementation plan §4 (supporting architecture). This skill READS those decisions — it does not interview for the stack.

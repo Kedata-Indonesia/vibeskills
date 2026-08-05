@@ -19,7 +19,7 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. §1 architecture (monolith vs split), §3 deployment platform, §4 stack (confirm Express + chosen DB), §6 API endpoints, §7 data model, §8 env vars, §10 DoD. **If missing, STOP.**
 2. **`PRD.md`** — §7 tech stack, §9 API overview, §10 data model, §18 edge cases — context, not re-interview.
 3. **Contracts:** `API_CONTRACTS.md` (shapes + status codes — source of truth), `DATA_CATALOG.md` (schema — update first), `ENVIRONMENT_VARIABLES.md` (config).
-4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md`, `DEVELOPMENT_PLAN.md`.
+4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
 
 **Stack discipline — READ, never decide:** confirm Express + DB from plan §4 / PRD §7. If missing, STOP and escalate.
 
