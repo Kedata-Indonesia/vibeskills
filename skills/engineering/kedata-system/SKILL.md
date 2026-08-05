@@ -8,7 +8,7 @@ author: Kedata Indonesia
 # Skill: Kedata System — Engineering Session Baseline
 
 ## Purpose
-Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity, **resolves the stack** (from the approved artifacts, or by interviewing the user when the artifacts don't decide), enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
+Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity, **reads the stack decided upstream** (PRD §7 / plan §4 — never decides it), enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
 
 **This skill produces NO file artifact** — it is behavioral, not artifact-producing. Its only outputs are ephemeral and conversational: the per-task implementation plan (Step 3) and the Changes Summary (Step 7), used as user-confirmation gates and then left in the conversation. The durable engineering inputs already exist upstream (plan, PRD, brief); this skill reads them and shapes how the work is done.
 
