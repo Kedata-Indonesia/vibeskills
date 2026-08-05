@@ -1,44 +1,44 @@
 ---
 name: kedata-backend
-description: Use this skill when writing, refactoring, or reviewing Kedata backend code. Covers Swagger/OpenAPI, activity logging, clean architecture, error handling, validation, testing, and deployment-aware decisions.
-version: 1.0.0
+description: "Use this skill when writing, refactoring, or reviewing Kedata backend code. Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD), then enforces the house standards: Swagger/OpenAPI, activity logging, clean architecture, error handling, validation, testing, and deployment-aware decisions per the plan's platform choice."
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
 # Skill: Kedata Backend Engineering
 
 ## Purpose
-Enforce Kedata's backend engineering standards: clean architecture (handler → service → repository → DB), the two mandatory standards (**Swagger/OpenAPI** and **Activity Log / Audit Service**), database-first design, robust error handling, and deployment-aware decisions for GCP Cloud Run.
+Enforce Kedata's backend engineering standards: clean architecture (handler → service → repository → DB), the two mandatory standards (**Swagger/OpenAPI** and **Activity Log / Audit Service**), database-first design, robust error handling, and deployment-aware decisions following the implementation plan's platform choice (VM + Docker Compose vs serverless Cloud Run). The stack and scope are **read from the approved artifacts** — this skill never decides them.
 
 ## When to Use
 * User command: `/kedata-backend`
 * Autonomous trigger: When writing, refactoring, or reviewing backend code in a Kedata repo; when designing API endpoints, database schemas, or services.
 
 ## Prerequisites & Context Gathering
-Before writing code, the agent MUST inspect the project:
-1. Read the project docs in order:
-   * `docs/PRD.md`
-   * `docs/DATA_CATALOG.md`
-   * `docs/API_CONTRACTS.md`
-   * `docs/ARCHITECTURE.md`
-   * `docs/DEVELOPMENT_PLAN.md`
-2. **Database before API:** design or update `DATA_CATALOG.md` before writing endpoints. No endpoint without an approved schema.
-3. Check the API contract — `API_CONTRACTS.md` is the source of truth for request/response shapes and status codes.
-4. Identify the stack from `DEVELOPMENT_PLAN.md`. Default is **Go + Gin + PostgreSQL** unless specified.
-5. Ask the user for clarification IF:
-   * The stack is not defined in `DEVELOPMENT_PLAN.md`.
-   * A schema change has no migration plan.
-   * The endpoint conflicts with an existing contract.
+Before writing code, the agent MUST read the approved artifacts IN ORDER. Do not guess conventions, API shapes, stack, or scope — everything needed was decided upstream:
+1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. §1 architecture (monolith vs split — where does the backend service live?), §3 deployment platform (VM vs Cloud Run — this skill's deployment rules follow it), §4 stack (backend framework, DB, auth, storage), §6 API endpoints (the exact list to build), §7 data model (the exact entities), §8 env vars, §10 DoD. **If missing, STOP — backend work requires the approved implementation plan.**
+2. **`PRD.md`** — check `docs/` first, then root. §7 tech stack, §9 API overview (the *why* behind the endpoints), §10 data model, §18 edge cases — for context, not re-interview.
+3. **Existing repo docs (optional hints only):** `DATA_CATALOG.md`, `API_CONTRACTS.md`, `ARCHITECTURE.md`, `DEVELOPMENT_PLAN.md` — reuse what exists from prior iterations; never a requirement.
+
+**Stack discipline — READ, never decide:** the backend framework, DB, auth, and storage come from plan §4 / PRD §7. Do NOT default to a stack. If the artifacts don't specify it, STOP and escalate: "The stack was not locked in the implementation plan. Decide it there first (PRD §7 → plan §4)."
+
+**Database before API:** design or update `DATA_CATALOG.md` before writing endpoints. No endpoint without an approved schema. `API_CONTRACTS.md` is the source of truth for request/response shapes and status codes — update it as you implement.
+
+Ask the user for clarification IF:
+* A schema change has no migration plan.
+* The endpoint conflicts with an existing contract.
+* The task touches an area the plan doesn't cover (→ escalate the plan, don't improvise).
 
 ## Execution Workflow
 
-### Step 1: Supported Tech Stacks
+### Step 1: Identify the Chosen Stack
+The stack comes from **plan §4 / PRD §7** — read it, don't pick it. The house reference patterns below are for whichever stack was chosen (they are guidance per language, NOT defaults):
 
-**Stack A: Go + Gin (Default)** — Go 1.23+, Gin, PostgreSQL/MongoDB/MySQL, sqlx/pgx/GORM, golang-migrate/goose, JWT (access + refresh), Swaggo (`/swagger`), go test + testify, GCP Cloud Run/Docker.
+**Go + Gin** — Go 1.23+, Gin, PostgreSQL/MongoDB/MySQL, sqlx/pgx/GORM, golang-migrate/goose, JWT (access + refresh), Swaggo (`/swagger`), go test + testify, deployment per plan §3.
 
-**Stack B: Python + FastAPI** — Python 3.11+, FastAPI, PostgreSQL/MongoDB, SQLAlchemy/beanie, JWT, auto docs (`/docs`), pytest, GCP Cloud Run/Docker.
+**Python + FastAPI** — Python 3.11+, FastAPI, PostgreSQL/MongoDB, SQLAlchemy/beanie, JWT, auto docs (`/docs`), pytest, deployment per plan §3.
 
-**Stack C: Node.js + Express** — Node 20+, Express, PostgreSQL/MongoDB, Prisma/TypeORM/Mongoose, JWT, swagger-jsdoc + swagger-ui-express, Jest/Vitest, GCP Cloud Run/Docker.
+**Node.js + Express** — Node 20+, Express, PostgreSQL/MongoDB, Prisma/TypeORM/Mongoose, JWT, swagger-jsdoc + swagger-ui-express, Jest/Vitest, deployment per plan §3.
 
 ### Step 2: Project Structure
 Follow the house layout for the stack (Go: `cmd/`, `internal/{config,delivery/http,domain,repository,service}`, `pkg/`, `docs/`, `migrations/`; Python: `app/{api,core,db,models,schemas,repositories,services}`, `alembic/`; Node: `src/{config,controllers,middleware,models,repositories,routes,services}`).
@@ -100,9 +100,37 @@ Implementation rules:
 * Target ≥70% coverage for service layer.
 * Run before committing: Go `go test ./...` + `go vet ./...`; Python `pytest`; Node `npm test`.
 
-### Step 10: Documentation & Definition of Done
+### Step 10: Deployment Awareness (per plan §3)
+Follow the **deployment platform decision in the implementation plan §3** — this overrides any generic default:
+
+**If Cloud Run (serverless):**
+* Stateless — no local file storage (use GCS); filesystem is ephemeral.
+* Listen on `$PORT`; one container per service; keep request duration within the Cloud Run cap (default 5m, max ~60m) — long work goes to background jobs.
+* Use Secret Manager for secrets; connection pooling configured for the DB (warm pool, bounded).
+* Health check endpoint for the platform probe; `--min-instances 0` to save cost (accept cold starts).
+
+**If VM + Docker Compose:**
+* One `docker-compose.yml` for the whole stack (app + any side services).
+* Migrations run as part of deploy (or a one-shot container); backups owned by the team.
+* Region near users for latency; fixed monthly cost.
+
+**Cloudflare:** single-level subdomains only (`api.kedata.id` ✓, `api.app.kedata.id` ✗); SSL mode **Full**.
+
+### Step 11: Documentation & Definition of Done
 * Update `DATA_CATALOG.md` (schemas), `API_CONTRACTS.md` (endpoints), `ARCHITECTURE.md` (infra/deployment), `DEVELOPMENT_PLAN.md` (milestones/conventions); regenerate Swagger after endpoint changes.
-* Work from a task issue/MR description; minimal changes; don't refactor unrelated code; write tests alongside code; ensure CI passes before review.
+* Work from the task in the implementation plan; minimal changes; don't refactor unrelated code; write tests alongside code; ensure CI passes before review.
+
+**Self-check — ALL must pass before presenting:**
+- [ ] Stack read from plan §4 / PRD §7 (no assumed default)
+- [ ] Every endpoint built matches plan §6 / PRD §9
+- [ ] Every entity matches plan §7 / PRD §10; `DATA_CATALOG.md` updated first for new schema
+- [ ] Swagger annotations on every new/modified endpoint; `make swagger` runs; `docs/swagger.json` committed
+- [ ] Activity log emitted for every state-changing action
+- [ ] No raw errors to clients; domain errors mapped to HTTP status codes
+- [ ] Migrations added for schema changes
+- [ ] Tests added/updated; ≥70% coverage on service layer
+- [ ] Deployment follows plan §3 (stateless rules for Cloud Run / compose stack for VM)
+- [ ] `API_CONTRACTS.md` updated
 
 **Definition of Done:**
 - [ ] Feature implemented per API contract
@@ -115,6 +143,7 @@ Implementation rules:
 - [ ] Deployed to staging and verified
 
 ## Constraints & Guardrails
+* **DO NOT** decide or improvise the stack — read it from plan §4 / PRD §7; if missing, STOP and escalate to the product team.
 * **DO NOT** write an endpoint before the schema is approved (`DATA_CATALOG.md` first).
 * **DO NOT** skip Swagger annotations or activity logging — both are mandatory.
 * **DO NOT** return raw errors or password hashes to clients.
