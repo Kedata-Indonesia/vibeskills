@@ -19,7 +19,7 @@ The differentiator of this skill is **the grilling**: the agent does not fill a 
 ## Prerequisites & Context Gathering
 Before the interview starts, the agent MUST:
 1. **Locate existing artifacts:**
-   * Existing PRD: check `docs/PRD.md` first, then root `PRD.md`. If one exists, interview against the gaps — update it, do not rewrite from scratch.
+   * Existing PRD: check `docs/PRD.md` first, then root `PRD.md`. If one exists, **update that same file in place** — do not rewrite from scratch and do not move it. A root `PRD.md` the team has been using stays at root; only new PRDs default to `docs/PRD.md`.
    * Issue / task description: read the full issue, note its key/number (e.g. `KEP-123`), and copy any existing acceptance criteria.
    * Reference docs: `docs/DEVELOPMENT_PLAN.md`, `docs/API_CONTRACTS.md`, `docs/DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` — reuse conventions, don't reinvent them.
 2. **Frame the interview with the user (2 minutes max):**
@@ -225,7 +225,7 @@ Grill follow-ups:
 
 ### Step 10: Draft & Self-Check
 * Fill every section of the template below from the interview answers — no empty placeholders; "N/A" with a one-line reason where a section doesn't apply.
-* Save to: **`docs/PRD.md`** (preferred — what `kedata-backend` reads). If no `docs/` dir, save to root `PRD.md` and note the location in §17.
+* **Save location rule:** the default is **`docs/PRD.md`** (what `kedata-backend` reads). EXCEPTION — if the user/team has already been using `PRD.md` at the repo root, update that root file in place instead; do not move it and do not create a second copy in `docs/`. Note the final location in §17.
 * Set §17 Document Info: status `Draft`, version `0.1`, issue key(s), owner.
 * Run the PRD self-check — ALL must pass before presenting:
   - [ ] All 18 sections filled (or explicitly "N/A" with reason)
@@ -342,7 +342,7 @@ Every assumption (A1, A2…) and open question (Q1, Q2…) from the interview, w
 | Author / Owner | [Name] |
 | Issue key(s) | KEP-123 |
 | Approver + date | [Name, date] |
-| PRD file location | `docs/PRD.md` |
+| PRD file location | `docs/PRD.md` (or root `PRD.md` if that's the existing convention) |
 
 ## 18. Edge Cases Register
 The output of the Step 7 sweep — one row per (feature/entity, edge case). This is the seed for the test plan and the `kedata-review` testing checks.
