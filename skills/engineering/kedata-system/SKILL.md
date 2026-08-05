@@ -8,7 +8,7 @@ author: Kedata Indonesia
 # Skill: Kedata System — Engineering Session Baseline
 
 ## Purpose
-Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity and stack defaults, enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
+Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity, **resolves the stack** (from the approved artifacts, or by interviewing the user when the artifacts don't decide), enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
 
 **This skill produces NO file artifact** — it is behavioral, not artifact-producing. Its only outputs are ephemeral and conversational: the per-task implementation plan (Step 3) and the Changes Summary (Step 7), used as user-confirmation gates and then left in the conversation. The durable engineering inputs already exist upstream (plan, PRD, brief); this skill reads them and shapes how the work is done.
 
@@ -29,9 +29,21 @@ Before writing any code, the agent MUST read the relevant approved artifacts IN 
 4. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
 5. **Optional hints only:** repo docs that exist from prior iterations (`DEVELOPMENT_PLAN.md`, `API_CONTRACTS.md`, `DATA_CATALOG.md`) — reuse conventions, never a requirement.
 
-Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack?
+**Stack resolution — NO silent defaults. Resolve in this order:**
+1. **If the approved artifacts decide the stack, follow them — do NOT re-interview.** The authoritative sources are: plan §1 (monolith vs FE/BE split), plan §4 (DB, auth, storage, testing choices), and PRD §7 (tech stack table).
+2. **If the artifacts do NOT decide** (no PRD §7, or plan §4 left choices open) — **interview the user to choose.** Present the recommended option per layer and the alternatives, then ask which they want. Record every confirmed choice.
 
-**Stack defaults (house standard, overridden upstream):** Backend Go + Gin; Frontend Nuxt 3 + TypeScript (strict); Database MongoDB Atlas; Auth JWT (access 15m / refresh 7d); Deployment per plan §3. **The authoritative stack comes from the approved artifacts — plan §1 (monolith vs FE/BE split), plan §4 (DB, auth, storage, testing choices), and PRD §7 (tech stack table). If those differ from the defaults (e.g., PostgreSQL, React + TanStack Start), follow the artifacts — they are the tiebreaker.**
+| Layer | Recommended | Alternatives |
+|-------|-------------|--------------|
+| Backend | Go + Gin | Python + FastAPI, Node.js + Express |
+| Frontend | Nuxt 3 + TypeScript (strict) | React + TanStack Start |
+| Database | MongoDB Atlas | PostgreSQL, MySQL |
+| Auth | JWT (access 15m / refresh 7d) | Session cookie, OAuth-only |
+| Deployment | per plan §3 | — |
+
+*"Recommended Go + Gin for the backend — or would you prefer FastAPI or Express?"* Ask layer by layer, one at a time; do not proceed to coding until every layer is confirmed. If the user has no preference, record the recommendation as the confirmed choice and note it in the conversation.
+
+Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack (confirmed above)?
 
 ## Execution Workflow
 
@@ -185,6 +197,7 @@ Follow the **deployment platform decision in the implementation plan §3** — t
 
 ## Constraints & Guardrails
 * **DO NOT** write code before reading the implementation plan — engineering without the approved plan is scope drift.
+* **DO NOT** silently assume a stack — if the artifacts don't decide it, interview the user layer by layer until every choice is confirmed; never code against an unconfirmed stack.
 * **DO NOT** re-interview the product team — the plan, PRD, and brief already decided scope; read them.
 * **DO NOT** deviate from the plan's architecture or deployment decisions — if the plan is wrong, escalate to update the plan first.
 * **DO NOT** skip Swagger annotations or activity logs on any backend change.
