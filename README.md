@@ -1,23 +1,40 @@
-# my-skills
+# kedata-skills
 
-A collection of modular, markdown-based agent skills compatible with the
-[`skills`](https://www.npmjs.com/package/skills) ecosystem (mattpocock/skills).
+A collection of modular, markdown-based agent skills encoding Kedata Indonesia's
+engineering discipline — readable for every AI coding assistant (Claude, Cursor,
+Kimi, Hermes, etc.) via the [`skills`](https://www.npmjs.com/package/skills)
+ecosystem (mattpocock/skills).
 
 ## Install
 
 ```bash
-# from GitHub (after you push this repo)
-npx skills@latest add <your-github-username>/my-skills
+# from GitHub
+npx skills@latest add canggihpw/kedata-skills
 
 # or locally, for testing before you push
-npx skills@latest add /path/to/my-skills
+npx skills@latest add /path/to/kedata-skills
 ```
 
 ## Available Skills
 
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
-| `example-skill` | engineering | STUB — replace with your skill's one-liner |
+| `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
+| `kedata-backend` | engineering | Backend standards: Swagger/OpenAPI, Activity Log, clean architecture, error handling, testing, GCP Cloud Run |
+| `kedata-frontend` | engineering | Frontend standards: React + TanStack Start / Vue + Nuxt 3, React→Vue conversion, state, forms, API integration, security |
+| `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
+| `kedata-prd` | product | Draft a Product Requirements Document in Kedata's house format (11 sections, before any code) |
+| `kedata-pr` | product | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
+
+## Suggested Session Flow
+
+For a new feature, run skills in order:
+
+1. `/kedata-system` — load baseline rules at session start
+2. `/kedata-prd` — draft the PRD before coding
+3. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
+4. `/kedata-review` — review the PR before merging
+5. `/kedata-pr` — open the PR with the house template
 
 ## Skill Format
 
@@ -47,19 +64,17 @@ author: You                 # optional
 
 ## Adding a New Skill
 
-1. Create `skills/<category>/<skill-name>/SKILL.md` (copy the stub's structure).
+1. Create `skills/<category>/<skill-name>/SKILL.md`.
 2. Fill in `name` and `description` in the frontmatter — these are **required**.
 3. Test locally:
    ```bash
-   npx skills@latest add /path/to/my-skills
+   npx skills@latest add /path/to/kedata-skills
    ```
 4. Commit and push — the GitHub install works with zero extra config.
 
 ## Development
 
 ```bash
-git init && git add . && git commit -m "Initial skill stub"
-# create a GitHub repo named `my-skills`, then:
-git remote add origin git@github.com:<your-github-username>/my-skills.git
+git add . && git commit -m "Adapt Kedata skills to registry format"
 git push -u origin main
 ```

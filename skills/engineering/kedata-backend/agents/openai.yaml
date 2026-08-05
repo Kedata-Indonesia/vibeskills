@@ -1,0 +1,3 @@
+interface:
+  display_name: "Kedata Backend"
+  short_description: "Kedata backend standards: Swagger/OpenAPI, Activity Log, clean architecture, testing."

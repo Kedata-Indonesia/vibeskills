@@ -1,11 +1,11 @@
 {
-  "name": "my-skills",
-  "version": "0.1.0",
+  "name": "kedata-skills",
+  "version": "1.0.0",
   "private": true,
-  "description": "Agent skills installable via `npx skills@latest add <username>/my-skills`",
+  "description": "Agent skills for Kedata Indonesia, installable via `npx skills@latest add canggihpw/kedata-skills`",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<your-github-username>/my-skills"
+    "url": "https://github.com/canggihpw/kedata-skills"
   },
   "license": "MIT",
   "packageManager": "npm@10.9.4"
