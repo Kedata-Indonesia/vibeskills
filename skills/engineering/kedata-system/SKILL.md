@@ -1,78 +1,72 @@
 ---
 name: kedata-system
-description: Kedata's baseline AI development rules. Manually invoke (/kedata-system) at the start of any session inside a Kedata repo so the assistant reads the project docs, follows house conventions, and produces production-ready code.
+description: "Use this skill at the start of any engineering session inside a Kedata repo — it loads the baseline development rules: read the approved plan artifacts first (implementation plan, PRD, design brief), follow house conventions, and produce production-ready code through the plan → confirm → code → test → verify workflow."
 version: 1.0.0
 author: Kedata Indonesia
 ---
 
-# Skill: Kedata System — Baseline Development Rules
+# Skill: Kedata System — Engineering Session Baseline
 
 ## Purpose
-Load the baseline operating rules for any AI-assisted development session inside a Kedata repo: identity and default stack, the mandatory read-before-you-code discipline, the plan → confirm → code → test → verify workflow, house code-quality standards, environment variable handling, deployment awareness (GCP Cloud Run + Cloudflare), and git/PR conventions. Run this skill at session start so every subsequent task inherits the house rules.
+Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity and stack defaults, enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
+
+**Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract). Engineering does NOT re-interview the product; it reads what was approved.
 
 ## When to Use
 * User command: `/kedata-system`
-* Autonomous trigger: At the start of any session inside a Kedata repo (detected via AGENTS.md, .cursorrules, or repo naming), before any other task; also after switching repos mid-session.
+* Autonomous trigger: At the start of any engineering session inside a Kedata repo (detected via AGENTS.md, .cursorrules, or repo naming); when starting work on a task/issue/branch; after switching repos mid-session.
 
 ## Prerequisites & Context Gathering
-Before writing any code, the agent MUST read the relevant project documentation. Do not guess conventions, API shapes, or folder structures.
+Before writing any code, the agent MUST read the relevant approved artifacts IN ORDER. Do not guess conventions, API shapes, folder structures, or scope — everything needed was already decided upstream.
 
 **Mandatory reading checklist (in order):**
-1. **Issue / Task Description** — What needs to be built? Acceptance criteria?
-2. **`docs/DEVELOPMENT_PLAN.md`** — Coding conventions, folder structure, tech decisions
-3. **`BACKEND_STANDARDS.md`** — **Mandatory:** Swagger/OpenAPI + Activity Log service for every backend
-4. **`docs/API_CONTRACTS.md`** — If building/modifying an API endpoint
-5. **`docs/DATA_CATALOG.md`** — If touching database models or queries
-6. **`docs/ARCHITECTURE.md`** — If adding new services, middleware, or infrastructure
-7. **`docs/STATE_MANAGEMENT.md`** — If modifying frontend state
-8. **`docs/COMPONENT_SPECS.md`** — If building/modifying UI components
-9. **`docs/API_INTEGRATION.md`** — If calling backend from frontend
+1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. The engineering contract: §1 architecture decision (monolith vs split), §3 deployment platform (VM vs Cloud Run) + constraints, §5 task breakdown (the task being worked), §6 endpoints, §7 data model, §8 env vars, §9 dependencies/milestones, §10 DoD. **If this is missing, STOP — engineering cannot start without an approved implementation plan.**
+2. **`PRD.md`** — check `docs/` first, then root. Features with priorities (§8), acceptance criteria (§5), API overview (§9), data model (§10), edge cases (§18) — the *why* behind the plan.
+3. **`DESIGN_BRIEF.md`** — check `docs/` first, then root. Visual identity, screens (§5), components (§6), states (§8) — the visual contract for FE work. If missing, note it and proceed (FE follows the plan + mockups).
+4. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
+5. **Optional hints only:** repo docs that exist from prior iterations (`DEVELOPMENT_PLAN.md`, `API_CONTRACTS.md`, `DATA_CATALOG.md`) — reuse conventions, never a requirement.
 
-If a document doesn't exist yet, **create it first** before writing code.
+Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack (from §4 of the plan)?
 
-Confirm with the user before coding: which repo (be-xxx / fe-xxx)? which scope (BE / FE / Mobile / Infra)? is there an existing API contract or data model? are there design/mockups?
+**Stack defaults (house standard, overridden by the plan):** Backend Go + Gin; Frontend Nuxt 3 + TypeScript (strict); Database MongoDB Atlas; Auth JWT (access 15m / refresh 7d); Deployment per plan §3. **If the implementation plan §4 specifies different choices (e.g., PostgreSQL, React + TanStack Start, separate FE/BE), follow the plan — it is the tiebreaker.**
 
 ## Execution Workflow
 
 ### Step 1: Understand the Task
-When given a GitHub issue or task, read the full issue first:
-1. Check the issue type: Feature / Bug / Refactor / Hotfix
-2. Read all acceptance criteria
-3. Check linked issues (parent/child)
-4. Check for an existing PR or branch
-5. Read QA comments if the issue was previously failed
+Read the task from the implementation plan §5 and the linked issue:
+1. Task description, owner (BE/FE/shared), effort, priority, milestone
+2. Acceptance criteria (from plan §5 + PRD §5)
+3. Linked issues and any existing PR/branch
+4. QA comments if the task was previously failed
 
 **Bug fixes:** reproduce the bug before fixing; write a failing test first (TDD); verify the fix resolves the exact scenario; check for regressions.
-**Features:** break into smaller PRs if >500 lines changed; update docs alongside code; add analytics/events if user-facing.
+**Features:** break into smaller PRs if >500 lines changed; update docs alongside code.
 
-### Step 2: Read Project Docs
+### Step 2: Read the Relevant Sections
 ```bash
-cat docs/DEVELOPMENT_PLAN.md
-cat docs/API_CONTRACTS.md | grep -A 20 "auth"
-cat docs/DATA_CATALOG.md | grep -A 20 "password"
+# confirm the artifacts exist
+cat docs/IMPLEMENTATION_PLAN.md | grep -A 20 "## 5. Task Breakdown"
+cat docs/PRD.md | grep -A 20 "## 9. API Overview"
+cat docs/PRD.md | grep -A 20 "## 10. Data Model"
 ```
+Read only what the task touches — the plan tells you which endpoints, entities, and env vars are in scope.
 
 ### Step 3: Plan the Implementation
-Write a brief plan before coding, then **wait for user confirmation**:
-- Files to create / files to modify
-- API endpoints
-- DB changes (collections, indexes)
-- Env vars
+Write a brief plan before coding, then **wait for user confirmation** for non-trivial tasks (>50 lines):
+- Files to create / modify (per the plan's architecture — monolith service layer or FE/BE split)
+- API endpoints (from plan §6) / DB changes (from plan §7)
+- Env vars (from plan §8)
 - Step-by-step order
 - Risks
 
-For non-trivial changes (>50 lines), generate `implementation_plan.md` with the same structure (Files to Create / Files to Modify / API Endpoints / DB Changes / Step-by-Step Order / Risks), then wait for confirmation before writing code.
+For trivial changes (typo, small UI tweak, single-function refactor, config value): make the change directly → run tests → commit (Fast Mode). For new features/modules: plan → review with user → write tests first (TDD).
 
-### Step 4: Choose a Development Mode
-* **Planning Mode** — starting a new feature/module, designing API contracts, DB schema, or architecture: generate `implementation_plan.md` → review with user → write tests first (TDD).
-* **Fast Mode** — typo fixes, small UI tweaks, single-function refactors, config updates: make change directly → run tests → commit.
-
-### Step 5: Write Code
-Follow conventions from `docs/DEVELOPMENT_PLAN.md`. House patterns:
+### Step 4: Write Code
+Follow the conventions from the plan and PRD. House patterns:
 
 **Backend (Go):**
 ```go
-// Error handling
+// Error handling — never return raw errors to clients
 if err != nil {
     logger.Error("failed to create password reset", zap.Error(err))
     return nil, httperr.InternalServerError("failed to process request")
@@ -87,17 +81,17 @@ func (r *PasswordResetRepository) Create(ctx context.Context, pr *models.Passwor
 
 **Frontend (Nuxt/Vue):** composables for API calls (`usePasswordReset`), `<script setup lang="ts">` components with explicit `loading`/`error` state.
 
-### Step 6: Write Tests
+### Step 5: Write Tests
 * Backend: `make test` or `go test ./internal/... -v -count=1`; coverage with `-coverprofile`.
 * Frontend: `npm run test`; coverage `npm run test:coverage`.
 
-### Step 7: Update Documentation
+### Step 6: Update Documentation
 After implementing, update the relevant docs: `API_CONTRACTS.md` (endpoints), `DATA_CATALOG.md` (collections/fields), `COMPONENT_SPECS.md` (components), `ENVIRONMENT_VARIABLES.md` (env vars, both `.env` and `.env.example`).
 
-### Step 8: Review Before Accepting (Human Verification)
+### Step 7: Review Before Accepting (Human Verification)
 Before the user accepts any changes, provide a Changes Summary (What changed / Why / Risks & Gotchas / Verification checklist) and **do not proceed until the user confirms**.
 
-### Step 9: Verify Before Submitting
+### Step 8: Verify Before Submitting
 **Backend:**
 ```bash
 make test          # all tests pass
@@ -134,54 +128,89 @@ npm run build      # builds without errors
 2. **State:** Pinia for global state; `ref`/`computed` for local; URL query params for shareable filters.
 3. **API:** `$fetch` via composables (not raw fetch in components); explicit loading/error states; interceptors for auth token injection.
 4. **Components:** `<script setup lang="ts">`, props interface + withDefaults, emit types, slot docs.
-5. **Styling:** Tailwind utility classes; design tokens in `tailwind.config.ts`; dark theme default.
+5. **Styling:** Tailwind utility classes; design tokens from the Design Brief; dark theme default.
 
 ## Environment Variables
 Always check before using an env var: is it in `.env`? in `.env.example`? documented in `ENVIRONMENT_VARIABLES.md`?
 
-**Rules:** add new env vars to BOTH `.env` and `.env.example`; update `ENVIRONMENT_VARIABLES.md` at project root; never commit `.env` — only `.env.example`; use Secret Manager for production secrets (GCP).
+**Rules:** add new env vars to BOTH `.env` and `.env.example`; update `ENVIRONMENT_VARIABLES.md`; never commit `.env` — only `.env.example`; secrets in production follow the plan §3 decision (Secret Manager for Cloud Run, docker secrets/`.env` on a VM).
 
 ## Deployment Awareness
-* **Docker:** multi-stage builds (builder → runtime); pinned versions (`node:20-alpine`, `golang:1.25-alpine`); correct ports (BE: 8080, FE: 3000); include `ca-certificates` for HTTPS.
-* **Cloud Run:** stateless services — no local file storage; Cloud Storage for files; Secret Manager for secrets; region `asia-southeast2` (Jakarta); `--min-instances 0` to save cost (accept cold starts).
-* **Cloudflare:** domain mapping via Cloudflare Workers; single-level subdomains only (`app.kedata.id` ✓, `api.app.kedata.id` ✗); SSL mode **Full**.
+Follow the **deployment platform decision in the implementation plan §3** — this overrides any generic default:
+
+**If VM + Docker Compose:**
+- One `docker-compose.yml` for the whole stack (app + any side services: DB, worker, analytics)
+- Patching, backups, and uptime are owned by the team — build for it
+- Fixed monthly cost; region matters for latency (choose near users)
+
+**If Cloud Run (serverless):**
+- Services are stateless — no local file storage (use GCS); filesystem is ephemeral
+- Request timeouts: stay within the Cloud Run cap (default 5m, max ~60m) — long work goes to background jobs
+- Background jobs/cron: Cloud Scheduler hitting an endpoint, Cloud Tasks, or a worker service — not in-request
+- Use Secret Manager for secrets; `--min-instances 0` to save cost (accept cold starts)
+- Service must listen on `$PORT`; one container per service
+
+**Cloudflare:** domain mapping via Cloudflare Workers; single-level subdomains only (`app.kedata.id` ✓, `api.app.kedata.id` ✗); SSL mode **Full**.
 
 ## Git & GitHub
 * **Branches:** `feature/123-password-reset`, `bugfix/456-login-crash`, `hotfix/auth-down`, `docs/api-contracts`, `refactor/user-service`.
 * **Commits:** conventional commits, e.g. `feat(auth): add password reset endpoints (#123)` with a bullet body and `Fixes #123`.
-* **PRs:** use the PR template (Summary / Changes / Type / Checklist / Related Issues); link the issue with `Closes #123`.
+* **PRs:** summary, changes, type, checklist, related issues — link the issue with `Closes #123`.
+
+## Security Rules
+1. **Never hardcode secrets** — env vars or Secret Manager.
+2. **Never log sensitive data** — emails, tokens, passwords.
+3. **Validate all inputs** — backend AND frontend.
+4. **Parameterized queries** — no string concatenation in DB queries.
+5. **Hash passwords** with bcrypt (cost ≥ 12).
+6. **JWT secrets** ≥ 32 bytes, rotated periodically.
+7. **CORS** to specific origins, not `*`.
+8. **Rate limit** auth endpoints and expensive operations.
+9. **Sanitize user content** before rendering (XSS prevention).
+
+## Performance Rules
+1. **Database:** indexes for queried fields; pagination for lists (default 20); avoid N+1 queries.
+2. **API:** response target <200ms for simple reads; caching for frequently-read data; gzip.
+3. **Frontend:** lazy-load routes and heavy components; optimize images (WebP, responsive); debounce search (300ms).
+
+## Communication Style
+1. **Ask before assuming** — "Should the reset token be 32 or 64 bytes?"
+2. **Propose options** — "I can implement this as A or B. A is simpler, B handles edge cases."
+3. **Show your work** — "I've read IMPLEMENTATION_PLAN.md §5 — the task ACs are X, Y, Z."
+4. **Flag risks** — "This approach stores tokens in plain text. Should I encrypt them?"
+5. **Update docs** — "I've updated API_CONTRACTS.md with the new endpoint."
 
 ## Constraints & Guardrails
-* **DO NOT** write code before reading the relevant project docs.
-* **DO NOT** skip `BACKEND_STANDARDS.md` requirements (Swagger + Activity Log) on any backend.
-* **DO NOT** return raw errors to clients or log sensitive data (emails, tokens, passwords).
-* **DO NOT** hardcode secrets — use env vars or Secret Manager.
-* **DO NOT** use string concatenation in DB queries (SQL/NoSQL injection).
-* **DO NOT** commit `.env`; add new env vars to both `.env` and `.env.example`.
+* **DO NOT** write code before reading the implementation plan — engineering without the approved plan is scope drift.
+* **DO NOT** re-interview the product team — the plan, PRD, and brief already decided scope; read them.
+* **DO NOT** deviate from the plan's architecture or deployment decisions — if the plan is wrong, escalate to update the plan first.
+* **DO NOT** skip Swagger annotations or activity logs on any backend change.
+* **DO NOT** return raw errors to clients or log sensitive data.
+* **DO NOT** hardcode secrets or commit `.env`.
+* **DO NOT** use string concatenation in DB queries.
 * **DO NOT** proceed past the implementation plan or changes summary without user confirmation.
-* **DO NOT** use unsupported multi-level subdomains (`api.app.kedata.id`) for Cloudflare mappings.
 * Keep responses dense; ask before assuming; propose options; flag risks; show your work.
 
 ## Example Output Structure
-Implementation plan artifact (`implementation_plan.md`):
+Implementation plan for the task (before coding, for non-trivial tasks):
 ```markdown
-## Implementation Plan for #123
+## Task: [KEP-123] Add password reset endpoint
 ### Files to Create
 - internal/models/password_reset.go
-- internal/repository/password_reset_repository.go
 - internal/service/password_reset_service.go
 - internal/api/password_reset_handler.go
 ### Files to Modify
 - internal/routes/routes.go
-- cmd/server/main.go
-### API Endpoints
+### API Endpoints (from plan §6)
 - POST /api/v1/auth/forgot-password
 - POST /api/v1/auth/reset-password
-### DB Changes
+### DB Changes (from plan §7)
 - New collection: password_resets
-### Env Vars
+### Env Vars (from plan §8)
 - SENDGRID_API_KEY
 - PASSWORD_RESET_EXPIRY=3600
+### Step-by-Step Order
+1. Model → 2. Repository → 3. Service → 4. Handler + Swagger → 5. Wire routes → 6. Tests → 7. Docs
 ```
 
 Changes summary (before accepting work):
