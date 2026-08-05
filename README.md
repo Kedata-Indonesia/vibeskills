@@ -23,7 +23,8 @@ npx skills@latest add /path/to/kedata-skills
 | `kedata-backend` | engineering | Backend standards: Swagger/OpenAPI, Activity Log, clean architecture, error handling, testing, GCP Cloud Run |
 | `kedata-frontend` | engineering | Frontend standards: React + TanStack Start / Vue + Nuxt 3, React→Vue conversion, state, forms, API integration, security |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
-| `kedata-prd` | product | Draft a Product Requirements Document in Kedata's house format (11 sections, before any code) |
+| `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
+| `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
 | `kedata-pr` | product | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
 
 ## Suggested Session Flow
@@ -32,9 +33,10 @@ For a new feature, run skills in order:
 
 1. `/kedata-system` — load baseline rules at session start
 2. `/kedata-prd` — draft the PRD before coding
-3. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
-4. `/kedata-review` — review the PR before merging
-5. `/kedata-pr` — open the PR with the house template
+3. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
+4. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
+5. `/kedata-review` — review the PR before merging
+6. `/kedata-pr` — open the PR with the house template
 
 ## Skill Format
 
