@@ -1,7 +1,7 @@
 ---
 name: kedata-system
 description: "Use this skill at the start of any engineering session inside a Kedata repo — it loads the baseline development rules: read the approved plan artifacts first (implementation plan, PRD, design brief), follow house conventions, and produce production-ready code through the plan → confirm → code → test → verify workflow."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -10,25 +10,28 @@ author: Kedata Indonesia
 ## Purpose
 Load the baseline operating rules for an engineering session in a Kedata repo. This is the first engineering skill invoked: it sets the engineer identity and stack defaults, enforces the **read-before-you-code** discipline (anchored on the approved product artifacts), runs the house development workflow, and carries the code-quality, git, security, and deployment standards. Every task in the session inherits these rules.
 
+**This skill produces NO file artifact** — it is behavioral, not artifact-producing. Its only outputs are ephemeral and conversational: the per-task implementation plan (Step 3) and the Changes Summary (Step 7), used as user-confirmation gates and then left in the conversation. The durable engineering inputs already exist upstream (plan, PRD, brief); this skill reads them and shapes how the work is done.
+
 **Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract). Engineering does NOT re-interview the product; it reads what was approved.
 
 ## When to Use
 * User command: `/kedata-system`
 * Autonomous trigger: At the start of any engineering session inside a Kedata repo (detected via AGENTS.md, .cursorrules, or repo naming); when starting work on a task/issue/branch; after switching repos mid-session.
+* **Bootstrap pattern (recommended):** consumer repos should reference this skill from their `AGENTS.md` (e.g. "Before any coding task, load the `kedata-system` skill.") so every fresh session auto-loads it — the developer should not have to remember to call `/kedata-system` manually.
 
 ## Prerequisites & Context Gathering
 Before writing any code, the agent MUST read the relevant approved artifacts IN ORDER. Do not guess conventions, API shapes, folder structures, or scope — everything needed was already decided upstream.
 
 **Mandatory reading checklist (in order):**
-1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. The engineering contract: §1 architecture decision (monolith vs split), §3 deployment platform (VM vs Cloud Run) + constraints, §5 task breakdown (the task being worked), §6 endpoints, §7 data model, §8 env vars, §9 dependencies/milestones, §10 DoD. **If this is missing, STOP — engineering cannot start without an approved implementation plan.**
+1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. The engineering contract: §1 architecture decision (monolith vs split), §2 repo/workspace layout, §3 deployment platform (VM vs Cloud Run) + constraints, §4 supporting architecture (DB, auth, storage, testing), §5 task breakdown (the task being worked), §6 endpoints, §7 data model, §8 env vars, §9 dependencies/milestones, §10 DoD. **If this is missing, STOP — engineering cannot start without an approved implementation plan.**
 2. **`PRD.md`** — check `docs/` first, then root. Features with priorities (§8), acceptance criteria (§5), API overview (§9), data model (§10), edge cases (§18) — the *why* behind the plan.
 3. **`DESIGN_BRIEF.md`** — check `docs/` first, then root. Visual identity, screens (§5), components (§6), states (§8) — the visual contract for FE work. If missing, note it and proceed (FE follows the plan + mockups).
 4. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
 5. **Optional hints only:** repo docs that exist from prior iterations (`DEVELOPMENT_PLAN.md`, `API_CONTRACTS.md`, `DATA_CATALOG.md`) — reuse conventions, never a requirement.
 
-Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack (from §4 of the plan)?
+Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack?
 
-**Stack defaults (house standard, overridden by the plan):** Backend Go + Gin; Frontend Nuxt 3 + TypeScript (strict); Database MongoDB Atlas; Auth JWT (access 15m / refresh 7d); Deployment per plan §3. **If the implementation plan §4 specifies different choices (e.g., PostgreSQL, React + TanStack Start, separate FE/BE), follow the plan — it is the tiebreaker.**
+**Stack defaults (house standard, overridden upstream):** Backend Go + Gin; Frontend Nuxt 3 + TypeScript (strict); Database MongoDB Atlas; Auth JWT (access 15m / refresh 7d); Deployment per plan §3. **The authoritative stack comes from the approved artifacts — plan §1 (monolith vs FE/BE split), plan §4 (DB, auth, storage, testing choices), and PRD §7 (tech stack table). If those differ from the defaults (e.g., PostgreSQL, React + TanStack Start), follow the artifacts — they are the tiebreaker.**
 
 ## Execution Workflow
 
