@@ -29,21 +29,11 @@ Before writing any code, the agent MUST read the relevant approved artifacts IN 
 4. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
 5. **Optional hints only:** repo docs that exist from prior iterations (`DEVELOPMENT_PLAN.md`, `API_CONTRACTS.md`, `DATA_CATALOG.md`) — reuse conventions, never a requirement.
 
-**Stack resolution — NO silent defaults. Resolve in this order:**
-1. **If the approved artifacts decide the stack, follow them — do NOT re-interview.** The authoritative sources are: plan §1 (monolith vs FE/BE split), plan §4 (DB, auth, storage, testing choices), and PRD §7 (tech stack table).
-2. **If the artifacts do NOT decide** (no PRD §7, or plan §4 left choices open) — **interview the user to choose.** Present the recommended option per layer and the alternatives, then ask which they want. Record every confirmed choice.
+**Stack resolution — READ the decided stack, never decide it here.**
+1. **The stack is decided UPSTREAM, not here.** The product team locked it in the PRD §7 (tech stack table) and the implementation plan §4 (supporting architecture). This skill READS those decisions — it does not interview for the stack.
+2. **If the artifacts do NOT specify the stack** (no PRD §7, or plan §4 left choices open) — **STOP and escalate**: "The stack was not locked in the implementation plan. Decide it there first (PRD §7 → plan §4), then engineering can proceed." Do not improvise a stack at engineering time — that is a product decision.
 
-| Layer | Recommended | Alternatives |
-|-------|-------------|--------------|
-| Backend | Go + Gin | Python + FastAPI, Node.js + Express |
-| Frontend | Nuxt 3 + TypeScript (strict) | React + TanStack Start |
-| Database | MongoDB Atlas | PostgreSQL, MySQL |
-| Auth | JWT (access 15m / refresh 7d) | Session cookie, OAuth-only |
-| Deployment | per plan §3 | — |
-
-*"Recommended Go + Gin for the backend — or would you prefer FastAPI or Express?"* Ask layer by layer, one at a time; do not proceed to coding until every layer is confirmed. If the user has no preference, record the recommendation as the confirmed choice and note it in the conversation.
-
-Confirm with the user before coding: which task (from §5 of the plan)? which milestone? which stack (confirmed above)?
+Confirm with the user before coding: which task (from §5 of the plan)? which milestone?
 
 ## Execution Workflow
 
@@ -197,7 +187,7 @@ Follow the **deployment platform decision in the implementation plan §3** — t
 
 ## Constraints & Guardrails
 * **DO NOT** write code before reading the implementation plan — engineering without the approved plan is scope drift.
-* **DO NOT** silently assume a stack — if the artifacts don't decide it, interview the user layer by layer until every choice is confirmed; never code against an unconfirmed stack.
+* **DO NOT** decide or improvise the stack at engineering time — read it from PRD §7 / plan §4; if it's missing, STOP and escalate to the product team.
 * **DO NOT** re-interview the product team — the plan, PRD, and brief already decided scope; read them.
 * **DO NOT** deviate from the plan's architecture or deployment decisions — if the plan is wrong, escalate to update the plan first.
 * **DO NOT** skip Swagger annotations or activity logs on any backend change.

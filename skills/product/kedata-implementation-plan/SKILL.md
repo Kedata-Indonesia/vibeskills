@@ -1,7 +1,7 @@
 ---
 name: kedata-implementation-plan
 description: Use this skill to interview the user and draft an IMPLEMENTATION_PLAN.md — the product-to-engineering handoff that turns the approved PRD and design brief into buildable units. Locks the architecture decision (monolith vs separate FE/BE), the deployment platform (VM + Docker Compose vs serverless Cloud Run) and its constraints, task breakdown with acceptance criteria, dependency order, and definition of done. Trigger when the user says "draft the implementation plan", "break down the work", or "slice the PRD into tasks".
-version: 1.2.0
+version: 1.3.0
 author: Kedata Indonesia
 ---
 
@@ -106,19 +106,22 @@ Grill follow-ups:
 **Goal:** lock the supporting architecture so engineering doesn't improvise it.
 
 Starter questions:
-- Database: confirm from PRD §7. Migration tooling? Who owns schema changes?
+- Backend framework: confirm from PRD §7 (e.g., Go + Gin / FastAPI / Express). Migration tooling? Who owns schema changes?
+- Frontend framework: confirm from PRD §7 (e.g., Nuxt 3 / React + TanStack Start).
+- Database: confirm from PRD §7.
 - Auth: JWT access/refresh? Where do tokens live (httpOnly cookie vs header)?
 - File storage: GCS, local, or direct-to-cloud upload? (from PRD §12 integrations)
 - Testing strategy: unit / integration / E2E split per layer?
 
 Grill follow-ups:
+- "Confirm each framework from PRD §7 — if the PRD left a layer open, decide it NOW and record it here; do not leave it for engineering to guess."
 - "What migration workflow — migration files, down migrations, who runs them?"
 - "Where does secrets management live — Secret Manager, env, .env.example?"
 - "Caching: what needs it (Redis, CDN, ISR)? What's cache invalidation?"
 - "Is there a background-job / worker need, or is everything request/response?" (cross-check with the §3 platform decision)
 - "What's the feature-flag approach for half-shipped features?"
 
-**Bedrock signal:** §4 records every supporting decision with a one-line rationale.
+**Bedrock signal:** §4 records every supporting decision with a one-line rationale — including the Backend and Frontend framework rows, which must be confirmed (from PRD §7 or decided here), never blank.
 
 ### Step 4: Domain 4 — Task Breakdown
 **Goal:** turn every PRD feature into an ordered, owner-assigned task with acceptance criteria.
@@ -208,7 +211,7 @@ Grill follow-ups:
   - [ ] §3 constraint implications addressed: statelessness, background jobs/cron, timeouts, secrets, cost model (each decided or explicitly "N/A" with reason)
   - [ ] Every PRD feature (§8) maps to at least one task in §5 (no orphan features)
   - [ ] Every task has owner (BE/FE/shared), effort (S/M/L), priority, milestone, and acceptance criteria
-  - [ ] §4 records every supporting decision (secrets, caching, background jobs, feature flags) — decided or explicitly "N/A" with reason
+  - [ ] §4 records every supporting decision (backend framework, frontend framework, secrets, caching, background jobs, feature flags) — decided or explicitly "N/A" with reason; framework rows never blank
   - [ ] Every PRD endpoint (§9) appears in §6
   - [ ] Every PRD entity (§10) appears in §7
   - [ ] Every env var from PRD §12 appears in §8
@@ -288,6 +291,8 @@ Monorepo vs polyrepo: [monorepo — shared types, single CI].
 ## 4. Supporting Architecture
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
+| Backend framework | Go + Gin | PRD §7 |
+| Frontend framework | Nuxt 3 + TypeScript (strict) | PRD §7 |
 | Database | MongoDB Atlas | PRD §7 |
 | Migrations | [golang-migrate / prisma migrate] | — |
 | Auth | JWT access 15m / refresh 7d | PRD §7 |
