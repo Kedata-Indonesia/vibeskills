@@ -20,7 +20,8 @@ npx skills@latest add /path/to/kedata-skills
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
-| `kedata-backend` | engineering | Backend standards: Swagger/OpenAPI, Activity Log, clean architecture, error handling, testing, GCP Cloud Run |
+| `kedata-backend` | engineering | Backend standards: Swagger/OpenAPI, Activity Log, clean architecture, error handling, testing, deployment per plan §3 |
+| `kedata-contracts` | engineering | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
 | `kedata-frontend` | engineering | Frontend standards: React + TanStack Start / Vue + Nuxt 3, React→Vue conversion, state, forms, API integration, security |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
@@ -36,9 +37,10 @@ For a new feature, run skills in order:
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(designer creates mockups — external)*
 4. `/kedata-implementation-plan` — lock architecture + break the work into tasks
-5. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
-6. `/kedata-review` — review the PR before merging
-7. `/kedata-pr` — open the PR with the house template
+5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
+6. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
+7. `/kedata-review` — review the PR before merging
+8. `/kedata-pr` — open the PR with the house template
 
 ## Skill Format
 
