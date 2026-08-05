@@ -50,6 +50,7 @@ Before the interview starts, the agent MUST:
 
 Starter questions:
 - From the PRD: what is the product in one sentence? (confirm, don't re-ask)
+- Extract the PRD personas into §2 (design view: who they are, what they see) — this is the grouping source for Domain 4.
 - What three adjectives describe the brand personality? (e.g., calm, trustworthy, scholarly)
 - If this product were a place, what would it be? (e.g., "a well-lit reading room — not a SaaS dashboard")
 - Who is the design for — what does the audience expect visually?
@@ -60,7 +61,7 @@ Grill follow-ups:
 - "Which existing products or designs do you admire? What specifically about them?"
 - "What feeling should a first-time visitor have in 5 seconds?"
 
-**Bedrock signal:** you can write §1 Product Identity and §3.6 Voice & Tone without a placeholder adjective.
+**Bedrock signal:** you can write §1 Product Identity (with the three brand adjectives and their why) without a placeholder adjective.
 
 ### Step 2: Domain 2 — Visual Identity & Design Tokens
 **Goal:** the exact tokens (colors, type, spacing, logo) a mockup generator can follow.
@@ -102,8 +103,9 @@ Grill follow-ups:
 
 Starter questions:
 - From the PRD: which screens exist? (extract from flows + features)
-- Group them: public, user, moderator, admin.
+- Group them: public, user, moderator, admin — the personas from §2 are the grouping keys.
 - For each: name, path, and its key elements.
+- Map every PRD flow to its screens into §7 (Flow → steps/screens → notes) — no orphan flows.
 
 Grill follow-ups:
 - "Which screens did the PRD imply but not name? (empty shelves, search results, error page)"
@@ -111,7 +113,7 @@ Grill follow-ups:
 - "Which screens share a layout skeleton? (list pages, detail pages, forms)"
 - "What is the empty/loading state of each screen?" (handled in Domain 6, but note them now)
 
-**Bedrock signal:** §5 lists every screen grouped by persona, each with a one-line description of its key elements.
+**Bedrock signal:** §2 lists every PRD persona in design terms; §5 lists every screen grouped by persona, each with a one-line description of its key elements; §7 maps every PRD flow to screens.
 
 ### Step 5: Domain 5 — Component Inventory
 **Goal:** the reusable components and their states.
@@ -159,7 +161,7 @@ Grill follow-ups:
 - "What's sticky on desktop: sidebar, table of contents, action bar?"
 - "Which layouts are shared skeletons across screens?"
 
-**Bedrock signal:** §9 defines the layout skeleton for the top screens at mobile and desktop with breakpoints.
+**Bedrock signal:** §4 breakpoints are defined (375px base, 1440px desktop minimum); §9 defines the layout skeleton for the top screens at mobile and desktop using those breakpoints.
 
 ### Step 8: Domain 8 — Dark Mode
 **Goal:** decide dark mode: required, default, and token mapping.
@@ -198,9 +200,10 @@ Grill follow-ups:
 * Set §12 Document Info: status `Draft`, version `0.1`, source PRD version, owner.
 * Run the design brief self-check — ALL must pass before presenting:
   - [ ] All 12 sections filled (or explicitly "N/A" with reason)
-  - [ ] §1 product identity and §3.6 voice & tone have no placeholder adjectives ("modern and clean" is NOT a decision)
+  - [ ] §1 product identity has no placeholder adjectives ("modern and clean" is NOT a decision)
+  - [ ] §2 lists every persona from the PRD in design terms (who they are, what they see)
   - [ ] Every persona in the PRD has screens in §5
-  - [ ] Every PRD flow maps to screens in §5 (no orphan flows)
+  - [ ] §7 maps every PRD flow to screens in §5 (no orphan flows)
   - [ ] Every component in §6 has states listed
   - [ ] Every screen in §5 has empty/error/loading coverage in §8 (or is marked N/A)
   - [ ] Every color token has light AND dark variants (unless dark mode is N/A)
@@ -218,11 +221,13 @@ Grill follow-ups:
 | Brief Section | Feeds | Consumed By |
 |---------------|-------|-------------|
 | §1 Product Identity | Brand consistency | Mockup design; frontend implementation |
+| §2 User Personas (Design View) | Who sees what per role | Mockup design (screen grouping); frontend RBAC-aware UI |
 | §3 Visual Identity & Tokens | Exact colors/type/spacing | Mockup design; frontend design tokens |
 | §3.6 Voice & Tone | UI copy | Mockup design; content writing |
 | §4 Responsive Breakpoints | Layout rules | Mockup design; frontend implementation |
 | §5 Screen Inventory | Which mockups to build | Mockup design (the screen list) |
 | §6 Component Inventory | Reusable UI blocks | Mockup design; component library |
+| §7 User Flows (with Screen References) | Navigation & journey order | Mockup design (flow screens); frontend routing |
 | §8 Error/Empty/Loading States | Non-happy-path visuals | Mockup design; frontend implementation |
 | §9 Key Layout Patterns | Page skeletons | Mockup design |
 | §10 Dark Mode | Token variants | Mockup design; frontend implementation |
