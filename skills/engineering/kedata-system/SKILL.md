@@ -12,7 +12,9 @@ Load the baseline operating rules for an engineering session in a Kedata repo. T
 
 **This skill produces NO file artifact** — it is behavioral, not artifact-producing. Its only outputs are ephemeral and conversational: the per-task implementation plan (Step 3) and the Changes Summary (Step 7), used as user-confirmation gates and then left in the conversation. The durable engineering inputs already exist upstream (plan, PRD, brief); this skill reads them and shapes how the work is done.
 
-**Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract). Engineering does NOT re-interview the product; it reads what was approved.
+**Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract), and the Contracts (API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md). Engineering does NOT re-interview the product; it reads what was approved.
+
+**Stack-specific context:** this skill is the SHARED baseline only. When a task touches a specific stack, the stack-specific skill for that language (backend: Go / Python / Node / Rust; frontend: React / Nuxt) is loaded for the framework details — project structure, patterns, testing commands. Load it when that stack is in play, not at session start.
 
 ## When to Use
 * User command: `/kedata-system`
@@ -120,20 +122,17 @@ npm run build      # builds without errors
 - [ ] Hover/focus/active states described
 - [ ] Dark theme compatibility verified
 
-## Code Quality Standards
+## Shared Code Quality Standards
+These apply to every language — the language-specific details (project structure, framework patterns, testing commands) live in the stack-specific skill for the language being worked, which is loaded when that stack is in play.
 
-### Backend (Go)
-1. **Error handling:** never return raw errors to clients; use `httperr` for standardized responses; log with context (`zap`).
-2. **Database:** repository pattern; always use `context.Context` for timeouts; index queried fields; transactions for multi-document operations.
+1. **Error handling:** never return raw errors to clients; standardized error responses; log with context.
+2. **Data access:** repository pattern — no DB calls in handlers/controllers; `context`/timeouts; index queried fields; transactions for multi-step operations.
 3. **API design:** base path `/api/v1/`; plural nouns (`/users`); consistent response shape `{ "data": {}, "message": "", "error": "" }`.
-4. **Swagger:** annotate all handlers with swaggo comments; regenerate with `make swagger`.
-
-### Frontend (Nuxt/Vue)
-1. **TypeScript:** strict mode; no `any`; type all props, emits, composable returns.
-2. **State:** Pinia for global state; `ref`/`computed` for local; URL query params for shareable filters.
-3. **API:** `$fetch` via composables (not raw fetch in components); explicit loading/error states; interceptors for auth token injection.
-4. **Components:** `<script setup lang="ts">`, props interface + withDefaults, emit types, slot docs.
-5. **Styling:** Tailwind utility classes; design tokens from the Design Brief; dark theme default.
+4. **Validation:** validate all input at the entry point (handler/controller), never trust the client.
+5. **Type safety (frontend):** strict mode; no `any`; type all props, emits, composable returns.
+6. **State (frontend):** server state in a query library; client state in a store; never `localStorage`/global mutable state for business data.
+7. **API integration (frontend):** typed service modules; explicit loading/error states; interceptors for auth token injection.
+8. **Styling (frontend):** Tailwind utility classes; design tokens from the Design Brief; dark theme default.
 
 ## Environment Variables
 Always check before using an env var: is it in `.env`? in `.env.example`? documented in `ENVIRONMENT_VARIABLES.md`?

@@ -20,9 +20,13 @@ npx skills@latest add /path/to/kedata-skills
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
-| `kedata-backend` | engineering | Backend standards: Swagger/OpenAPI, Activity Log, clean architecture, error handling, testing, deployment per plan §3 |
+| `kedata-backend-go` | engineering | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
+| `kedata-backend-python` | engineering | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
+| `kedata-backend-node` | engineering | Backend standards for Node + Express: swagger-jsdoc, activity log, zod, Jest/Vitest |
+| `kedata-backend-rust` | engineering | Backend standards for Rust (Axum optional): utoipa docs, activity log, thiserror, cargo test |
 | `kedata-contracts` | engineering | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
-| `kedata-frontend` | engineering | Frontend standards: React + TanStack Start / Vue + Nuxt 3, React→Vue conversion, state, forms, API integration, security |
+| `kedata-frontend-react` | engineering | Frontend standards for React 19 + TanStack Start: Router/Query, Zustand, react-hook-form + zod, Vitest |
+| `kedata-frontend-nuxt` | engineering | Frontend standards for Vue 3 + Nuxt 3: pages/, Pinia, vee-validate + zod, $fetch composables |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
 | `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
@@ -38,9 +42,10 @@ For a new feature, run skills in order:
 3. *(designer creates mockups — external)*
 4. `/kedata-implementation-plan` — lock architecture + break the work into tasks
 5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
-6. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
-7. `/kedata-review` — review the PR before merging
-8. `/kedata-pr` — open the PR with the house template
+6. `/kedata-backend-go` · `/kedata-backend-python` · `/kedata-backend-node` · `/kedata-backend-rust` — implement per the chosen backend stack (plan §4)
+7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
+8. `/kedata-review` — review the PR before merging
+9. `/kedata-pr` — open the PR with the house template
 
 ## Skill Format
 

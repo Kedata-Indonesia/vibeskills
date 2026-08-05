@@ -79,10 +79,11 @@ Grill follow-ups (per entity):
 **Bedrock signal:** every entity in plan §7 has fields with types/required/indexes, relationships defined, and delete/audit rules — no "TBD".
 
 ### Step 3: Domain 3 — Env Vars (`ENVIRONMENT_VARIABLES.md`)
-**Goal:** every env var from plan §8 documented with environment matrix.
+**Goal:** every env var from plan §8 documented with environment matrix, **structured per service**.
 
 Starter questions:
 - From plan §8: list every env var. For each: purpose, dev/staging/prod values, secret or not.
+- **If plan §1 split FE/BE: which service owns each var?** Backend vars (DB, JWT, email) vs Frontend vars (`VITE_*` / `NUXT_PUBLIC_*`) live in DIFFERENT `.env` files and deployment units — structure the doc in per-service sections.
 - What goes in `.env.example`?
 
 Grill follow-ups:
@@ -90,8 +91,9 @@ Grill follow-ups:
 - "How are secrets provisioned per the plan §3 platform — Secret Manager (Cloud Run) vs `.env`/docker secrets (VM)?"
 - "Which vars are required at startup (fail-fast) vs optional with defaults?"
 - "Which vars are needed for the first milestone to run locally?"
+- "Which vars are shared infra (deployment, domain) vs service-specific?"
 
-**Bedrock signal:** every env var in plan §8 has purpose, per-environment values, and secrets handling — no "TBD".
+**Bedrock signal:** every env var in plan §8 has purpose, per-environment values, secrets handling, AND a service owner — organized per service when split (no mixing BE and FE vars in one flat table).
 
 ### Step 4: Domain 4 — Cross-Document Consistency Sweep
 **Goal:** the three docs must agree with each other and with the plan.
@@ -208,19 +210,28 @@ The reference docs that define "complete" for Kedata contracts are the shapes be
 ### `ENVIRONMENT_VARIABLES.md`
 # Environment Variables: [Project Name]
 
-**Status:** Draft · **Version:** 0.1 · **Source:** IMPLEMENTATION_PLAN.md §8 / PRD.md §12
+**Status:** Draft · **Version:** 0.1 · **Source:** IMPLEMENTATION_PLAN.md §8 / PRD.md §12 · **Service split:** [monolith / BE+FE split per plan §1]
 
-## 1. Variables
+## 1. Backend Service (`.env` — [Go / FastAPI / Express / Axum])
 | Var | Purpose | Dev | Staging | Prod | Secret | Required at startup |
 |-----|---------|-----|---------|------|--------|---------------------|
 | `MONGODB_URI` | DB connection | mongodb://localhost/kedata | atlas-staging | atlas-prod | Yes | Yes |
 | `JWT_SECRET` | Token signing | dev-secret | staging-secret | (Secret Manager) | Yes | Yes |
 | `SENDGRID_API_KEY` | Transactional email | dev-key | staging-key | (Secret Manager) | Yes | No |
-| `VITE_API_BASE_URL` | FE API base | http://localhost:8080 | https://staging.kedata.id | https://api.kedata.id | No | Yes |
 
-## 2. Secrets Handling
+## 2. Frontend Service (`.env` — [React / Nuxt])
+| Var | Purpose | Dev | Staging | Prod | Secret | Required at startup |
+|-----|---------|-----|---------|------|--------|---------------------|
+| `VITE_API_BASE_URL` / `NUXT_PUBLIC_API_BASE_URL` | API base | http://localhost:8080 | https://staging.kedata.id | https://api.kedata.id | No | Yes |
+
+## 3. Shared Infra
+| Var | Purpose | Dev | Staging | Prod | Secret |
+|-----|---------|-----|---------|------|--------|
+| `PROJECT_ID` | GCP project | dev | staging | prod | No |
+
+## 4. Secrets Handling
 - Cloud Run (plan §3): secrets via Secret Manager, referenced as env vars
 - VM + Docker Compose (plan §3): `.env` file (0600 perms), docker secrets for production
 
-## 3. Open Questions
+## 5. Open Questions
 - Q1: ...
