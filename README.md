@@ -25,18 +25,20 @@ npx skills@latest add /path/to/kedata-skills
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
 | `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
+| `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-pr` | product | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
 
 ## Suggested Session Flow
 
 For a new feature, run skills in order:
 
-1. `/kedata-system` — load baseline rules at session start
-2. `/kedata-prd` — draft the PRD before coding
-3. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
-4. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
-5. `/kedata-review` — review the PR before merging
-6. `/kedata-pr` — open the PR with the house template
+1. `/kedata-prd` — draft the PRD before coding
+2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
+3. *(designer creates mockups — external)*
+4. `/kedata-implementation-plan` — lock architecture + break the work into tasks
+5. `/kedata-backend` or `/kedata-frontend` — implement per stack standards
+6. `/kedata-review` — review the PR before merging
+7. `/kedata-pr` — open the PR with the house template
 
 ## Skill Format
 
