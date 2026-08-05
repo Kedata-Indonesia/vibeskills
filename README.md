@@ -20,18 +20,18 @@ npx skills@latest add /path/to/kedata-skills
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
-| `kedata-backend-go` | engineering | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
-| `kedata-backend-python` | engineering | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
-| `kedata-backend-node` | engineering | Backend standards for Node + Express: swagger-jsdoc, activity log, zod, Jest/Vitest |
-| `kedata-backend-rust` | engineering | Backend standards for Rust (Axum optional): utoipa docs, activity log, thiserror, cargo test |
 | `kedata-contracts` | engineering | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
-| `kedata-frontend-react` | engineering | Frontend standards for React 19 + TanStack Start: Router/Query, Zustand, react-hook-form + zod, Vitest |
-| `kedata-frontend-nuxt` | engineering | Frontend standards for Vue 3 + Nuxt 3: pages/, Pinia, vee-validate + zod, $fetch composables |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
+| `kedata-backend-go` | backend | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
+| `kedata-backend-python` | backend | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
+| `kedata-backend-node` | backend | Backend standards for Node + Express: swagger-jsdoc, activity log, zod, Jest/Vitest |
+| `kedata-backend-rust` | backend | Backend standards for Rust (Axum optional): utoipa docs, activity log, thiserror, cargo test |
+| `kedata-frontend-react` | frontend | Frontend standards for React 19 + TanStack Start: Router/Query, Zustand, react-hook-form + zod, Vitest |
+| `kedata-frontend-nuxt` | frontend | Frontend standards for Vue 3 + Nuxt 3: pages/, Pinia, vee-validate + zod, $fetch composables |
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
 | `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
-| `kedata-pr` | product | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
+| `kedata-pr` | engineering | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
 
 ## Suggested Session Flow
 
@@ -54,12 +54,17 @@ The `npx skills` CLI discovers skills by scanning the repo tree for
 
 ```
 skills/
-└── <category>/
-    └── <skill-name>/
-        ├── SKILL.md              # REQUIRED — the skill itself
-        └── agents/
-            └── openai.yaml       # optional — display metadata
+├── backend/                # language-specific backend skills
+│   └── kedata-backend-go/
+│       ├── SKILL.md              # REQUIRED — the skill itself
+│       └── agents/
+│           └── openai.yaml       # optional — display metadata
+├── frontend/               # language-specific frontend skills
+├── engineering/            # cross-cutting engineering skills (system, contracts, review, pr)
+└── product/                # product-team skills (prd, design-brief, implementation-plan)
 ```
+
+**Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.
 
 **Frontmatter requirements** (enforced by the CLI — a skill missing these is
 skipped, and a repo with zero valid skills fails to install):
