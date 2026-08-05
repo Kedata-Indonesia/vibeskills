@@ -1,14 +1,16 @@
 ---
 name: kedata-prd
-description: Use this skill to interview the user deeply and draft a Product Requirements Document in Kedata's house format. The PRD is the first source of truth for the implementation plan, API contracts, data model, review, and PR skills. Trigger when the user says "draft a PRD", "write a product spec", or starts a new product / feature without a PRD on file.
-version: 1.3.0
+description: Use this skill to interview the user deeply and draft a Product Requirements Document in Kedata's house format. The PRD is the first source of truth for implementation planning, API contracts, the data model, code review, and pull request workflows. Trigger when the user says "draft a PRD", "write a product spec", or starts a new product / feature without a PRD on file.
+version: 1.4.0
 author: Kedata Indonesia
 ---
 
 # Skill: Kedata PRD Writer
 
 ## Purpose
-Produce a Product Requirements Document in Kedata's house format through a **structured deep interview**. The PRD is the **first and primary source of truth** for the entire delivery pipeline: `kedata-system` (implementation baseline), `kedata-backend` / `kedata-frontend` (stack standards), `kedata-review` (verification criteria), and `kedata-pr` (PR description). A weak PRD propagates weakness everywhere.
+Produce a Product Requirements Document in Kedata's house format through a **structured deep interview**. The PRD is the **first and primary source of truth** for the entire delivery pipeline: implementation planning, backend and frontend engineering, code review, and pull request descriptions. A weak PRD propagates weakness everywhere.
+
+This skill stands alone — it does not depend on any other skill being installed. All house conventions it relies on are embedded below (tech stack defaults, response envelope, API base path, file conventions), so a fresh install works end-to-end.
 
 The differentiator of this skill is **the grilling**: the agent does not fill a template from what the user volunteers. It interviews domain by domain, asks follow-ups until answers are specific and decision-ready, surfaces assumptions, forces priorities, systematically breaks the product with **edge-case probing**, and records every open question. The template below is the *output*; the interview is the *method*.
 
@@ -154,7 +156,7 @@ Grill follow-ups:
 - "Which external services have env vars we must document?" (→ §12)
 - "Any webhooks, background jobs, or async processing?"
 - "Are there rate limits or abuse concerns on any endpoint?"
-- "What does the API contract need that Swagger must document?" (→ feeds `kedata-backend`)
+- "What does the API contract need that Swagger must document?"
 - **Edge cases:** "What happens on idempotent retries (double-submit, network retry)? Timeouts? Partial failures in multi-step operations (are they transactional)? What's the status code for each failure mode?"
 
 **Bedrock signal:** §9 API overview lists endpoint / method / auth / description for every feature; §12 lists integrations with env vars.
@@ -202,7 +204,7 @@ Grill follow-ups:
 - "Any compliance requirements (data retention, privacy, GDPR/Indonesia PDP)?"
 - "What's the hosting reality — cloud, VPS, region? Latency constraints?"
 - "What happens on a bad day — backup, restore, rollback plan?"
-- "Which NFRs have an *implementation* note, not just a number?" (e.g., "LCP < 1.5s via SSG + static cache" — see the reference PRD pattern)
+- "Which NFRs have an *implementation* note, not just a number?" (e.g., "LCP < 1.5s via SSG + static cache")
 
 **Bedrock signal:** §11 NFRs have targets AND implementation notes, and reference the real deployment target.
 
@@ -225,7 +227,7 @@ Grill follow-ups:
 
 ### Step 10: Draft & Self-Check
 * Fill every section of the template below from the interview answers — no empty placeholders; "N/A" with a one-line reason where a section doesn't apply.
-* **Save location rule:** the default is **`docs/PRD.md`** (what `kedata-backend` reads). EXCEPTION — if the user/team has already been using `PRD.md` at the repo root, update that root file in place instead; do not move it and do not create a second copy in `docs/`. Note the final location in §17.
+* **Save location rule:** the default is **`docs/PRD.md`** (the Kedata project convention). EXCEPTION — if the user/team has already been using `PRD.md` at the repo root, update that root file in place instead; do not move it and do not create a second copy in `docs/`. Note the final location in §17.
 * Set §17 Document Info: status `Draft`, version `0.1`, issue key(s), owner.
 * Run the PRD self-check — ALL must pass before presenting:
   - [ ] All 18 sections filled (or explicitly "N/A" with reason)
@@ -243,22 +245,22 @@ Grill follow-ups:
 ### Step 11: Review & Sign-Off
 * Present the PRD to the user with a tight summary: what was decided, the 3-5 riskiest assumptions, the most dangerous edge cases, and the open questions.
 * **Do not proceed to implementation until the user approves it.** On approval, update §17: status `Approved`, version `1.0`, approver + date.
-* Hand off: "PRD approved. Next: run `/kedata-system`, then `/kedata-backend` or `/kedata-frontend` to implement."
+* Hand off: "PRD approved. Next: draft the implementation plan, then begin coding per the stack standards."
 
 ## Downstream Consumers (why the PRD is the first source)
 | PRD Section | Feeds | Consumed By |
 |-------------|-------|-------------|
-| §5 User Stories & Acceptance Criteria | Verification criteria | `kedata-system` (task understanding), `kedata-review` (testing/acceptance) |
-| §4 Personas & Roles | Auth + RBAC design | `kedata-backend`, `kedata-frontend` |
-| §7 Tech Stack | Architecture decisions | `kedata-backend`, `kedata-frontend`, `kedata-system` |
-| §8 Core Features | Implementation plan | `kedata-system` (planning mode) |
-| §9 API Overview | `docs/API_CONTRACTS.md` | `kedata-backend`, `kedata-review` |
-| §10 Data Model | `docs/DATA_CATALOG.md` | `kedata-backend` |
-| §11 NFRs | Performance/security targets | `kedata-backend`, `kedata-review` |
-| §12 Integrations & Env Vars | `ENVIRONMENT_VARIABLES.md`, `.env.example` | `kedata-backend`, `kedata-system` |
-| **§18 Edge Cases register** | **Test plan seed, boundary/negative test cases** | **`kedata-review` (testing checks), QA** |
-| §16 Decisions Record | Future change requests | All — prevents re-litigating settled decisions |
-| §17 Sign-off status | Readiness gate | All downstream skills — a Draft PRD must never be implemented |
+| §5 User Stories & Acceptance Criteria | Verification criteria | Implementation planning; code review (testing/acceptance) |
+| §4 Personas & Roles | Auth + RBAC design | Backend & frontend engineering |
+| §7 Tech Stack | Architecture decisions | Backend & frontend engineering |
+| §8 Core Features | Implementation plan | Implementation planning |
+| §9 API Overview | `docs/API_CONTRACTS.md` | Backend engineering; code review |
+| §10 Data Model | `docs/DATA_CATALOG.md` | Backend engineering |
+| §11 NFRs | Performance/security targets | Backend engineering; code review |
+| §12 Integrations & Env Vars | `ENVIRONMENT_VARIABLES.md`, `.env.example` | Backend engineering; project setup |
+| **§18 Edge Cases register** | **Test plan seed, boundary/negative test cases** | **Code review (testing checks); QA** |
+| §16 Decisions Record | Future change requests | All downstream work — prevents re-litigating settled decisions |
+| §17 Sign-off status | Readiness gate | All downstream work — a Draft PRD must never be implemented |
 
 ## Constraints & Guardrails
 * **DO NOT** write code, design API contracts, or start the implementation plan while the PRD status is `Draft` — requirements must be approved first.
@@ -272,7 +274,7 @@ Grill follow-ups:
 * **DO NOT** renumber the 18 sections — the numbering is a stable contract downstream references depend on.
 
 ## Example Output Structure
-The reference PRD that defines "complete" for Kedata is the Nalarela PRD (`rangkuman-buku-prod/docs/PRD.md`). Study its depth: personas, numbered FRs (FR1.1, FR2.2…), NFRs with implementation notes, entity schema, milestones mapped to features, and a Decisions Record. Your output should reach similar specificity for the interviewed product. The house skeleton:
+A complete PRD reaches this specificity: personas with role rules, numbered functional requirements (FR1.1, FR2.2…), NFRs with implementation notes, an entity schema with indexes, milestones mapped to features, a Decisions Record, and an Edge Cases register. Use the house skeleton below, and fill every cell with concrete, confirmed answers — no placeholders:
 
 # PRD: [Project Name] (KEP-123)
 **Status:** Draft · **Version:** 0.1 · **Owner:** [Name] · **Issue:** [key]
@@ -345,10 +347,10 @@ Every assumption (A1, A2…) and open question (Q1, Q2…) from the interview, w
 | PRD file location | `docs/PRD.md` (or root `PRD.md` if that's the existing convention) |
 
 ## 18. Edge Cases Register
-The output of the Step 7 sweep — one row per (feature/entity, edge case). This is the seed for the test plan and the `kedata-review` testing checks.
+The output of the Step 7 sweep — one row per (feature/entity, edge case). This is the seed for the test plan and the code review testing checks.
 
 | Feature / Entity | Edge Case | Expected Behavior | Status |
 |------------------|-----------|-------------------|--------|
-| Submission form | Duplicate title submitted | Warn contributor, flag for moderator (FR2.7) | Decided |
+| Submission form | Duplicate title submitted | Warn contributor, flag for moderator | Decided |
 | Book delete | Book referenced by 3 related books | Block delete; show referencing books (or soft-delete + mark broken) | Open → Q7 |
-| Edit (User role) | Content changed since base revision | Prompt rebase: reload diff, apply onto latest (FR3b.4) | Decided |
+| Edit (User role) | Content changed since base revision | Prompt rebase: reload diff, apply onto latest | Decided |
