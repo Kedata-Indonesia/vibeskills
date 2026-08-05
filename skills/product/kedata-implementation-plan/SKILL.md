@@ -1,7 +1,7 @@
 ---
 name: kedata-implementation-plan
 description: Use this skill to interview the user and draft an IMPLEMENTATION_PLAN.md — the product-to-engineering handoff that turns the approved PRD and design brief into buildable units. Locks the architecture decision (monolith vs separate FE/BE), task breakdown with acceptance criteria, dependency order, and definition of done. Trigger when the user says "draft the implementation plan", "break down the work", or "slice the PRD into tasks".
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -172,7 +172,8 @@ Grill follow-ups:
   - [ ] All 12 sections filled (or explicitly "N/A" with reason)
   - [ ] §1 architecture decision is LOCKED (monolith vs separate FE/BE) with rationale — no "TBD"
   - [ ] Every PRD feature (§8) maps to at least one task in §5 (no orphan features)
-  - [ ] Every task has owner (BE/FE/shared), priority, milestone, and acceptance criteria
+  - [ ] Every task has owner (BE/FE/shared), effort (S/M/L), priority, milestone, and acceptance criteria
+  - [ ] §4 records every supporting decision (secrets, caching, background jobs, feature flags) — decided or explicitly "N/A" with reason
   - [ ] Every PRD endpoint (§9) appears in §6
   - [ ] Every PRD entity (§10) appears in §7
   - [ ] Every env var from PRD §12 appears in §8
@@ -248,12 +249,16 @@ Monorepo vs polyrepo: [monorepo — shared types, single CI].
 | Migrations | [golang-migrate / prisma migrate] | — |
 | Auth | JWT access 15m / refresh 7d | PRD §7 |
 | File storage | GCS | PRD §12 |
+| Secrets management | [Secret Manager / .env] | — |
+| Caching | [Redis / CDN / ISR / none] | — |
+| Background jobs | [worker / none — request-response only] | — |
+| Feature flags | [flag library / env-based / none] | — |
 | Testing | unit + integration + E2E | per task |
 
 ## 5. Task Breakdown
-| # | Task | Owner | Priority | Milestone | Acceptance Criteria |
-|---|------|-------|----------|-----------|---------------------|
-| 1 | [Auth: register/login/refresh] | BE | P0 | M1 | PRD §5 AC1-AC3 + Swagger docs |
+| # | Task | Owner | Effort | Priority | Milestone | Acceptance Criteria |
+|---|------|-------|--------|----------|-----------|---------------------|
+| 1 | [Auth: register/login/refresh] | BE | M | P0 | M1 | PRD §5 AC1-AC3 + Swagger docs |
 
 ## 6. API Endpoints (seeded from PRD §9)
 | Endpoint | Method | Auth | Milestone | Notes |
