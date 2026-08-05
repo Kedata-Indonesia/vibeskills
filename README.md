@@ -31,7 +31,7 @@ npx skills@latest add /path/to/kedata-skills
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
 | `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
-| `kedata-pr` | engineering | Write a pull request description in Kedata's standard template (Summary / Changes / Type / Mandatory checks) |
+| `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
 
 ## Suggested Session Flow
 
@@ -45,7 +45,7 @@ For a new feature, run skills in order:
 6. `/kedata-backend-go` · `/kedata-backend-python` · `/kedata-backend-node` · `/kedata-backend-rust` — implement per the chosen backend stack (plan §4)
 7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
 8. `/kedata-review` — review the PR before merging
-9. `/kedata-pr` — open the PR with the house template
+9. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
 
 ## Skill Format
 
