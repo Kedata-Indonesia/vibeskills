@@ -1,7 +1,7 @@
 ---
 name: kedata-prd
 description: Use this skill to interview the user deeply and draft a Product Requirements Document in Kedata's house format. The PRD is the first source of truth for implementation planning, API contracts, the data model, code review, and pull request workflows. Trigger when the user says "draft a PRD", "write a product spec", or starts a new product / feature without a PRD on file.
-version: 1.4.0
+version: 1.5.0
 author: Kedata Indonesia
 ---
 
@@ -157,7 +157,7 @@ Grill follow-ups:
 - "Which external services have env vars we must document?" (→ §12)
 - "Any webhooks, background jobs, or async processing?"
 - "Are there rate limits or abuse concerns on any endpoint?"
-- "What does the API contract need that Swagger must document?"
+- "What request/response shapes and status codes must the API contract pin down?" (the backend documentation will be generated from this)
 - **Edge cases:** "What happens on idempotent retries (double-submit, network retry)? Timeouts? Partial failures in multi-step operations (are they transactional)? What's the status code for each failure mode?"
 
 **Bedrock signal:** §9 API overview lists endpoint / method / auth / description for every feature; §12 lists integrations with env vars.
@@ -234,7 +234,7 @@ Grill follow-ups:
   - [ ] All 18 sections filled (or explicitly "N/A" with reason)
   - [ ] Every persona in §4 has core needs and role rules
   - [ ] Every user story has acceptance criteria
-  - [ ] Every feature row in §8 maps to an endpoint in §9 and an entity in §10 (no orphans)
+  - [ ] Every feature row in §8 maps to an endpoint in §9 and an entity in §10 (no orphans); pure-UI features (landing page, empty states) are marked "N/A — UI-only"
   - [ ] Every API endpoint has: method, path under `/api/v1/`, auth flag, description
   - [ ] Every entity has indexed fields defined
   - [ ] Every env var referenced anywhere appears in §12
@@ -275,7 +275,7 @@ Grill follow-ups:
 * **DO NOT** renumber the 18 sections — the numbering is a stable contract downstream references depend on.
 
 ## Example Output Structure
-A complete PRD reaches this specificity: personas with role rules, numbered functional requirements (FR1.1, FR2.2…), NFRs with implementation notes, an entity schema with indexes, milestones mapped to features, a Decisions Record, and an Edge Cases register. Use the house skeleton below, and fill every cell with concrete, confirmed answers — no placeholders:
+A complete PRD reaches this specificity: personas with role rules, numbered functional requirements (FR1.1, FR2.2…), NFRs with implementation notes, an entity schema with indexes, milestones mapped to features, a Decisions Record, and an Edge Cases register. The skeleton below is the **shape** — replace every `[bracket]` and placeholder description with the concrete, confirmed answers from the interview. No `[bracket]` may survive in the delivered PRD:
 
 # PRD: [Project Name] (KEP-123)
 **Status:** Draft · **Version:** 0.1 · **Owner:** [Name] · **Issue:** [key]
@@ -309,7 +309,7 @@ Happy path diagrams + failure/edge paths; state transitions per entity (includin
 | Layer | Technology | Version | Confirmed |
 
 ## 8. Core Features (MVP / V1 / V2)
-| # | Feature | Priority | BE | FE | Notes |
+| # | Feature | For Whom / Solves What | Priority | BE | FE | Notes |
 
 ## 9. API Overview
 Response envelope `{ "data": {}, "message": "", "error": "" }` under `/api/v1/`.
@@ -353,5 +353,5 @@ The output of the Step 7 sweep — one row per (feature/entity, edge case). This
 | Feature / Entity | Edge Case | Expected Behavior | Status |
 |------------------|-----------|-------------------|--------|
 | Submission form | Duplicate title submitted | Warn contributor, flag for moderator | Decided |
-| Book delete | Book referenced by 3 related books | Block delete; show referencing books (or soft-delete + mark broken) | Open → Q7 |
-| Edit (User role) | Content changed since base revision | Prompt rebase: reload diff, apply onto latest | Decided |
+| Parent record delete | Record referenced by 3 related records | Block delete; show referencing records (or soft-delete + mark broken) | Open → Q7 |
+| Edit (regular user) | Content changed since base revision | Prompt rebase: reload diff, apply onto latest | Decided |
