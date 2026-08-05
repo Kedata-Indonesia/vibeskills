@@ -20,11 +20,12 @@ The differentiator of this skill is **the grilling**: the agent does not fill a 
 
 ## Prerequisites & Context Gathering
 Before the interview starts, the agent MUST:
-1. **Locate existing artifacts:**
-   * Existing PRD: check `docs/PRD.md` first, then root `PRD.md`. If one exists, **update that same file in place** — do not rewrite from scratch and do not move it. A root `PRD.md` the team has been using stays at root; only new PRDs default to `docs/PRD.md`.
-   * Issue / task description: read the full issue, note its key/number (e.g. `KEP-123`), and copy any existing acceptance criteria.
-   * Reference docs: `docs/DEVELOPMENT_PLAN.md`, `docs/API_CONTRACTS.md`, `docs/DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` — reuse conventions, don't reinvent them.
-2. **Frame the interview with the user (2 minutes max):**
+1. **Assume PRD-first.** The PRD is the FIRST artifact of the delivery pipeline. The repo contains either an existing PRD or nothing at all. Downstream docs (`docs/DEVELOPMENT_PLAN.md`, `docs/API_CONTRACTS.md`, `docs/DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md`) are outputs of later steps — do NOT expect them, do NOT wait for them, do NOT block the interview on them. The PRD defines the conventions that those docs will later be generated from.
+2. **Locate existing artifacts:**
+   * Existing PRD: check `docs/PRD.md` first, then root `PRD.md`. If one exists, **update that same file in place** — do not rewrite from scratch and do not move it. A root `PRD.md` the team has been using stays at root; only new PRDs default to `docs/PRD.md`. If no PRD exists, this is a greenfield draft — the interview below is the source of everything.
+   * Issue / task description: read the full issue, note its key/number (e.g. `KEP-123`), and copy any existing acceptance criteria. If no issue exists, the interview extracts the requirements directly from the user.
+   * Optional hints only: if any downstream doc happens to exist from a prior iteration, skim it to reuse conventions — but treat it as a hint, never a requirement.
+3. **Frame the interview with the user (2 minutes max):**
    * "I'll interview you domain by domain — problem, users, scope, flows, data, API, edge cases, non-functional, delivery. Answer briefly; I'll follow up where I need depth. At the end you'll have a complete PRD and we'll review it for sign-off."
    * Agree on session budget: full grill (45-60 min) vs focused grill (15-20 min, e.g. single feature).
 
