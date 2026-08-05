@@ -1,18 +1,18 @@
-# kedata-skills
+# vibeskills
 
 A collection of modular, markdown-based agent skills encoding Kedata Indonesia's
 engineering discipline — readable for every AI coding assistant (Claude, Cursor,
 Kimi, Hermes, etc.) via the [`skills`](https://www.npmjs.com/package/skills)
-ecosystem (mattpocock/skills).
+ecosystem.
 
 ## Install
 
 ```bash
 # from GitHub
-npx skills@latest add canggihpw/kedata-skills
+npx skills@latest add Kedata-Indonesia/vibeskills
 
 # or locally, for testing before you push
-npx skills@latest add /path/to/kedata-skills
+npx skills@latest add /path/to/vibeskills
 ```
 
 ## Available Skills
@@ -86,7 +86,7 @@ author: You                 # optional
 2. Fill in `name` and `description` in the frontmatter — these are **required**.
 3. Test locally:
    ```bash
-   npx skills@latest add /path/to/kedata-skills
+   npx skills@latest add /path/to/vibeskills
    ```
 4. Commit and push — the GitHub install works with zero extra config.
 

@@ -1,11 +1,11 @@
 {
-  "name": "kedata-skills",
+  "name": "vibeskills",
   "version": "1.0.0",
   "private": true,
-  "description": "Agent skills for Kedata Indonesia, installable via `npx skills@latest add canggihpw/kedata-skills`",
+  "description": "Agent skills for Kedata Indonesia, installable via `npx skills@latest add Kedata-Indonesia/vibeskills`",
   "repository": {
     "type": "git",
-    "url": "https://github.com/canggihpw/kedata-skills"
+    "url": "https://github.com/Kedata-Indonesia/vibeskills"
   },
   "license": "MIT",
   "packageManager": "npm@10.9.4"

@@ -69,7 +69,7 @@ Present a compact status report (see Example Output Structure below):
 * **Blockers / notes** — e.g. contracts missing before coding can start; stack not decided in the plan; mockups not produced.
 
 ### Step 4: Hand-Off
-* If the next skill is not installed, tell the user how to install it: `npx skills@latest add canggihpw/kedata-skills -s <skill>`.
+* If the next skill is not installed, tell the user how to install it: `npx skills@latest add Kedata-Indonesia/vibeskills -s <skill>`.
 * End with a clear, single next action — not a list of options.
 
 ## Constraints & Guardrails
@@ -101,7 +101,7 @@ Draft the engineering contracts — the backend and frontend cannot start withou
 
 **Run:** `/kedata-contracts` (reads PRD.md + IMPLEMENTATION_PLAN.md, interviews you, produces API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md).
 
-**Not installed?** `npx skills@latest add canggihpw/kedata-skills -s kedata-contracts`
+**Not installed?** `npx skills@latest add Kedata-Indonesia/vibeskills -s kedata-contracts`
 
 ## ⚠️ Blockers
 - None — this is the correct next step.
