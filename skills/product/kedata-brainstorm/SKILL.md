@@ -1,6 +1,6 @@
 ---
 name: kedata-brainstorm
-description: Use this skill to partner on a raw product idea and grill it from a business perspective — problem, market, competition, value proposition, business model, feasibility, go-to-market, and kill criteria — until it matures into a feasible, market-fit idea ready for a PRD. Produces an optional docs/IDEA_BRIEF.md. This step is OPTIONAL and sits BEFORE kedata-prd: if the user is already convinced the idea is sound, they may skip straight to kedata-prd. Trigger when the user says "I have an idea", "let's brainstorm", "validate this idea", "is this worth building?", or shares a rough concept that is not yet a product spec.
+description: "Use this skill to partner on a raw product idea and grill it from a business perspective — problem, market, competition, value proposition, business model, feasibility, go-to-market, and kill criteria — until it matures into a feasible, market-fit idea ready for a PRD. Produces an optional docs/IDEA_BRIEF.md. This step is OPTIONAL and sits BEFORE kedata-prd: if the user is already convinced the idea is sound, they may skip straight to kedata-prd. Trigger when the user says \"I have an idea\", \"let's brainstorm\", \"validate this idea\", \"is this worth building?\", or shares a rough concept that is not yet a product spec."
 version: 1.0.0
 author: Kedata Indonesia
 ---
