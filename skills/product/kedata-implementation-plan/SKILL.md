@@ -321,7 +321,7 @@ Monorepo vs polyrepo: [monorepo — shared types, single CI].
 ## 8. Env Vars & Config (from PRD §12)
 | Var | Dev | Staging | Prod | Secret? |
 |-----|-----|---------|------|---------|
-| `MONGODB_URI` | local | atlas-staging | atlas-prod | Yes |
+| `MONGODB_URI` | `<local-db-uri>` | `<staging-db-uri>` | `<prod-db-uri>` | Yes |
 
 ## 9. Dependency Order & Milestones
 ```

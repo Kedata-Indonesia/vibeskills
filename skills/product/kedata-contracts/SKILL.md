@@ -215,14 +215,14 @@ The reference docs that define "complete" for Kedata contracts are the shapes be
 ## 1. Backend Service (`.env` — [Go / FastAPI / Express / Axum])
 | Var | Purpose | Dev | Staging | Prod | Secret | Required at startup |
 |-----|---------|-----|---------|------|--------|---------------------|
-| `MONGODB_URI` | DB connection | mongodb://localhost/kedata | atlas-staging | atlas-prod | Yes | Yes |
-| `JWT_SECRET` | Token signing | dev-secret | staging-secret | (Secret Manager) | Yes | Yes |
-| `SENDGRID_API_KEY` | Transactional email | dev-key | staging-key | (Secret Manager) | Yes | No |
+| `MONGODB_URI` | DB connection | `mongodb://localhost:27017/<db>` | `<staging-db-uri>` | `<prod-db-uri>` | Yes | Yes |
+| `JWT_SECRET` | Token signing | `<dev-secret>` | `<staging-secret>` | (Secret Manager) | Yes | Yes |
+| `SENDGRID_API_KEY` | Transactional email | `<dev-api-key>` | `<staging-api-key>` | (Secret Manager) | Yes | No |
 
 ## 2. Frontend Service (`.env` — [React / Nuxt])
 | Var | Purpose | Dev | Staging | Prod | Secret | Required at startup |
 |-----|---------|-----|---------|------|--------|---------------------|
-| `VITE_API_BASE_URL` / `NUXT_PUBLIC_API_BASE_URL` | API base | http://localhost:8080 | https://staging.kedata.id | https://api.kedata.id | No | Yes |
+| `VITE_API_BASE_URL` / `NUXT_PUBLIC_API_BASE_URL` | API base | `http://localhost:8080` | `https://staging.<domain>` | `https://api.<domain>` | No | Yes |
 
 ## 3. Shared Infra
 | Var | Purpose | Dev | Staging | Prod | Secret |
