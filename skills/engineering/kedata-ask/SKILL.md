@@ -14,6 +14,7 @@ Orient anyone — a new developer, a returning user, or an agent in a fresh sess
 
 | # | Stage | Produces / Does | Skill to run |
 |---|-------|-----------------|--------------|
+| 0 | Idea *(optional)* | `IDEA_BRIEF.md` (business grill of a raw idea) — **not a gate** | `kedata-brainstorm` |
 | 1 | Requirements | `PRD.md` (interview) | `kedata-prd` |
 | 2 | Design | `DESIGN_BRIEF.md` (reads PRD.md, interview) | `kedata-design-brief` |
 | — | Mockups | designer/LLM produces mockups from the brief | *external* |
@@ -34,6 +35,7 @@ Artifacts are checked at `docs/<FILE>.md` first, then root `<FILE>.md`.
 Before reporting, the agent MUST inspect the repo (do NOT ask the user — the artifacts answer):
 
 1. **Check which pipeline artifacts exist** (`docs/` first, then root):
+   * `IDEA_BRIEF.md` *(optional pre-PRD artifact — its absence does NOT block the pipeline)*
    * `PRD.md`
    * `DESIGN_BRIEF.md`
    * `IMPLEMENTATION_PLAN.md`
@@ -53,7 +55,8 @@ Before reporting, the agent MUST inspect the repo (do NOT ask the user — the a
 
 ### Step 2: Map to Stage
 Find the **furthest completed stage** by the presence of its artifact (each stage's artifact must exist to count as done):
-* No `PRD.md` → stage 1 not started (or PRD update needed).
+* No `PRD.md` and no code → stage 1 not started. If the user also has only a **raw idea**, offer stage 0 (`kedata-brainstorm`, optional) as a business-validity check before the PRD — but make clear the PRD can be written directly if the idea is already validated. Never gate the PRD on an `IDEA_BRIEF.md`.
+* `IDEA_BRIEF.md` present, no `PRD.md` → idea validated; next is stage 1 (`kedata-prd`), using the brief as context.
 * `PRD.md` only → stages 1 done; next is 2.
 * `PRD.md` + `DESIGN_BRIEF.md` → next is mockups / stage 3.
 * `PRD.md` + `DESIGN_BRIEF.md` + `IMPLEMENTATION_PLAN.md` → next is stage 4 (contracts).
@@ -77,6 +80,7 @@ Present a compact status report (see Example Output Structure below):
 * **DO NOT** create, modify, or fill any artifact — this skill only inspects and reports.
 * **DO NOT** re-interview the user for requirements — that is what the artifact-producing skills do.
 * **DO NOT** recommend a stack-specific skill unless the plan §4 says that stack.
+* **DO NOT** treat `IDEA_BRIEF.md` / `kedata-brainstorm` as a required stage — it is optional; never block the PRD on it or report it as a missing blocker.
 * **DO NOT** dump the whole pipeline table unless the user asks — keep the report to where they are, what's next, and what to run.
 * Keep the report short and decisive: position, next step, skill, blockers.
 

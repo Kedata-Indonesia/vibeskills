@@ -19,6 +19,7 @@ npx skills@latest add /path/to/vibeskills
 
 | Skill | Category | Description |
 | ----- | -------- | ----------- |
+| `kedata-brainstorm` | product | Raw idea → validated idea: business grill on problem, market, competition, value prop, business model, feasibility, GTM, kill criteria. Optional, before `kedata-prd` |
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
 | `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
@@ -39,7 +40,8 @@ npx skills@latest add /path/to/vibeskills
 For a new feature, run skills in order:
 
 0. **Don't know where the codebase is?** Start with `/kedata-ask` — it inspects the artifacts and tells you the current stage + next step + which skill to run.
-1. `/kedata-prd` — draft the PRD before coding
+0.5 *(optional)* `/kedata-brainstorm` — have a raw idea? Grill it from a business perspective (problem, market, competition, economics, feasibility, GTM) → `docs/IDEA_BRIEF.md`. **Skip it if you're already convinced the idea is sound** and go straight to the PRD.
+1. `/kedata-prd` — draft the PRD before coding (bring `docs/IDEA_BRIEF.md` as context if you brainstormed)
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(designer creates mockups — external)*
 4. `/kedata-implementation-plan` — lock architecture + break the work into tasks
