@@ -346,6 +346,30 @@ flowchart TD
 
 ---
 
+### Cross-cutting — Repo-wide Audit `[X]` *(proactive discovery)*
+
+**`/kedata-audit`** — *scan the whole repo → file prioritized issues*
+- **Input:** the entire codebase; the approved artifacts (to trace findings); the existing issue backlog (to dedupe).
+- **Output:** `docs/AUDIT_REPORT.md` **+ filed GitHub/GitLab issues** (bugs, security, tech debt, test gaps, doc/deploy drift).
+- **Method:** reuses the `kedata-review` checklist **repo-wide** (not a diff); dedupes against the tracker; files only above a severity threshold, after a **dry-run** confirmation.
+- **Rule:** it **creates issues, it does not gate merges** — that is `kedata-review`. Fixes flow back through `kedata-change` / the stack skills.
+
+```mermaid
+flowchart TD
+    SCAN(["Scan whole repo"]) --> S1["scanners (lint · vet · audit)"]
+    S1 --> S2["artifact compliance (contracts · PRD §18)"]
+    S2 --> S3["security · quality · perf · docs · deploy"]
+    S3 --> DED{"Dedupe vs<br/>tracker"}
+    DED -->|"already open"| SKIP["skip → reference #n"]
+    DED -->|"new + above threshold"| DRY["dry-run proposal"]
+    DRY -->|"confirm"| FILE["file issues (gh/glab)"]
+    FILE --> REP["AUDIT_REPORT.md"]
+```
+
+> Discovery is **proactive**: the pipeline fixes work already in flight; `kedata-audit` finds the work that *should* exist and puts it on the board. It never gates a merge.
+
+---
+
 ## 4. Full Linear View (the "golden path")
 
 ```mermaid
@@ -366,6 +390,7 @@ flowchart TD
         ASK["<b>[O]</b> kedata-ask — orientation"]
         RVS["<b>[M]</b> kedata-reverse — brownfield entry"]
         CHG["<b>[X]</b> kedata-change — change control"]
+        AUD["<b>[X]</b> kedata-audit — repo-wide discovery → issues"]
     end
 ```
 
@@ -391,6 +416,7 @@ flowchart TD
 | 7 | `kedata-review` | `[M]` | `/kedata-review` | artifacts + diff | review verdict |
 | 8 | `kedata-repo` | `[M]` | `/kedata-repo` | diff + artifacts | PR / MR |
 | — | `kedata-change` | `[X]` | `/kedata-change` | change request + artifacts | `CHANGE_REQUEST.md` + updated artifacts |
+| — | `kedata-audit` | `[X]` | `/kedata-audit` | whole repo + artifacts + backlog | `AUDIT_REPORT.md` + GitHub/GitLab issues |
 
 \* `kedata-reverse` is mandatory **only when** you enter a brownfield repo with missing artifacts; otherwise it is skipped entirely.
 
@@ -406,3 +432,4 @@ flowchart TD
 6. **Change before you build.** If scope moves, run `kedata-change` FIRST (hotfix excepted), then resume — never let code lead the docs.
 7. **Update in place.** Re-running a skill updates its existing file and bumps the version — never creates a second copy.
 8. **Optional means optional.** `kedata-brainstorm`, `kedata-design-brief`, and `kedata-reverse` can be skipped (the last only if you already have artifacts) — but skipping the brief costs you the FE visual contract, and skipping the test plan costs you coverage proof.
+9. **Review gates, audit discovers.** `kedata-review` blocks a merge against one diff; `kedata-audit` scans the whole repo and files issues — it never gates. Fixes found by an audit flow back through `kedata-change` / the stack skills.

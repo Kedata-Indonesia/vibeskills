@@ -1,7 +1,7 @@
 ---
 name: kedata-design-brief
 description: Use this skill to interview the user deeply and draft a DESIGN_BRIEF.md in Kedata's house format — the visual/UX context document consumed by mockup design. Reads the approved PRD first, then grills brand identity, design tokens, screens, components, and states. Trigger when the user says "draft a design brief", "design the UI", or "prepare mockup context".
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -215,7 +215,7 @@ Grill follow-ups:
 ### Step 11: Review & Sign-Off
 * Present the brief with a tight summary: the visual identity decided, the screens covered, the riskiest assumptions (e.g., dark mode scope, font availability), and open questions.
 * **Do not proceed to mockup design until the user approves it.** On approval, update §12: status `Approved`, version `1.0`, approver + date.
-* Hand off: "Design brief approved. Feed it as context for mockup design — start with the launch-critical screens from §11."
+* Hand off: "Design brief approved. Feed it as context for mockup design — start with the launch-critical screens from §11 — then hand it to `/kedata-implementation-plan` (FE task scope)."
 
 ## Downstream Consumers (why the design brief is the input to design)
 | Brief Section | Feeds | Consumed By |
@@ -228,10 +228,10 @@ Grill follow-ups:
 | §5 Screen Inventory | Which mockups to build | Mockup design (the screen list) |
 | §6 Component Inventory | Reusable UI blocks | Mockup design; component library |
 | §7 User Flows (with Screen References) | Navigation & journey order | Mockup design (flow screens); frontend routing |
-| §8 Error/Empty/Loading States | Non-happy-path visuals | Mockup design; frontend implementation |
+| §8 Error/Empty/Loading States | Non-happy-path visuals | Mockup design; frontend implementation; `kedata-test-plan` (state coverage cases) |
 | §9 Key Layout Patterns | Page skeletons | Mockup design |
 | §10 Dark Mode | Token variants | Mockup design; frontend implementation |
-| §11 Deliverables | Mockup scope & order | Mockup design (definition of done) |
+| §11 Deliverables | Mockup scope & order | Mockup design (definition of done); `kedata-implementation-plan` (FE task scope) |
 | §12 Sign-off status | Readiness gate | Mockup design — a Draft brief must not drive mockups |
 
 ## Constraints & Guardrails

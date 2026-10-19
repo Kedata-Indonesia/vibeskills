@@ -1,7 +1,7 @@
 ---
 name: kedata-contracts
 description: "Use this skill to interview the user and draft the engineering contract docs — API_CONTRACTS.md, DATA_CATALOG.md, and ENVIRONMENT_VARIABLES.md — from the approved implementation plan. These are the source of truth that backend, frontend, and review consume; contract-first is mandatory when FE/BE are split. Trigger when the user says \"draft the API contract\", \"write the data catalog\", or \"prepare the engineering reference docs\"."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -123,7 +123,7 @@ Grill follow-ups:
 ### Step 6: Review & Sign-Off
 * Present the docs with a tight summary: contract coverage (endpoints/entities/env vars contracted), the riskiest contract decisions, and open questions.
 * **Do not proceed to backend/frontend implementation until the user approves.** On approval, note the sign-off in each doc header: status `Approved`, version `1.0`, approver + date.
-* Hand off: "Contracts approved. Backend and frontend can now build against these docs — for split FE/BE, the API contract is the shared reference."
+* Hand off: "Contracts approved. Next: draft the test plan — `/kedata-test-plan` (every endpoint's contract test, every AC/edge case). Backend and frontend then build against these docs — for split FE/BE, the API contract is the shared reference."
 
 ## Downstream Consumers (why contracts are the engineering source of truth)
 | Doc | Section | Consumed By |
@@ -131,6 +131,7 @@ Grill follow-ups:
 | `API_CONTRACTS.md` | Every endpoint's shapes/codes | Backend implementation; frontend integration; code review |
 | `DATA_CATALOG.md` | Every entity's schema | Backend implementation (DB layer); code review |
 | `ENVIRONMENT_VARIABLES.md` | Every env var + secrets | Backend/frontend setup; `.env.example` generation |
+| All three docs | Traceability seed for test cases + deploy config | `kedata-test-plan` (contract tests); `kedata-deploy` (config/secrets) |
 | Sign-off status (all three) | Readiness gate | Engineering — Draft contracts must not drive implementation |
 
 ## Constraints & Guardrails

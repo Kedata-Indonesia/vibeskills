@@ -1,7 +1,7 @@
 ---
 name: kedata-review
 description: "Use this skill when reviewing a pull request, auditing pending changes, or when the user asks for a code review. Reads the approved artifacts first (implementation plan, PRD, contracts, design brief), then runs the Kedata code-review checklist against them — security, correctness, contract compliance, tests, observability, docs — and reports findings in priority order."
-version: 1.1.0
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -13,6 +13,7 @@ Run a structured code review against Kedata's house checklist — **verifying th
 ## When to Use
 * User command: `/kedata-review`
 * Autonomous trigger: When the user asks to review a pull request, audit pending changes, or requests a code review; before merging any PR into a Kedata repo.
+* **Do NOT use** to scan the whole repository for a backlog — that is `kedata-audit` (repo-wide discovery → issues). This skill reviews one diff against the artifacts and gates its merge.
 
 ## Prerequisites & Context Gathering
 Before reviewing, the agent MUST:
@@ -22,7 +23,9 @@ Before reviewing, the agent MUST:
    * **`DATA_CATALOG.md`** — entity schemas, indexes, relationships.
    * **`ENVIRONMENT_VARIABLES.md`** — config the code depends on.
    * **`PRD.md`** — §5 acceptance criteria, §18 edge cases.
+   * **`TEST_PLAN.md`** — §3 traceability matrix (which ACs/edge cases must be covered), §4 test cases (what the tests should assert), §9 exit criteria. The diff's tests must match the plan, not just exist.
    * **`DESIGN_BRIEF.md`** — screens (§5), components (§6), states (§8), dark mode (§10) — the FE visual contract.
+   * **`DEPLOYMENT.md`** — §5 config/secrets, §6 migrations, §7 CI gates, §10 rollout/rollback — the deploy contract when the diff touches infra.
 2. **Identify the changes:** PR/branch and its diff vs. base (`git diff main...HEAD`, `gh pr view`); the linked issue and its acceptance criteria.
 3. **Determine scope and stack:** backend (Go/Python/Node/Rust), frontend (React/Nuxt), infra, docs-only. Read the stack from plan §4 — do not assume.
 4. Run the local verification commands where possible: `make test`, `make swagger`, build/lint per the stack.
@@ -44,6 +47,7 @@ The code must match the approved artifacts. Any mismatch = request changes:
 | 4 | Every env var used exists in `ENVIRONMENT_VARIABLES.md` | Cross-check code references vs the doc |
 | 5 | The task satisfies the implementation plan §5 acceptance criteria + §10 DoD | Walk each AC against the implementation |
 | 6 | Stack in the code matches plan §4 (no improvised stack) | Frameworks, DB, auth per the plan |
+| 7 | Tests cover what `TEST_PLAN.md` §3 requires for this task | Map the diff's tests to the traceability matrix; missing P0 coverage = request changes |
 
 ### Step 2: Mandatory Standards (per the stack from plan §4)
 
@@ -78,7 +82,7 @@ The code must match the approved artifacts. Any mismatch = request changes:
 **Testing:**
 | # | Check | How to Verify |
 |---|-------|---------------|
-| 23 | Unit tests for new logic | Happy path + 2 edge cases per function |
+| 23 | Unit/integration tests for new logic match `TEST_PLAN.md` §4 | Happy path + 2 edge cases per function; cite the test case ID from the §3 matrix |
 | 24 | All tests pass | `make test` / `npm run test` / `pytest` / `cargo test` — 100% |
 | 25 | No unexplained test skips | `t.Skip()` / `it.skip()` / `#[ignore]` need TODO comment or linked issue |
 
@@ -126,6 +130,7 @@ Failures = approve with suggestions:
 | 45 | Follows the plan §3 platform: stateless rules for Cloud Run ($PORT, no local FS) vs compose stack for VM |
 | 46 | Secrets via Secret Manager (Cloud Run) or docker secrets/.env (VM) |
 | 47 | No `api.app.kedata.id`-style multi-level subdomains (Cloudflare rule) |
+| 48 | Matches `DEPLOYMENT.md` (build/services/migrations/rollout) — a diff that contradicts the runbook needs the runbook updated via `kedata-deploy` |
 
 ### Step 4: Language-Specific Deep Checks
 Run the deep checklist for the stack in play (from plan §4):

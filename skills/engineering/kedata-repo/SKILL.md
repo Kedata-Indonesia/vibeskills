@@ -1,7 +1,7 @@
 ---
 name: kedata-repo
 description: "Use this skill for GitHub/GitLab communication in a Kedata repo: draft and open PR/MR descriptions in the house template, summarize a branch's changes, link issues, and gather repo context via the platform CLI (gh / glab). Trigger when the user asks to open a pull request, write a PR/MR description, or handle an issue."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -18,7 +18,8 @@ Handle all repository-platform communication in a Kedata repo: draft and open **
 Before drafting anything, the agent MUST gather repo context:
 1. **Run the helper script** (installed with this skill): `bash scripts/repo-context.sh [base]` — it detects the platform (`gh`/`glab`/none), prints the current branch, base branch, commits since base, diff stat, changed files, the issue key from the branch name (e.g. `feature/KEP-123-short-desc` → `KEP-123`), and any existing PR/MR for the branch.
 2. **Detect the platform:** GitHub → `gh`; GitLab → `glab`; neither installed → git-only (output the body for manual paste).
-3. Read the approved artifacts if the diff touches code: `IMPLEMENTATION_PLAN.md` §5 (task ACs), `API_CONTRACTS.md`, `DATA_CATALOG.md` — the PR description should reflect what was agreed, not improvise.
+3. Read the approved artifacts if the diff touches code: `IMPLEMENTATION_PLAN.md` §5 (task ACs), `API_CONTRACTS.md`, `DATA_CATALOG.md`, `TEST_PLAN.md` (which ACs/edge cases this PR covers), and `DEPLOYMENT.md` if the diff touches infra — the PR description should reflect what was agreed, not improvise.
+4. Note any related `AUDIT_REPORT.md` / `CHANGE_REQUEST.md` — issues filed by `kedata-audit` and changes cascaded by `kedata-change` are what this PR/MR closes (`Closes #n`).
 4. Ask the user for clarification IF:
    * The target base branch is ambiguous (main vs. develop vs. release).
    * The diff spans multiple unrelated features — suggest splitting into separate PRs/MRs.
@@ -89,6 +90,8 @@ Add password reset flow for users who forgot their passwords.
 - [x] Build passes (`go build` / `npm run build`)
 - [x] `API_CONTRACTS.md` updated (if endpoints changed)
 - [x] `DATA_CATALOG.md` updated (if schema changed)
+- [x] Tests cover the `TEST_PLAN.md` §3 matrix for this task
+- [x] `DEPLOYMENT.md` updated (if infra/build changed)
 
 ## Screenshots / Demo (if UI changes)
 [Add screenshots here]

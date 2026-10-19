@@ -1,7 +1,7 @@
 ---
 name: kedata-prd
 description: Use this skill to interview the user deeply and draft a Product Requirements Document in Kedata's house format. The PRD is the first source of truth for implementation planning, API contracts, the data model, code review, and pull request workflows. Trigger when the user says "draft a PRD", "write a product spec", or starts a new product / feature without a PRD on file.
-version: 1.5.0
+version: 1.6.0
 author: Kedata Indonesia
 ---
 
@@ -246,20 +246,20 @@ Grill follow-ups:
 ### Step 11: Review & Sign-Off
 * Present the PRD to the user with a tight summary: what was decided, the 3-5 riskiest assumptions, the most dangerous edge cases, and the open questions.
 * **Do not proceed to implementation until the user approves it.** On approval, update §17: status `Approved`, version `1.0`, approver + date.
-* Hand off: "PRD approved. Next: draft the implementation plan, then begin coding per the stack standards."
+* Hand off: "PRD approved. Next: draft the design brief (`/kedata-design-brief`, if UI), then the implementation plan, contracts, and test plan — then begin coding per the stack standards. If scope changes later, run `/kedata-change` first."
 
 ## Downstream Consumers (why the PRD is the first source)
 | PRD Section | Feeds | Consumed By |
 |-------------|-------|-------------|
-| §5 User Stories & Acceptance Criteria | Verification criteria | Implementation planning; code review (testing/acceptance) |
-| §4 Personas & Roles | Auth + RBAC design | Backend & frontend engineering |
+| §5 User Stories & Acceptance Criteria | Verification criteria | Implementation planning; `kedata-test-plan` (each AC → ≥1 test case); code review (testing/acceptance) |
+| §4 Personas & Roles | Auth + RBAC design | Backend & frontend engineering; `kedata-test-plan` (RBAC matrix) |
 | §7 Tech Stack | Architecture decisions | Backend & frontend engineering |
 | §8 Core Features | Implementation plan | Implementation planning |
 | §9 API Overview | `docs/API_CONTRACTS.md` | Backend engineering; code review |
 | §10 Data Model | `docs/DATA_CATALOG.md` | Backend engineering |
 | §11 NFRs | Performance/security targets | Backend engineering; code review |
 | §12 Integrations & Env Vars | `ENVIRONMENT_VARIABLES.md`, `.env.example` | Backend engineering; project setup |
-| **§18 Edge Cases register** | **Test plan seed, boundary/negative test cases** | **Code review (testing checks); QA** |
+| **§18 Edge Cases register** | **Test plan seed, boundary/negative test cases** | **`kedata-test-plan` (§3 traceability matrix); code review (testing checks); QA** |
 | §16 Decisions Record | Future change requests | All downstream work — prevents re-litigating settled decisions |
 | §17 Sign-off status | Readiness gate | All downstream work — a Draft PRD must never be implemented |
 

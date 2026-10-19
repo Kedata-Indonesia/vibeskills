@@ -1,7 +1,7 @@
 ---
 name: kedata-backend-node
 description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Node.js + Express. Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Node-specific standards: swagger-jsdoc docs, activity logging, clean architecture (src/ layout), zod validation, Jest/Vitest, and deployment per the plan's platform choice."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -19,7 +19,8 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. §1 architecture (monolith vs split), §3 deployment platform, §4 stack (confirm Express + chosen DB), §6 API endpoints, §7 data model, §8 env vars, §10 DoD. **If missing, STOP.**
 2. **`PRD.md`** — §7 tech stack, §9 API overview, §10 data model, §18 edge cases — context, not re-interview.
 3. **Contracts:** `API_CONTRACTS.md` (shapes + status codes — source of truth), `DATA_CATALOG.md` (schema — update first), `ENVIRONMENT_VARIABLES.md` (config).
-4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
+4. **`TEST_PLAN.md`** — §3 traceability matrix + §4 test cases for this task; §5 fixtures; §9 exit criteria. Write the tests the plan specifies, not improvised coverage.
+5. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
 
 **Stack discipline — READ, never decide:** confirm Express + DB from plan §4 / PRD §7. If missing, STOP and escalate.
 
@@ -72,10 +73,12 @@ project-root/
 * Index queried fields; transactions for multi-step operations; soft deletes preferred; connection pooling configured.
 
 ### Step 6: Testing
+* Write the tests `TEST_PLAN.md` specifies for this task (§4 cases, §5 fixtures, §3 traceability).
 * Jest or Vitest; unit tests for services, integration tests for repositories, API tests with supertest.
 * Target ≥70% coverage on service layer. `eslint` passes; `tsc --noEmit` clean.
 
 ### Step 7: Deployment Awareness (per plan §3)
+The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) — follow it; plan §3 governs. If it's missing and the task touches infra, run `/kedata-deploy` rather than improvising.
 **Cloud Run:** stateless — no local FS (GCS); listen on `$PORT`; keep requests within the cap; Secret Manager for secrets; health check endpoint; `--min-instances 0`.
 **VM + Docker Compose:** one `docker-compose.yml` for the whole stack; migrations as deploy step; backups owned by the team; region near users.
 **Cloudflare:** single-level subdomains only (`api.kedata.id` ✓); SSL **Full**.
@@ -89,7 +92,7 @@ project-root/
 - [ ] Activity log emitted for every state-changing action
 - [ ] zod validation on all inputs; no raw errors/stack traces to clients
 - [ ] Migration added for schema changes
-- [ ] Tests added; ≥70% coverage on service layer; eslint + tsc pass
+- [ ] Tests added per TEST_PLAN.md; ≥70% coverage on service layer; eslint + tsc pass
 - [ ] Deployment follows plan §3
 - [ ] API_CONTRACTS.md / DATA_CATALOG.md / ENVIRONMENT_VARIABLES.md updated
 

@@ -1,7 +1,7 @@
 ---
 name: kedata-backend-go
 description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Go + Gin. Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Go-specific standards: swaggo Swagger, activity logging, clean architecture (internal/ layout), httperr error handling, and deployment per the plan's platform choice."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -19,7 +19,8 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 1. **`IMPLEMENTATION_PLAN.md`** — check `docs/` first, then root. §1 architecture (monolith vs split — where does the Go service live?), §3 deployment platform, §4 stack (confirm Go + Gin + chosen DB), §6 API endpoints (the exact list to build), §7 data model, §8 env vars, §10 DoD. **If missing, STOP — backend work requires the approved implementation plan.**
 2. **`PRD.md`** — §7 tech stack, §9 API overview, §10 data model, §18 edge cases — context, not re-interview.
 3. **Contracts:** `API_CONTRACTS.md` (request/response shapes + status codes — the source of truth), `DATA_CATALOG.md` (schema — update first for new schema), `ENVIRONMENT_VARIABLES.md` (config).
-4. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
+4. **`TEST_PLAN.md`** — §3 traceability matrix + §4 test cases for this task; §5 fixtures; §9 exit criteria. Write the tests the plan specifies, not improvised coverage.
+5. **Existing repo docs (optional hints only):** `ARCHITECTURE.md` — reuse, never a requirement.
 
 **Stack discipline — READ, never decide:** confirm Go + Gin + DB from plan §4 / PRD §7. If the artifacts don't specify, STOP and escalate: "The stack was not locked in the implementation plan."
 
@@ -76,10 +77,12 @@ Swagger checklist: UI accessible; every endpoint annotated; request bodies typed
 * Index queried fields; transactions for multi-step operations; soft deletes preferred; connection pooling configured.
 
 ### Step 6: Testing
+* Write the tests `TEST_PLAN.md` specifies for this task (§4 cases, §5 fixtures, §3 traceability).
 * `go test ./...` + `go vet ./...`; unit tests for services, integration tests for repositories, handler tests with httptest.
 * Target ≥70% coverage on service layer. Race detector: `go test -race ./...`.
 
 ### Step 7: Deployment Awareness (per plan §3)
+The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) — follow it; plan §3 governs. If it's missing and the task touches infra, run `/kedata-deploy` rather than improvising.
 **Cloud Run:** stateless — no local FS (GCS); listen on `$PORT`; keep requests within the cap (default 5m, max ~60m); Secret Manager for secrets; health check endpoint; `--min-instances 0` for cost.
 **VM + Docker Compose:** one `docker-compose.yml` for the whole stack; migrations as deploy step; backups owned by the team; region near users.
 **Cloudflare:** single-level subdomains only (`api.kedata.id` ✓); SSL **Full**.
@@ -92,7 +95,7 @@ Swagger checklist: UI accessible; every endpoint annotated; request bodies typed
 - [ ] Swagger annotations on every new/modified endpoint; `make swagger` runs; docs committed
 - [ ] Activity log emitted for every state-changing action
 - [ ] No raw errors to clients; domain errors mapped to HTTP status codes
-- [ ] Migrations added; tests added; ≥70% coverage on service layer
+- [ ] Migrations added; tests added per TEST_PLAN.md; ≥70% coverage on service layer
 - [ ] Deployment follows plan §3
 - [ ] API_CONTRACTS.md / DATA_CATALOG.md / ENVIRONMENT_VARIABLES.md updated
 

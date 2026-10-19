@@ -1,7 +1,7 @@
 ---
 name: kedata-implementation-plan
 description: Use this skill to interview the user and draft an IMPLEMENTATION_PLAN.md — the product-to-engineering handoff that turns the approved PRD and design brief into buildable units. Locks the architecture decision (monolith vs separate FE/BE), the deployment platform (VM + Docker Compose vs serverless Cloud Run) and its constraints, task breakdown with acceptance criteria, dependency order, and definition of done. Trigger when the user says "draft the implementation plan", "break down the work", or "slice the PRD into tasks".
-version: 1.3.0
+version: 1.4.0
 author: Kedata Indonesia
 ---
 
@@ -223,7 +223,7 @@ Grill follow-ups:
 ### Step 10: Review & Sign-Off
 * Present the plan with a tight summary: the architecture and deployment decisions and why, the task count per milestone, the riskiest tasks, and the open questions.
 * **Do not proceed to implementation until the user approves it.** On approval, update §12: status `Approved`, version `1.0`, approver + date.
-* Hand off: "Implementation plan approved. The architecture, deployment platform, and task order are locked — engineering can start with the first-milestone tasks."
+* Hand off: "Implementation plan approved. Next: draft the contracts — `/kedata-contracts`, then `/kedata-test-plan`. The architecture, deployment platform, and task order are locked — engineering can start with the first-milestone tasks once contracts + test plan are approved."
 
 ## Downstream Consumers (why the implementation plan is the handoff)
 | Plan Section | Feeds | Consumed By |
@@ -231,11 +231,12 @@ Grill follow-ups:
 | §1 Architecture Decision | Codebase topology, repo setup | Engineering kickoff — determines everything below |
 | §2 Repo & Workspace Layout | Folder structure, monorepo config | Engineering setup |
 | §3 Deployment Platform & Topology | Dockerfile vs docker-compose, services, regions, domains, CI/CD | DevOps / deployment — platform constraints shape the build |
-| §4 Supporting Architecture | DB, auth, storage, testing strategy | Engineering (each stack) |
+| §4 Supporting Architecture | DB, auth, storage, testing strategy | Engineering (each stack); `kedata-test-plan` (the §4 testing strategy seeds the plan) |
 | §5 Task Breakdown | What to build, in what order | Engineering backlog; review verification |
 | §6 API Endpoints | `API_CONTRACTS.md` | Backend engineering; code review |
 | §7 Data Model | `DATA_CATALOG.md` | Backend engineering |
 | §8 Env Vars & Config | `ENVIRONMENT_VARIABLES.md`, `.env.example` | Engineering setup |
+| §3 Deployment Platform & Topology | Dockerfile vs docker-compose, services, regions, domains, CI/CD | `kedata-deploy` — turns the decision into real infra + runbook |
 | §9 Dependency Order & Milestones | Execution sequence | Engineering planning |
 | §10 Definition of Done | Per-task completion bar | Engineering; code review |
 | §11 Risks & Rollout | Rollout order, rollback | Deployment |

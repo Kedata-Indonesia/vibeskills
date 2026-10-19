@@ -27,6 +27,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
 | `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
+| `kedata-audit` | engineering | Repo-wide codebase audit → prioritized, deduplicated GitHub/GitLab issues (bugs, security, tech debt, test gaps) + AUDIT_REPORT.md |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-backend-go` | backend | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
 | `kedata-backend-python` | backend | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
@@ -59,6 +60,7 @@ For a new feature, run skills in order:
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
 
 **Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.
+**Anytime:** `/kedata-audit` — proactively scan the whole repo and file prioritized, deduplicated issues to the tracker (bugs, security, tech debt, test gaps).
 
 ## Skill Format
 

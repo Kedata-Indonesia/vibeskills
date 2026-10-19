@@ -1,7 +1,7 @@
 ---
 name: kedata-system
 description: "Use this skill at the start of any engineering session inside a Kedata repo — it loads the baseline development rules: read the approved plan artifacts first (implementation plan, PRD, design brief), follow house conventions, and produce production-ready code through the plan → confirm → code → test → verify workflow."
-version: 1.1.0
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -12,7 +12,7 @@ Load the baseline operating rules for an engineering session in a Kedata repo. T
 
 **This skill produces NO file artifact** — it is behavioral, not artifact-producing. Its only outputs are ephemeral and conversational: the per-task implementation plan (Step 3) and the Changes Summary (Step 7), used as user-confirmation gates and then left in the conversation. The durable engineering inputs already exist upstream (plan, PRD, brief); this skill reads them and shapes how the work is done.
 
-**Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract), and the Contracts (API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md). Engineering does NOT re-interview the product; it reads what was approved.
+**Input chain:** the product team has already produced the approved artifacts this skill reads — Implementation Plan (architecture + tasks + DoD), PRD (features + acceptance criteria), Design Brief + mockups (visual/UX contract), the Contracts (API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md), the Test Plan (TEST_PLAN.md — what to test), and the Deployment runbook (DEPLOYMENT.md — how it ships). Engineering does NOT re-interview the product; it reads what was approved.
 
 **Stack-specific context:** this skill is the SHARED baseline only. When a task touches a specific stack, the stack-specific skill for that language (backend: Go / Python / Node / Rust; frontend: React / Nuxt) is loaded for the framework details — project structure, patterns, testing commands. Load it when that stack is in play, not at session start.
 
@@ -29,8 +29,10 @@ Before writing any code, the agent MUST read the relevant approved artifacts IN 
 2. **`PRD.md`** — check `docs/` first, then root. Features with priorities (§8), acceptance criteria (§5), API overview (§9), data model (§10), edge cases (§18) — the *why* behind the plan.
 3. **`DESIGN_BRIEF.md`** — check `docs/` first, then root. Visual identity, screens (§5), components (§6), states (§8) — the visual contract for FE work. If missing, note it and proceed (FE follows the plan + mockups).
 4. **Contracts — `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md`** — check `docs/` first, then root. The exact endpoint shapes, entity schemas, and config the code must match. **If these are missing, STOP and escalate — code cannot be written against a contract that doesn't exist.**
-5. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
-6. **Optional hints only:** any other repo docs that exist from prior iterations — reuse conventions, never a requirement.
+5. **Test Plan — `TEST_PLAN.md`** — check `docs/` first, then root. The cases to write per task (§4 test cases, §3 traceability matrix, §5 fixtures, §9 exit criteria). **If missing, note it and recommend `kedata-test-plan` — do not invent coverage.**
+6. **Deployment runbook — `DEPLOYMENT.md`** — check `docs/` first, then root. §5 config/secrets, §6 migrations, §7 CI gates, §10 rollout/rollback. If missing, note it and recommend `kedata-deploy` when the task touches infra; do not improvise the deploy model (plan §3 still governs).
+7. **Issue / task description** — the specific task from the plan; its acceptance criteria; its milestone.
+8. **Optional hints only:** any other repo docs that exist from prior iterations — reuse conventions, never a requirement. If an `AUDIT_REPORT.md` or `CHANGE_REQUEST.md` exists, read it for context on known issues or recent scope changes.
 
 **Stack resolution — READ the decided stack, never decide it here.**
 1. **The stack is decided UPSTREAM, not here.** The product team locked it in the PRD §7 (tech stack table) and the implementation plan §4 (supporting architecture). This skill READS those decisions — it does not interview for the stack.
@@ -90,11 +92,12 @@ func (r *PasswordResetRepository) Create(ctx context.Context, pr *models.Passwor
 **Frontend (Nuxt/Vue):** composables for API calls (`usePasswordReset`), `<script setup lang="ts">` components with explicit `loading`/`error` state.
 
 ### Step 5: Write Tests
+* Write the tests `TEST_PLAN.md` §4 specifies for this task — trace each to its source via the §3 matrix; use the §5 fixtures and meet the §9 exit criteria. Do not invent coverage the plan didn't set.
 * Backend: `make test` or `go test ./internal/... -v -count=1`; coverage with `-coverprofile`.
 * Frontend: `npm run test`; coverage `npm run test:coverage`.
 
 ### Step 6: Update Documentation
-After implementing, update the relevant docs: `API_CONTRACTS.md` (endpoints), `DATA_CATALOG.md` (collections/fields), `COMPONENT_SPECS.md` (components), `ENVIRONMENT_VARIABLES.md` (env vars, both `.env` and `.env.example`).
+After implementing, update the relevant docs: `API_CONTRACTS.md` (endpoints), `DATA_CATALOG.md` (collections/fields), `COMPONENT_SPECS.md` (components), `ENVIRONMENT_VARIABLES.md` (env vars, both `.env` and `.env.example`). If the change affects test coverage or deploy config, update `TEST_PLAN.md` / `DEPLOYMENT.md` accordingly — or route the scope change through `kedata-change` first.
 
 ### Step 7: Review Before Accepting (Human Verification)
 Before the user accepts any changes, provide a Changes Summary (What changed / Why / Risks & Gotchas / Verification checklist) and **do not proceed until the user confirms**.
@@ -141,7 +144,7 @@ Always check before using an env var: is it in `.env`? in `.env.example`? docume
 **Rules:** add new env vars to BOTH `.env` and `.env.example`; update `ENVIRONMENT_VARIABLES.md`; never commit `.env` — only `.env.example`; secrets in production follow the plan §3 decision (Secret Manager for Cloud Run, docker secrets/`.env` on a VM).
 
 ## Deployment Awareness
-Follow the **deployment platform decision in the implementation plan §3** — this overrides any generic default:
+Follow the **deployment platform decision in the implementation plan §3** — this overrides any generic default. The generated config and runbook live in `DEPLOYMENT.md` (produced by `kedata-deploy`); follow it. If it's missing and the task touches infra/Dockerfile/CI, run `/kedata-deploy` rather than improvising.
 
 **If VM + Docker Compose:**
 - One `docker-compose.yml` for the whole stack (app + any side services: DB, worker, analytics)
@@ -190,6 +193,7 @@ Follow the **deployment platform decision in the implementation plan §3** — t
 * **DO NOT** decide or improvise the stack at engineering time — read it from PRD §7 / plan §4; if it's missing, STOP and escalate to the product team.
 * **DO NOT** re-interview the product team — the plan, PRD, and brief already decided scope; read them.
 * **DO NOT** deviate from the plan's architecture or deployment decisions — if the plan is wrong, escalate to update the plan first.
+* **DO NOT** change scope mid-task — if a requirement moves, run `kedata-change` FIRST (PRD → plan → contracts → test plan), then resume. Never let code lead the docs.
 * **DO NOT** skip Swagger annotations or activity logs on any backend change.
 * **DO NOT** return raw errors to clients or log sensitive data.
 * **DO NOT** hardcode secrets or commit `.env`.

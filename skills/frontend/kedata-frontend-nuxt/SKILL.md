@@ -1,7 +1,7 @@
 ---
 name: kedata-frontend-nuxt
 description: "Use this skill when writing, converting, or reviewing Kedata frontend code in Vue 3 + Nuxt 3. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces Nuxt-specific standards: file-based pages/, Pinia, vee-validate + zod, fetch composables, Vitest, and design preservation from the brief."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -20,8 +20,9 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 2. **`DESIGN_BRIEF.md`** — visual identity, tokens (§3), screens (§5), components (§6), states (§8), layouts (§9), dark mode (§10) — the visual contract. **Preserve it exactly.**
 3. **Contracts:** `API_CONTRACTS.md` (request/response shapes), `ENVIRONMENT_VARIABLES.md` (FE vars like `NUXT_PUBLIC_API_BASE_URL`).
 4. **`PRD.md`** — §7 tech stack, §18 edge cases — context.
-5. **Existing repo docs (optional hints only):** `COMPONENT_SPECS.md`, `STATE_MANAGEMENT.md`, `API_INTEGRATION.md` — reuse, never a requirement.
-6. **Mockups** (external designer output) — the visual target.
+5. **`TEST_PLAN.md`** — §3 traceability + §4 cases (including loading/error/empty state coverage per brief §8); §5 fixtures. Write the tests the plan specifies.
+6. **Existing repo docs (optional hints only):** `COMPONENT_SPECS.md`, `STATE_MANAGEMENT.md`, `API_INTEGRATION.md` — reuse, never a requirement.
+7. **Mockups** (external designer output) — the visual target.
 
 **Stack discipline — READ, never decide:** confirm Nuxt from plan §4 / PRD §7. If missing, STOP and escalate.
 
@@ -86,6 +87,7 @@ project-root/
 * Typed service modules only — no raw `$fetch` in components. Reads via `useFetch`/`useQuery`; writes via `$fetch`/`useMutation`; invalidate related queries after mutations; parse API errors to UX.
 
 ### Step 7: Testing
+* Write the tests `TEST_PLAN.md` specifies for this task (§4 cases incl. loading/error/empty, §5 fixtures).
 * Vitest + Vue Test Utils; integration with MSW; Playwright E2E for critical flows.
 * Run before finishing: `npm run lint`, `npx nuxi typecheck`, `npm run test`.
 
@@ -98,7 +100,7 @@ project-root/
 - [ ] No `any` types; strict mode; nuxi typecheck clean
 - [ ] Design tokens from brief §3 used (not invented)
 - [ ] Dark theme (brief §10) honored
-- [ ] Tests added (unit/integration/E2E per critical flow)
+- [ ] Tests added per TEST_PLAN.md (unit/integration/E2E per critical flow)
 - [ ] `npm run lint` + `npm run test` + `npm run build` pass
 
 **Definition of Done:** feature per implementation plan task; screens match brief + mockups; loading/error/empty states handled; tests added; lint + type checks + build pass; responsive + dark theme verified.
