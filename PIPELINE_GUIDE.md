@@ -56,11 +56,19 @@ flowchart TD
     CHANGE -.-> PLANART
     CHANGE -.-> CONART
     CHANGE -.-> TESTART
+
+    AUDIT["[X] kedata-audit<br/>repo-wide scan → filed issues"]
+    CODE -.->|"scans"| AUDIT
+    AUDIT -.->|"findings become work"| CHANGE
 ```
 
 > `kedata-change` is a **loop**, not a stage: whenever an approved artifact must move
 > (scope change, spec gap, hotfix), it runs first and cascades the change through the
 > chain below it before work resumes.
+
+> `kedata-audit` is the **proactive twin**: it scans the whole repo (not a diff) and files
+> prioritized, deduplicated issues — those findings re-enter the flow as `kedata-change`
+> requests or direct stack-skill fixes. It never gates a merge.
 
 ---
 
@@ -94,6 +102,10 @@ flowchart LR
     CHG -.-> PLAN
     CHG -.-> CON
     CHG -.-> TEST
+
+    AUD(["kedata-audit"]) -.->|"files"| ISS(["tracker issue"])
+    ISS -.-> CHG
+    CODE -.-> AUD
 
     CODE -.->|"brownfield,<br/>no docs"| RVS["kedata-reverse<br/>reconstructs →"]
     RVS -.-> PRD
