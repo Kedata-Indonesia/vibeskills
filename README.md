@@ -23,6 +23,10 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
 | `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
+| `kedata-test-plan` | engineering | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
+| `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
+| `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
+| `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
 | `kedata-review` | engineering | Code review checklist: mandatory + recommended checks, security, testing, docs, review comment templates |
 | `kedata-backend-go` | backend | Backend standards for Go + Gin: swaggo Swagger, activity log, clean architecture, httperr errors, testing |
 | `kedata-backend-python` | backend | Backend standards for Python + FastAPI: auto docs, activity log, pydantic, pytest |
@@ -40,16 +44,21 @@ npx skills@latest add /path/to/vibeskills
 For a new feature, run skills in order:
 
 0. **Don't know where the codebase is?** Start with `/kedata-ask` — it inspects the artifacts and tells you the current stage + next step + which skill to run.
+0.2 *(brownfield only)* `/kedata-reverse` — inherited a codebase with no docs? Reverse-engineer the PRD, contracts, and a baseline plan from the code so the pipeline can run. Skip if artifacts already exist.
 0.5 *(optional)* `/kedata-brainstorm` — have a raw idea? Grill it from a business perspective (problem, market, competition, economics, feasibility, GTM) → `docs/IDEA_BRIEF.md`. **Skip it if you're already convinced the idea is sound** and go straight to the PRD.
 1. `/kedata-prd` — draft the PRD before coding (bring `docs/IDEA_BRIEF.md` as context if you brainstormed)
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(designer creates mockups — external)*
-4. `/kedata-implementation-plan` — lock architecture + break the work into tasks
+4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks
 5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
+5.5 `/kedata-test-plan` — turn PRD acceptance criteria + edge cases into a traceable TEST_PLAN.md
 6. `/kedata-backend-go` · `/kedata-backend-python` · `/kedata-backend-node` · `/kedata-backend-rust` — implement per the chosen backend stack (plan §4)
 7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
-8. `/kedata-review` — review the PR before merging
-9. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
+8. `/kedata-deploy` — turn plan §3 into Dockerfile/compose/CI + a DEPLOYMENT.md runbook (rollout + rollback)
+9. `/kedata-review` — review the PR before merging
+10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
+
+**Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.
 
 ## Skill Format
 
