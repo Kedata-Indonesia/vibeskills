@@ -1,7 +1,7 @@
 ---
 name: kedata-backend-rust
-description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Rust (optionally with the Axum framework). Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Rust-specific standards: utoipa OpenAPI docs, activity logging, clean architecture (src/ layout), thiserror domain errors, cargo test, and deployment per the plan's platform choice."
-version: 1.1.0
+description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Rust (optionally with the Axum framework). Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Rust-specific standards: utoipa OpenAPI docs, activity logging, clean architecture (src/ layout), thiserror domain errors, cargo test, and deployment per the plan's platform choice. Pairs with the rust-expert-best-practices-code-review skill (wispbit-ai/skills) for idiomatic Rust."
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -27,6 +27,29 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 **Database before API:** design or update `DATA_CATALOG.md` before writing endpoints. `API_CONTRACTS.md` is the source of truth — update it as you implement.
 
 Ask the user for clarification IF: a schema change has no migration plan; the endpoint conflicts with an existing contract; the task touches an area the plan doesn't cover (→ escalate, don't improvise).
+
+## Companion Skill — rust-expert-best-practices-code-review (idiomatic-Rust layer)
+This skill enforces Kedata's *engineering* standards (layout, mandatory OpenAPI + activity log,
+contracts). The **rust-expert-best-practices-code-review** skill from
+[wispbit-ai/skills](https://github.com/wispbit-ai/skills) supplies the *idiomatic-Rust craft* —
+type safety, error handling, API design, code quality, readability and performance rules — for
+writing, refactoring, and reviewing Rust. Load it alongside this skill; it does not replace the
+approved artifacts.
+
+* **Install once per project:**
+  `npx skills add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review`.
+* **Load when:** before writing/reviewing/refactoring Rust — structs, functions, enums, traits,
+  error handling, `Result` types, public APIs, or performance work. Read the individual rule files
+  under the skill's `rules/` for detail.
+* **Priority order it applies:** type safety (`use-typesafe-`, `use-enum-`) →
+  error handling (`result-`, `avoid-panic`) → API design (`use-borrowed-`, `prefer-builder-`) →
+  code quality (`use-iterator-`, `prefer-format`) → readability (`use-named-`) →
+  performance (`avoid-rc`, `avoid-box`).
+* **Boundary & precedence:** it governs *how the Rust is written*, not *what is built* — plan
+  §4/§6, `API_CONTRACTS.md`, and `DATA_CATALOG.md` stay the source of truth for scope, endpoints,
+  and schema. Where a rule and a Kedata mandatory standard diverge, the **Kedata standard wins**
+  (e.g. keep `thiserror` domain errors and `?`-based propagation per Step 4 — both align with
+  `result-error-returns` / `avoid-panic`). Note any deliberate deviation in the PR.
 
 ## Execution Workflow
 
@@ -71,6 +94,7 @@ project-root/
 * Write the tests `TEST_PLAN.md` specifies for this task (§4 cases, §5 fixtures, §3 traceability).
 * `cargo test`; unit tests for services, integration tests for repositories (test DB), handler tests with `tower::ServiceExt::oneshot`.
 * Target ≥70% coverage on service layer. `cargo clippy` clean; `cargo fmt` applied.
+* Idiomatic craft: apply the companion `rust-expert-best-practices-code-review` rules while writing/reviewing (see Companion Skill); `cargo clippy` clean is the floor, not the ceiling.
 
 ### Step 7: Deployment Awareness (per plan §3)
 The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) — follow it; plan §3 governs. If it's missing and the task touches infra, run `/kedata-deploy` rather than improvising.
@@ -88,6 +112,7 @@ The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) 
 - [ ] thiserror domain errors; no internal error details leaked
 - [ ] Migration added for schema changes
 - [ ] Tests added per TEST_PLAN.md; ≥70% coverage on service layer; clippy + fmt pass
+- [ ] Companion `rust-expert-best-practices-code-review` rules applied (no `unwrap`/`panic!` in request paths, borrowed argument types, iterator transforms over push loops, all enum arms handled)
 - [ ] Deployment follows plan §3
 - [ ] API_CONTRACTS.md / DATA_CATALOG.md / ENVIRONMENT_VARIABLES.md updated
 
@@ -101,6 +126,7 @@ The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) 
 * **DO NOT** put business logic in handlers or repositories.
 * **DO NOT** use blocking calls in async handlers; `tokio` throughout.
 * **DO NOT** hardcode secrets; use env vars / Secret Manager.
+* **DO NOT** let the companion `rust-expert-best-practices-code-review` skill override the approved plan/contracts — it guides idiom only; Kedata's mandatory standards and the artifacts win on conflict.
 * Keep functions small and focused; ask before assuming; propose options; flag risks.
 
 ## Example Output Structure

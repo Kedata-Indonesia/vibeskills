@@ -40,6 +40,29 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
 
+## Companion Skills
+
+Some Kedata skills pair with an external companion skill for craft depth. They **reference** it
+(install, when to load, precedence) rather than vendoring it, so it stays current with upstream,
+and the approved Kedata artifact always wins on conflict.
+
+**`kedata-design-brief` + `kedata-frontend-*` → [taste-skill](https://www.tasteskill.dev/)** —
+the open-source anti-slop design layer — for visual craft (typography, spacing, color, motion,
+banned patterns), plus its `lint.mjs` / `inspect.mjs` gate on public pages. The approved
+`DESIGN_BRIEF.md` is always the visual contract.
+
+```bash
+npx skills add Leonxlnx/taste-skill
+```
+
+**`kedata-backend-rust` → [rust-expert-best-practices-code-review](https://github.com/wispbit-ai/skills)** —
+idiomatic-Rust rules (type safety, error handling, API design, quality, performance) for writing,
+refactoring, and reviewing Rust. The approved plan/contracts stay the source of truth.
+
+```bash
+npx skills add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review
+```
+
 ## Suggested Session Flow
 
 For a new feature, run skills in order:

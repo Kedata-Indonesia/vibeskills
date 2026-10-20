@@ -190,6 +190,12 @@ flowchart LR
 - **Then:** `[E]` mockups are produced externally (designer or LLM) from the brief.
 - **Optional?** Technically yes — but required input for FE work. Without it, the FE follows plan + mockups only.
 
+> **Companion — taste-skill.** This stage pairs with **taste-skill**
+> ([tasteskill.dev](https://www.tasteskill.dev/); `npx skills add Leonxlnx/taste-skill`) for
+> anti-slop art direction. Load it while grilling §1 Product Identity and §3 tokens so the brand
+> personality and palette are *decided*, not defaulted. The approved `DESIGN_BRIEF.md` is the
+> contract and wins on any conflict.
+
 ---
 
 ### Stage 3 — Planning `[M]`
@@ -296,6 +302,18 @@ flowchart TD
 
 Each stack skill enforces its own mandatory standards (e.g. backend: Swagger/OpenAPI docs
 + activity logging; frontend: design-token fidelity + loading/error/empty states).
+
+> **Companion — taste-skill.** Each `kedata-frontend-*` skill pairs with **taste-skill**
+> ([tasteskill.dev](https://www.tasteskill.dev/)) for visual craft: load `design-taste-frontend`
+> for public pages, its `references/app-screens.md` for dashboards/admin, and run its
+> `lint.mjs` / `inspect.mjs` gate (1440 / 768 / 390px) on public pages. It complements the
+> brief's contract and never overrides it.
+
+> **Companion — rust-expert-best-practices-code-review.** `kedata-backend-rust`
+> ([wispbit-ai/skills](https://github.com/wispbit-ai/skills);
+> `npx skills add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review`)
+> adds idiomatic-Rust rules — type safety, error handling, API design, quality, performance — for
+> writing, refactoring, and reviewing Rust. It guides idiom only; the plan and contracts win.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: kedata-design-brief
-description: Use this skill to interview the user deeply and draft a DESIGN_BRIEF.md in Kedata's house format — the visual/UX context document consumed by mockup design. Reads the approved PRD first, then grills brand identity, design tokens, screens, components, and states. Trigger when the user says "draft a design brief", "design the UI", or "prepare mockup context".
-version: 1.1.0
+description: Use this skill to interview the user deeply and draft a DESIGN_BRIEF.md in Kedata's house format — the visual/UX context document consumed by mockup design. Reads the approved PRD first, then grills brand identity, design tokens, screens, components, and states. Pairs with the taste-skill visual-craft layer (tasteskill.dev) for anti-slop art direction. Trigger when the user says "draft a design brief", "design the UI", or "prepare mockup context".
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -28,6 +28,31 @@ Before the interview starts, the agent MUST:
 3. **Frame the interview with the user (2 minutes max):**
    * "I'll interview you on design — brand personality, tokens, voice, screens, components, states, layouts, dark mode. Answer briefly; I'll follow up where I need depth. At the end you'll have a DESIGN_BRIEF.md ready for mockup design."
    * Agree on session budget: full grill (30-45 min) vs focused grill (15-20 min, e.g. only public screens).
+
+## Companion Skill — taste-skill (visual-craft layer)
+This brief defines the *contract* (12 sections, tokens, screens, sign-off). **taste-skill**
+([tasteskill.dev](https://www.tasteskill.dev/)) supplies the *craft* — the anti-slop art
+direction (typography, spacing, color, motion, banned patterns) that stops the mockups and
+UI from looking generated. Use it **alongside** this skill, never instead of it.
+
+* **Install once per project:** `npx skills add Leonxlnx/taste-skill` — installs the
+  `design-taste-frontend` default plus 12 siblings (works in Claude Code, Cursor, Codex,
+  OpenCode, Gemini CLI).
+* **Load it** before drafting §1 Product Identity and §3 Visual Identity & Tokens so the
+  brand personality and palette are *decided*, not defaulted; load it again when §11
+  mockups are produced.
+  * `design-taste-frontend` — brief inference + the direction draw
+    (`node <skill>/scripts/draw.mjs …`) that deals 3 researched directions (type system,
+    palette, hero, section compositions) instead of the model's default template.
+  * Style anchor for §1: `soft-skill` (calm, expensive), `minimalist-skill` (editorial),
+    `brutalist-skill` (Swiss, sharp).
+  * Mockups for §11: `imagegen-frontend-web`, `imagegen-frontend-mobile`, `brandkit`;
+    `image-to-code-skill` bridges a mockup to the FE.
+* **Boundary & precedence:** this brief is the source of truth. Pass `--keep palette,type`
+  to the draw so taste-skill adopts the brief's brand values instead of overriding them;
+  where a taste-skill rule conflicts with the approved brief, the **brief wins** — record
+  the deviation as an Open Question in §12 (and, if the brand mandates a banned device,
+  note it in §11 so the FE run can justify it).
 
 ## Interview Protocol (How to Grill)
 
@@ -211,6 +236,7 @@ Grill follow-ups:
   - [ ] Breakpoints defined in §4; layouts for mobile (375px) AND desktop (1440px) in §9
   - [ ] No engineering detail leaked (no DB schema, API contracts, or algorithms)
   - [ ] §12 lists source PRD + any open design questions
+  - [ ] If taste-skill was used: its dealt direction is reflected in §1/§3/§9, any `--keep palette,type` brand values were preserved, and every deviation is logged in §12
 
 ### Step 11: Review & Sign-Off
 * Present the brief with a tight summary: the visual identity decided, the screens covered, the riskiest assumptions (e.g., dark mode scope, font availability), and open questions.
@@ -244,6 +270,7 @@ Grill follow-ups:
 * **DO NOT** skip dark mode — decide it or mark it "N/A" with a reason.
 * **DO NOT** rewrite an existing brief from scratch — update in place and bump the version.
 * **DO NOT** renumber the 12 sections — the numbering is a stable contract mockup design depends on.
+* **DO NOT** let taste-skill override the brief — it supplies craft direction; the approved brief supplies the contract and wins on any conflict (log the deviation in §12).
 
 ## Example Output Structure
 A complete design brief reaches this specificity: a named brand personality with a *why*, token tables with light+dark hex values and rationales, a screen inventory grouped by persona, a component inventory with states, and error/empty/loading coverage for every screen. The skeleton below is the **shape** — replace every `[bracket]` and placeholder description with the concrete, confirmed answers. No `[bracket]` may survive in the delivered brief:

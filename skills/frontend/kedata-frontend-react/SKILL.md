@@ -1,7 +1,7 @@
 ---
 name: kedata-frontend-react
-description: "Use this skill when writing, converting, or reviewing Kedata frontend code in React 19 + TanStack Start. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces React-specific standards: TanStack Router/Query, Zustand, react-hook-form + zod, axios, Vitest, and design preservation from the brief."
-version: 1.1.0
+description: "Use this skill when writing, converting, or reviewing Kedata frontend code in React 19 + TanStack Start. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces React-specific standards: TanStack Router/Query, Zustand, react-hook-form + zod, axios, Vitest, and design preservation from the brief. Pairs with the taste-skill visual-craft layer (tasteskill.dev) for anti-slop UI."
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -27,6 +27,29 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 **Stack discipline — READ, never decide:** confirm React from plan §4 / PRD §7. If missing, STOP and escalate.
 
 Ask the user for clarification IF: a design reference conflicts with a new requirement; an API contract is missing for the endpoint being consumed; the task touches an area the plan doesn't cover (→ escalate, don't improvise).
+
+## Companion Skill — taste-skill (visual-craft layer)
+This skill enforces *engineering* standards; **taste-skill**
+([tasteskill.dev](https://www.tasteskill.dev/)) enforces *visual* craft — the anti-slop rules
+(typography, spacing, color, motion, banned patterns) that stop the UI from looking generated.
+Load it before building or restyling any public-facing page or app screen; it complements
+this skill, it does not replace the brief or the contracts.
+
+* **Install once per project:** `npx skills add Leonxlnx/taste-skill`.
+* **Load when:**
+  * Landing / marketing / product page → `design-taste-frontend` (its "page" run).
+  * Dashboard, admin, analytics, settings, inbox → read its `references/app-screens.md`
+    (app screens have their own run and house rules).
+  * Redesigning an existing page → `redesign-skill`; mockup-first → `image-to-code-skill`.
+* **Optional gate (recommended for public pages):** from the project root, run
+  `node <taste-skill>/scripts/lint.mjs <src>` and
+  `node <taste-skill>/scripts/inspect.mjs <url|dist/index.html>` (1440 / 768 / 390px, writes
+  to `.taste-skill/`). Fix every `FAIL` before finishing; treat each `WARN` as wrong unless
+  defensible in one sentence.
+* **Boundary & precedence:** `DESIGN_BRIEF.md` is the visual contract — taste-skill must not
+  invent a new look. Hand it the brief's values (`--keep palette,type`) so it adopts the
+  Kedata brand tokens. If the brief mandates a device taste-skill bans (e.g. a logo on a
+  gradient), keep the brief and note the override in the PR.
 
 ## Execution Workflow
 
@@ -69,6 +92,7 @@ project-root/
 * Mobile-first, responsive (375px+); dark theme per brief §10.
 * Indonesian copy for Indonesian products (brief §3.6 voice & tone).
 * Feature-flag beyond-MVP scope per plan (e.g., `VITE_ENABLE_*` flags).
+* Anti-slop craft: for public pages load the taste-skill `design-taste-frontend` and run its `lint.mjs`/`inspect.mjs` gate (see Companion Skill) — preserve the brief's tokens via `--keep palette,type`.
 
 ### Step 4: Auth Rules
 * Access token in Zustand + `localStorage`; refresh token via backend httpOnly cookie.
@@ -102,6 +126,7 @@ project-root/
 - [ ] Dark theme (brief §10) honored
 - [ ] Tests added per TEST_PLAN.md (unit/integration/E2E per critical flow)
 - [ ] `npm run lint` + `npm run test` + `npm run build` pass
+- [ ] If taste-skill is installed: `lint.mjs` + `inspect.mjs` show 0 FAIL at 1440/768/390 for public pages (or the omission is stated)
 
 **Definition of Done:** feature per implementation plan task; screens match brief + mockups; loading/error/empty states handled; tests added; lint + type checks + build pass; responsive + dark theme verified.
 
@@ -112,6 +137,7 @@ project-root/
 * **DO NOT** store refresh tokens in `localStorage`.
 * **DO NOT** use `any` types; do not create manual route configs.
 * **DO NOT** alter the design brief's visual identity unless explicitly asked.
+* **DO NOT** let taste-skill override the approved brief or contracts — it supplies visual craft only; the brief wins on any conflict.
 * **DO NOT** log secrets or tokens; sanitize user-generated HTML; validate input on both client (zod) and server.
 * Keep components small and focused; ask before assuming; propose options; flag risks.
 
