@@ -11,6 +11,8 @@ author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 
 # Kedata Ponytail Debt
 
+* User command: `/kedata-ponytail-debt`
+
 Every deliberate ponytail shortcut is marked with a `shortcut:` comment naming
 its ceiling and upgrade path (older code may say `ponytail:`). This collects them into one ledger so a deferral
 can't quietly become permanent.

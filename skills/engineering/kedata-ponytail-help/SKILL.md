@@ -10,6 +10,8 @@ author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 
 # Kedata Ponytail Help
 
+* User command: `/kedata-ponytail-help`
+
 Display this reference card when invoked. One-shot, do NOT change mode,
 write flag files, or persist anything.
 

@@ -10,6 +10,8 @@ author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 
 # Kedata Ponytail Gain
 
+* User command: `/kedata-ponytail-gain`
+
 Display this scoreboard when invoked. One-shot: do NOT change mode, write flag
 files, or persist anything.
 

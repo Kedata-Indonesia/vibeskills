@@ -43,6 +43,10 @@ In the commands below `<skill>` is this skill's folder. Run them from the projec
 working files land in `.taste-skill/` there. The scripts need Node 22+ and an installed Chrome, Edge
 or Chromium, and install nothing. `assets.mjs` also needs network access; it uses no API keys.
 
+## When to Use
+* User command: `/kedata-design-frontend`
+* When the user says "build the UI", "design the page", "make it look designed", "this looks generic", or when `DESIGN_BRIEF.md` is approved and the visuals are next. Also for app screens: dashboards, admin, settings, inboxes.
+
 ## Kedata context: the brief is the contract, this skill is the craft
 
 This is the **visual-craft layer** of the Kedata pipeline. On a Kedata project it runs after
