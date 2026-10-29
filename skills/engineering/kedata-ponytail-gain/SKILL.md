@@ -1,9 +1,6 @@
 ---
 name: kedata-ponytail-gain
-description: >
-  Show ponytail's measured savings (code, cost, speed) from the benchmark.
-  One-shot display. Use for /kedata-ponytail-gain, "what does ponytail save",
-  "ponytail impact". Adapted from ponytail (DietrichGebert, MIT).
+description: 'Show ponytail''s measured savings (code, cost, speed) from the benchmark. One-shot display. Use for /kedata-ponytail-gain, "what does ponytail save", "ponytail impact". Adapted from ponytail (DietrichGebert, MIT).'
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 ---

@@ -1,11 +1,6 @@
 ---
 name: kedata-ponytail-audit
-description: >
-  Lean quality audit of a whole repo: bugs, security holes, what breaks under
-  real load, risky code without tests, slow paths, and what to delete, merge or
-  split. Ranked, each finding explained in plain English. One-shot report,
-  changes nothing. Use for "find bloat", "what can I delete", "is this repo
-  over-engineered", /kedata-ponytail-audit. Adapted from ponytail (DietrichGebert, MIT).
+description: 'Lean quality audit of a whole repo: bugs, security holes, what breaks under real load, risky code without tests, slow paths, and what to delete, merge or split. Ranked, each finding explained in plain English. One-shot report, changes nothing. Use for "find bloat", "what can I delete", "is this repo over-engineered", /kedata-ponytail-audit. Adapted from ponytail (DietrichGebert, MIT).'
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 ---
