@@ -20,7 +20,7 @@ This skill **creates issues; it does not gate merges** (that is `kedata-review`)
 * **Do NOT use** to review a specific PR/diff → that is `kedata-review`.
 * **Lean lens:** `kedata-ponytail-audit` asks the question this skill does not — whether the code should exist at all (dead code, duplication, what to delete or merge) — and writes a report only, filing nothing. Run both; cite its findings instead of re-filing them. A cut that moves an approved artifact goes through `kedata-change`.
 * **DO NOT** use to write fixes or new features → `kedata-change` / stack skills.
-* **DO NOT** file issues you have not deduplicated and evidenced.
+* **Evidence from QA:** `kedata-qa-automation` leaves per-case results and failure screenshots in `test-results/` (gitignored, uploaded as a CI artifact). Cite them as evidence instead of re-running the suite.
 
 ## Prerequisites & Context Gathering
 Before scanning, the agent MUST:

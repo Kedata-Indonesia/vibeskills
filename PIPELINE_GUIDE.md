@@ -449,6 +449,7 @@ flowchart TD
 | 3 | `kedata-implementation-plan` | `[M]` | `/kedata-implementation-plan` | `PRD.md` + brief | `IMPLEMENTATION_PLAN.md` |
 | 4 | `kedata-contracts` | `[M]` | `/kedata-contracts` | plan + PRD | `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` |
 | 4.5 | `kedata-test-plan` | `[M]` | `/kedata-test-plan` | PRD + plan + contracts | `TEST_PLAN.md` |
+| 4.6 | `kedata-qa-automation` | `[O]` | `/kedata-qa-automation` | `TEST_PLAN.md` + contracts + catalog | `tests/e2e/` + `test-results/` evidence |
 | 5 | `kedata-system` | `[M]` | `/kedata-system` | all artifacts | none (baseline) |
 | 6 | `kedata-backend-*` | `[S]` | `-go`/`-python`/`-node`/`-rust` | plan §4 | backend code |
 | 6 | `kedata-frontend-*` | `[S]` | `-react`/`-nuxt` | plan §4 + brief | frontend code |
