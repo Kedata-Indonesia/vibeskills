@@ -1,16 +1,6 @@
 ---
 name: kedata-design-frontend
-description: >-
-  Use this skill to design, build, restyle, polish or review any public-facing web page — landing
-  page, marketing site, portfolio, product page, event page, one-pager, hero — or any app screen
-  people work in (dashboard, admin, analytics, settings, inbox, queue), in any stack (HTML/CSS,
-  React, Next.js, Vue, Nuxt, Svelte, Astro, Tailwind). Kedata's anti-slop art direction, adapted
-  from tasteskill v2 (Leonxlnx, MIT) and its study of 247 curated gallery sites: reads
-  docs/DESIGN_BRIEF.md as the contract, deals researched directions (idea, composition, type,
-  palette, photographs, section blueprints) from a bundled library, gates the result with a
-  real-browser inspector, and runs a look-and-fix loop on screenshots. Trigger when the user says
-  "build the UI", "design the page", "make it look designed/premium/award-level", "this looks
-  generic, templated or AI-made", or when DESIGN_BRIEF.md is approved and the UI is next.
+description: 'Use this skill to design, build, restyle, polish or review any public-facing web page — landing page, marketing site, portfolio, product page, event page, one-pager, hero — or any app screen people work in (dashboard, admin, analytics, settings, inbox, queue), in any stack (HTML/CSS, React, Next.js, Vue, Nuxt, Svelte, Astro, Tailwind). Kedata''s anti-slop art direction, adapted from tasteskill v2 (Leonxlnx, MIT) and its study of 247 curated gallery sites: reads docs/DESIGN_BRIEF.md as the contract, deals researched directions (idea, composition, type, palette, photographs, section blueprints) from a bundled library, gates the result with a real-browser inspector, and runs a look-and-fix loop on screenshots. Trigger when the user says "build the UI", "design the page", "make it look designed/premium/award-level", "this looks generic, templated or AI-made", or when DESIGN_BRIEF.md is approved and the UI is next.'
 version: 2.1.0
 author: Kedata Indonesia (adapted from Leonxlnx / tasteskill.dev, MIT)
 ---
@@ -42,6 +32,10 @@ section carrying its full content. The skill is built to give you that; do not t
 In the commands below `<skill>` is this skill's folder. Run them from the project's root, so the
 working files land in `.taste-skill/` there. The scripts need Node 22+ and an installed Chrome, Edge
 or Chromium, and install nothing. `assets.mjs` also needs network access; it uses no API keys.
+
+## When to Use
+* User command: `/kedata-design-frontend`
+* When the user says "build the UI", "design the page", "make it look designed", "this looks generic", or when `DESIGN_BRIEF.md` is approved and the visuals are next. Also for app screens: dashboards, admin, settings, inboxes.
 
 ## Kedata context: the brief is the contract, this skill is the craft
 

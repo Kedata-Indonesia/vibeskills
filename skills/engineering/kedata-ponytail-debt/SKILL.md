@@ -1,15 +1,13 @@
 ---
 name: kedata-ponytail-debt
-description: >
-  List every `shortcut:` comment (and older `ponytail:` ones) as a debt ledger.
-  One-shot report, changes nothing. Use for "ponytail debt", "what did we
-  defer", "list the shortcuts", /kedata-ponytail-debt. Adapted from ponytail
-  (DietrichGebert, MIT).
+description: 'List every `shortcut:` comment (and older `ponytail:` ones) as a debt ledger. One-shot report, changes nothing. Use for "ponytail debt", "what did we defer", "list the shortcuts", /kedata-ponytail-debt. Adapted from ponytail (DietrichGebert, MIT).'
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 ---
 
 # Kedata Ponytail Debt
+
+* User command: `/kedata-ponytail-debt`
 
 Every deliberate ponytail shortcut is marked with a `shortcut:` comment naming
 its ceiling and upgrade path (older code may say `ponytail:`). This collects them into one ledger so a deferral

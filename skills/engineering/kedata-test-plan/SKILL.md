@@ -1,7 +1,7 @@
 ---
 name: kedata-test-plan
 description: "Use this skill to turn the approved PRD and contracts into a TEST_PLAN.md — the traceability bridge from acceptance criteria and edge cases to concrete test cases, fixtures, environments, and exit criteria. Reads PRD §5/§18, the implementation plan §4/§5/§10, and the contracts, then produces the test plan every stack skill and the review verify against. Trigger when the user says \"write a test plan\", \"plan the tests\", \"QA plan\", or before implementation starts."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -17,7 +17,7 @@ This skill **produces the plan, not the tests** — the stack skills (`kedata-ba
 ## When to Use
 * User command: `/kedata-test-plan`
 * Autonomous trigger: When the user says "write a test plan", "plan the tests", "QA plan", "how do we test this?"; after the contracts are approved and before implementation starts. Run AFTER `kedata-contracts`, BEFORE `kedata-system` / implementation.
-* **Do NOT use** to write test code — that is the stack skill's job.
+* **Do NOT use** to write test code — that is the stack skill's job for unit and integration tests, and `kedata-qa-automation` for the E2E suite and its fixtures.
 * **Do NOT use** before the PRD is approved — there is nothing to verify against.
 
 ## Prerequisites & Context Gathering

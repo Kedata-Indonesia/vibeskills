@@ -24,6 +24,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
 | `kedata-test-plan` | engineering | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
+| `kedata-qa-automation` | engineering | Run TEST_PLAN.md cases in a real browser with Playwright, against a URL the user provides or a running local environment. No test plan: stops and asks for `kedata-test-plan` |
 | `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
 | `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
@@ -97,6 +98,7 @@ For a new feature, run skills in order:
 4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks
 5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
 5.5 `/kedata-test-plan` — turn PRD acceptance criteria + edge cases into a traceable TEST_PLAN.md
+5.6 `/kedata-qa-automation` — run the plan's cases in a real browser with Playwright, against a URL you provide or a running local environment. No test plan, and it stops and asks you to run `/kedata-test-plan` first.
 6. `/kedata-backend-go` · `/kedata-backend-python` · `/kedata-backend-node` · `/kedata-backend-rust` — implement per the chosen backend stack (plan §4)
 7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
 8. `/kedata-deploy` — turn plan §3 into Dockerfile/compose/CI + a DEPLOYMENT.md runbook (rollout + rollback)

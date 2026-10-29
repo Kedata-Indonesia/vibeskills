@@ -1,16 +1,13 @@
 ---
 name: kedata-ponytail-review
-description: >
-  Lean review of a change: is the logic right, is it safe, does it hold under
-  real load, is risky code tested, is it fast enough, and is every line
-  needed. Reads the connected code, not only the diff. Each finding is
-  explained in plain English. Use for "is this over-engineered", "what can we
-  cut", /kedata-ponytail-review. Adapted from ponytail (DietrichGebert, MIT).
+description: 'Lean review of a change: is the logic right, is it safe, does it hold under real load, is risky code tested, is it fast enough, and is every line needed. Reads the connected code, not only the diff. Each finding is explained in plain English. Use for "is this over-engineered", "what can we cut", /kedata-ponytail-review. Adapted from ponytail (DietrichGebert, MIT).'
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 ---
 
 # Kedata Ponytail Review
+
+* User command: `/kedata-ponytail-review`
 
 Review a change like the senior developer who will be paged when it breaks.
 Order of importance: correct, safe, holds under load, tested, fast, lean.

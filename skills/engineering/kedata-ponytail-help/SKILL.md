@@ -1,14 +1,13 @@
 ---
 name: kedata-ponytail-help
-description: >
-  Quick reference for the Kedata ponytail levels, skills and commands.
-  One-shot display. Use for /kedata-ponytail-help, "ponytail help", "how do I
-  use ponytail". Adapted from ponytail (DietrichGebert, MIT).
+description: 'Quick reference for the Kedata ponytail levels, skills and commands. One-shot display. Use for /kedata-ponytail-help, "ponytail help", "how do I use ponytail". Adapted from ponytail (DietrichGebert, MIT).'
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 ---
 
 # Kedata Ponytail Help
+
+* User command: `/kedata-ponytail-help`
 
 Display this reference card when invoked. One-shot, do NOT change mode,
 write flag files, or persist anything.
