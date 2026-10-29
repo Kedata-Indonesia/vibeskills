@@ -1,7 +1,7 @@
 ---
 name: kedata-frontend-nuxt
-description: "Use this skill when writing, converting, or reviewing Kedata frontend code in Vue 3 + Nuxt 3. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces Nuxt-specific standards: file-based pages/, Pinia, vee-validate + zod, fetch composables, Vitest, and design preservation from the brief. Pairs with the taste-skill visual-craft layer (tasteskill.dev) for anti-slop UI."
-version: 1.2.0
+description: "Use this skill when writing, converting, or reviewing Kedata frontend code in Vue 3 + Nuxt 3. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces Nuxt-specific standards: file-based pages/, Pinia, vee-validate + zod, fetch composables, Vitest, and design preservation from the brief. Pairs with the vendored kedata-design-frontend visual-craft layer for anti-slop UI."
+version: 1.3.0
 author: Kedata Indonesia
 ---
 
@@ -28,27 +28,29 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 
 Ask the user for clarification IF: a design reference conflicts with a new requirement; an API contract is missing for the endpoint being consumed; the task touches an area the plan doesn't cover (→ escalate, don't improvise).
 
-## Companion Skill — taste-skill (visual-craft layer)
-This skill enforces *engineering* standards; **taste-skill**
-([tasteskill.dev](https://www.tasteskill.dev/)) enforces *visual* craft — the anti-slop rules
+## Companion Skill — kedata-design-frontend (visual-craft layer)
+This skill enforces *engineering* standards; **`kedata-design-frontend`**
+(vendored in this collection under `skills/design/`, adapted from
+[tasteskill.dev](https://www.tasteskill.dev/)) enforces *visual* craft — the anti-slop rules
 (typography, spacing, color, motion, banned patterns) that stop the UI from looking generated.
 Load it before building or restyling any public-facing page or app screen; it complements
 this skill, it does not replace the brief or the contracts.
 
-* **Install once per project:** `npx skills add Leonxlnx/taste-skill`.
+* **Already installed** with this collection — no separate install. It needs Node 22+ and an
+  installed Chrome/Edge/Chromium for its `inspect.mjs` gate.
 * **Load when:**
-  * Landing / marketing / product page → `design-taste-frontend` (its "page" run).
+  * Landing / marketing / product page → its "page" run.
   * Dashboard, admin, analytics, settings, inbox → read its `references/app-screens.md`
     (app screens have their own run and house rules).
-  * Redesigning an existing page → `redesign-skill`; mockup-first → `image-to-code-skill`.
-* **Optional gate (recommended for public pages):** from the project root, run
-  `node <taste-skill>/scripts/lint.mjs <src>` and
-  `node <taste-skill>/scripts/inspect.mjs <url|.output/public/index.html>` (1440 / 768 / 390px,
+  * Redesigning an existing page → its "Redesign, restyle or review" special case.
+* **Gate (required for public pages):** from the project root, run
+  `node <kedata-design-frontend>/scripts/lint.mjs <src>` and
+  `node <kedata-design-frontend>/scripts/inspect.mjs <url|.output/public/index.html>` (1440 / 768 / 390px,
   writes to `.taste-skill/`). Fix every `FAIL` before finishing; treat each `WARN` as wrong
   unless defensible in one sentence.
-* **Boundary & precedence:** `DESIGN_BRIEF.md` is the visual contract — taste-skill must not
+* **Boundary & precedence:** `DESIGN_BRIEF.md` is the visual contract — the design skill must not
   invent a new look. Hand it the brief's values (`--keep palette,type`) so it adopts the
-  Kedata brand tokens. If the brief mandates a device taste-skill bans (e.g. a logo on a
+  Kedata brand tokens. If the brief mandates a device it bans (e.g. a logo on a
   gradient), keep the brief and note the override in the PR.
 
 ## Execution Workflow
@@ -92,7 +94,7 @@ project-root/
 * Mobile-first, responsive (375px+); dark theme per brief §10.
 * Indonesian copy for Indonesian products (brief §3.6 voice & tone).
 * Feature-flag beyond-MVP scope per plan (e.g., `NUXT_PUBLIC_ENABLE_*` flags).
-* Anti-slop craft: for public pages load the taste-skill `design-taste-frontend` and run its `lint.mjs`/`inspect.mjs` gate (see Companion Skill) — preserve the brief's tokens via `--keep palette,type`.
+* Anti-slop craft: for public pages load `kedata-design-frontend` and run its `lint.mjs`/`inspect.mjs` gate (see Companion Skill) — preserve the brief's tokens via `--keep palette,type`.
 
 ### Step 4: Auth Rules
 * Access token in Pinia + `localStorage` (or `useCookie`); refresh token via backend httpOnly cookie.
@@ -126,7 +128,7 @@ project-root/
 - [ ] Dark theme (brief §10) honored
 - [ ] Tests added per TEST_PLAN.md (unit/integration/E2E per critical flow)
 - [ ] `npm run lint` + `npm run test` + `npm run build` pass
-- [ ] If taste-skill is installed: `lint.mjs` + `inspect.mjs` show 0 FAIL at 1440/768/390 for public pages (or the omission is stated)
+- [ ] Gate run (required for public pages): `lint.mjs` + `inspect.mjs` show 0 FAIL at 1440/768/390 for public pages (or the omission is stated)
 
 **Definition of Done:** feature per implementation plan task; screens match brief + mockups; loading/error/empty states handled; tests added; lint + type checks + build pass; responsive + dark theme verified.
 
@@ -137,7 +139,7 @@ project-root/
 * **DO NOT** store refresh tokens in `localStorage`.
 * **DO NOT** use `any` types; do not create manual route configs.
 * **DO NOT** alter the design brief's visual identity unless explicitly asked.
-* **DO NOT** let taste-skill override the approved brief or contracts — it supplies visual craft only; the brief wins on any conflict.
+* **DO NOT** let the design skill override the approved brief or contracts — it supplies visual craft only; the brief wins on any conflict.
 * **DO NOT** log secrets or tokens; sanitize user-generated HTML; validate input on both client (zod) and server.
 * Keep components small and focused; ask before assuming; propose options; flag risks.
 

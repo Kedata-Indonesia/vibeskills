@@ -1,7 +1,7 @@
 ---
 name: kedata-ask
 description: "Use this skill when the user does not know where the codebase currently stands in the Kedata delivery pipeline, or asks 'what should I do next?', 'where is this project at?', or is new to the repo. It inspects which approved artifacts exist, tells the user which pipeline step the codebase is at, what must happen next, and which skill to run."
-version: 1.1.0
+version: 1.2.0
 author: Kedata Indonesia
 ---
 
@@ -19,7 +19,7 @@ Orient anyone — a new developer, a returning user, or an agent in a fresh sess
 | 0 | Idea *(optional)* | `IDEA_BRIEF.md` (business grill of a raw idea) — **not a gate** | `kedata-brainstorm` |
 | 1 | Requirements | `PRD.md` (interview) | `kedata-prd` |
 | 2 | Design | `DESIGN_BRIEF.md` (reads PRD.md, interview) | `kedata-design-brief` |
-| — | Mockups | designer/LLM produces mockups from the brief | *external* |
+| 2.5 | Visuals | build + gate the UI from the brief (or designer/LLM mockups) | `kedata-design-frontend` *(or external)* |
 | 3 | Planning | `IMPLEMENTATION_PLAN.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
 | 4 | Contracts | `API_CONTRACTS.md` + `DATA_CATALOG.md` + `ENVIRONMENT_VARIABLES.md` | `kedata-contracts` |
 | 4.5 | Test plan | `TEST_PLAN.md` (reads PRD §5/§18 + plan + contracts) | `kedata-test-plan` |
@@ -72,7 +72,7 @@ Find the **furthest completed stage** by the presence of its artifact (each stag
 * No `PRD.md` and no code → stage 1 not started. If the user also has only a **raw idea**, offer stage 0 (`kedata-brainstorm`, optional) as a business-validity check before the PRD — but make clear the PRD can be written directly if the idea is already validated. Never gate the PRD on an `IDEA_BRIEF.md`.
 * `IDEA_BRIEF.md` present, no `PRD.md` → idea validated; next is stage 1 (`kedata-prd`), using the brief as context.
 * `PRD.md` only → stages 1 done; next is 2.
-* `PRD.md` + `DESIGN_BRIEF.md` → next is mockups / stage 3.
+* `PRD.md` + `DESIGN_BRIEF.md` → next is visuals (`kedata-design-frontend`) or external mockups, then stage 3.
 * `PRD.md` + `DESIGN_BRIEF.md` + `IMPLEMENTATION_PLAN.md` → next is stage 4 (contracts).
 * + contracts, no `TEST_PLAN.md` → next is stage 4.5 (`kedata-test-plan`).
 * + `TEST_PLAN.md` → planning complete; next is engineering (stages 5–6) via `kedata-system`.
