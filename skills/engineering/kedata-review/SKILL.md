@@ -1,7 +1,7 @@
 ---
 name: kedata-review
 description: "Use this skill when reviewing a pull request, auditing pending changes, or when the user asks for a code review. Reads the approved artifacts first (implementation plan, PRD, contracts, design brief), then runs the Kedata code-review checklist against them — security, correctness, contract compliance, tests, observability, docs — and reports findings in priority order."
-version: 1.2.0
+version: 1.3.0
 author: Kedata Indonesia
 ---
 
@@ -14,6 +14,7 @@ Run a structured code review against Kedata's house checklist — **verifying th
 * User command: `/kedata-review`
 * Autonomous trigger: When the user asks to review a pull request, audit pending changes, or requests a code review; before merging any PR into a Kedata repo.
 * **Do NOT use** to scan the whole repository for a backlog — that is `kedata-audit` (repo-wide discovery → issues). This skill reviews one diff against the artifacts and gates its merge.
+* **Lean lens:** `kedata-ponytail-review` reviews the same diff for whether every line earns its place (bloat, duplication, missing tests on risky logic). It complements this checklist; it does not replace the artifact checks, and a lean cut that moves an approved artifact goes through `kedata-change`.
 
 ## Prerequisites & Context Gathering
 Before reviewing, the agent MUST:

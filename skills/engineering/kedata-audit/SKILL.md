@@ -1,7 +1,7 @@
 ---
 name: kedata-audit
 description: "Use this skill to scan an entire codebase (not a single diff) and turn findings into a prioritized, deduplicated backlog of GitHub/GitLab issues — bugs, security holes, enhancements, tech debt, missing tests, and doc/deploy drift — plus an AUDIT_REPORT.md. Reuses the kedata-review checklist repo-wide, traces findings to the approved artifacts, and files issues only after a dry-run confirmation. Trigger when the user says \"audit the codebase\", \"find issues\", \"create a backlog\", \"scan the repo for problems\", or after kedata-reverse."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
@@ -18,6 +18,7 @@ This skill **creates issues; it does not gate merges** (that is `kedata-review`)
 * User command: `/kedata-audit`
 * Autonomous trigger: When the user says "audit the codebase", "find issues", "scan the repo for problems", "create a backlog", "what's wrong with this code"; after `kedata-reverse` (turn its risk flags into issues); on a maintenance cadence; before a release hardening pass.
 * **Do NOT use** to review a specific PR/diff → that is `kedata-review`.
+* **Lean lens:** `kedata-ponytail-audit` asks the question this skill does not — whether the code should exist at all (dead code, duplication, what to delete or merge) — and writes a report only, filing nothing. Run both; cite its findings instead of re-filing them. A cut that moves an approved artifact goes through `kedata-change`.
 * **DO NOT** use to write fixes or new features → `kedata-change` / stack skills.
 * **DO NOT** file issues you have not deduplicated and evidenced.
 

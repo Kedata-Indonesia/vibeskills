@@ -30,7 +30,7 @@ flowchart TD
 
     PRDART --> DESIGN["[O] kedata-design-brief"]
     DESIGN --> DESART["docs/DESIGN_BRIEF.md"]
-    DESART --> MOCK["[E] Mockups<br/>designer / LLM"]
+    DESART --> MOCK["[O] kedata-design-frontend<br/>build + gate the visuals<br/><i>or [E] designer / LLM mockups</i>"]
 
     MOCK --> PLAN
     PRDART --> PLAN["[M] kedata-implementation-plan<br/>architecture + tasks + deploy platform"]
@@ -187,14 +187,16 @@ flowchart LR
 **`/kedata-design-brief`** — *visual / UX context*
 - **Input:** `PRD.md` (mandatory).
 - **Output:** `docs/DESIGN_BRIEF.md` — 12 sections, no engineering detail.
-- **Then:** `[E]` mockups are produced externally (designer or LLM) from the brief.
+- **Then:** visuals come from **`/kedata-design-frontend`** (in-collection, anti-slop art direction
+  + real-browser gate) or, alternatively, from `[E]` external designer / LLM mockups.
 - **Optional?** Technically yes — but required input for FE work. Without it, the FE follows plan + mockups only.
 
-> **Companion — taste-skill.** This stage pairs with **taste-skill**
-> ([tasteskill.dev](https://www.tasteskill.dev/); `npx skills add Leonxlnx/taste-skill`) for
-> anti-slop art direction. Load it while grilling §1 Product Identity and §3 tokens so the brand
-> personality and palette are *decided*, not defaulted. The approved `DESIGN_BRIEF.md` is the
-> contract and wins on any conflict.
+> **Companion — `kedata-design-frontend`.** This stage pairs with the vendored
+> **`kedata-design-frontend`** (adapted from [tasteskill.dev](https://www.tasteskill.dev/), MIT —
+> see `THIRD_PARTY_NOTICES.md`) for anti-slop art direction. Load it while grilling §1 Product
+> Identity and §3 tokens so the brand personality and palette are *decided*, not defaulted, and
+> again when the visuals are built. The approved `DESIGN_BRIEF.md` is the contract and wins on any
+> conflict.
 
 ---
 
@@ -303,11 +305,11 @@ flowchart TD
 Each stack skill enforces its own mandatory standards (e.g. backend: Swagger/OpenAPI docs
 + activity logging; frontend: design-token fidelity + loading/error/empty states).
 
-> **Companion — taste-skill.** Each `kedata-frontend-*` skill pairs with **taste-skill**
-> ([tasteskill.dev](https://www.tasteskill.dev/)) for visual craft: load `design-taste-frontend`
-> for public pages, its `references/app-screens.md` for dashboards/admin, and run its
-> `lint.mjs` / `inspect.mjs` gate (1440 / 768 / 390px) on public pages. It complements the
-> brief's contract and never overrides it.
+> **Companion — `kedata-design-frontend`.** Each `kedata-frontend-*` skill pairs with the vendored
+> **`kedata-design-frontend`** (adapted from [tasteskill.dev](https://www.tasteskill.dev/)) for
+> visual craft: use its page run for public pages, its `references/app-screens.md` for
+> dashboards/admin, and run its `lint.mjs` / `inspect.mjs` gate (1440 / 768 / 390px) on public
+> pages. It complements the brief's contract and never overrides it.
 
 > **Companion — rust-expert-best-practices-code-review.** `kedata-backend-rust`
 > ([wispbit-ai/skills](https://github.com/wispbit-ai/skills);
@@ -398,6 +400,13 @@ flowchart TD
 
 > Discovery is **proactive**: the pipeline fixes work already in flight; `kedata-audit` finds the work that *should* exist and puts it on the board. It never gates a merge.
 
+> **Lean lens — `kedata-ponytail*`.** The vendored ponytail family (MIT — see `THIRD_PARTY_NOTICES.md`)
+> is a cross-cutting discipline, not a stage. `/kedata-ponytail` (lite/full/ultra) sets how every stage
+> is built: the smallest complete change. `/kedata-ponytail-review` pairs with `kedata-review` and
+> `/kedata-ponytail-audit` pairs with `kedata-audit` — they ask whether every line earns its place, and
+> they report only. Lean never overrides an approved artifact; shrinking one goes through `kedata-change`.
+> `/kedata-ponytail-debt` lists the `shortcut:` deferrals left behind.
+
 ---
 
 ## 4. Full Linear View (the "golden path")
@@ -406,7 +415,7 @@ flowchart TD
 flowchart TD
     A["<b>[O]</b> kedata-brainstorm<br/><i>IDEA_BRIEF.md</i>"] --> B["<b>[M]</b> kedata-prd<br/><i>PRD.md</i>"]
     B --> C["<b>[O]</b> kedata-design-brief<br/><i>DESIGN_BRIEF.md</i>"]
-    C --> D["<b>[E]</b> Mockups"]
+    C --> D["<b>[O]</b> kedata-design-frontend<br/><i>visuals + gate</i>"]
     D --> E["<b>[M]</b> kedata-implementation-plan<br/><i>IMPLEMENTATION_PLAN.md</i>"]
     E --> F["<b>[M]</b> kedata-contracts<br/><i>API/DATA/ENV docs</i>"]
     F --> T["<b>[M]</b> kedata-test-plan<br/><i>TEST_PLAN.md</i>"]
@@ -421,6 +430,7 @@ flowchart TD
         RVS["<b>[M]</b> kedata-reverse — brownfield entry"]
         CHG["<b>[X]</b> kedata-change — change control"]
         AUD["<b>[X]</b> kedata-audit — repo-wide discovery → issues"]
+        PONY["<b>[X]</b> kedata-ponytail* — lean discipline + lean lens"]
     end
 ```
 
@@ -435,7 +445,7 @@ flowchart TD
 | 0.5 | `kedata-brainstorm` | `[O]` | `/kedata-brainstorm` | raw idea | `IDEA_BRIEF.md` |
 | 1 | `kedata-prd` | `[M]` | `/kedata-prd` | `IDEA_BRIEF.md`? | `PRD.md` |
 | 2 | `kedata-design-brief` | `[O]` | `/kedata-design-brief` | `PRD.md` | `DESIGN_BRIEF.md` |
-| — | *mockups* | `[E]` | — | `DESIGN_BRIEF.md` | mockups |
+| 2.5 | `kedata-design-frontend` | `[O]` | `/kedata-design-frontend` | `DESIGN_BRIEF.md` + `PRD.md` | implemented visuals + inspector report (or `[E]` mockups) |
 | 3 | `kedata-implementation-plan` | `[M]` | `/kedata-implementation-plan` | `PRD.md` + brief | `IMPLEMENTATION_PLAN.md` |
 | 4 | `kedata-contracts` | `[M]` | `/kedata-contracts` | plan + PRD | `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` |
 | 4.5 | `kedata-test-plan` | `[M]` | `/kedata-test-plan` | PRD + plan + contracts | `TEST_PLAN.md` |
@@ -447,6 +457,12 @@ flowchart TD
 | 8 | `kedata-repo` | `[M]` | `/kedata-repo` | diff + artifacts | PR / MR |
 | — | `kedata-change` | `[X]` | `/kedata-change` | change request + artifacts | `CHANGE_REQUEST.md` + updated artifacts |
 | — | `kedata-audit` | `[X]` | `/kedata-audit` | whole repo + artifacts + backlog | `AUDIT_REPORT.md` + GitHub/GitLab issues |
+| — | `kedata-ponytail` | `[X]` | `/kedata-ponytail` | the task at hand | none (session discipline: lite/full/ultra) |
+| — | `kedata-ponytail-review` | `[X]` | `/kedata-ponytail-review` | a diff | lean review report (pairs with `kedata-review`) |
+| — | `kedata-ponytail-audit` | `[X]` | `/kedata-ponytail-audit` | whole repo | lean audit report (pairs with `kedata-audit`) |
+| — | `kedata-ponytail-debt` | `[X]` | `/kedata-ponytail-debt` | `shortcut:` comments | ledger (optionally `docs/PONYTAIL_DEBT.md`) |
+| — | `kedata-ponytail-gain` | `[X]` | `/kedata-ponytail-gain` | — | benchmark scoreboard (display only) |
+| — | `kedata-ponytail-help` | `[X]` | `/kedata-ponytail-help` | — | reference card |
 
 \* `kedata-reverse` is mandatory **only when** you enter a brownfield repo with missing artifacts; otherwise it is skipped entirely.
 
