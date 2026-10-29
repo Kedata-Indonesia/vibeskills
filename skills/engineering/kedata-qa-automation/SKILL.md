@@ -1,99 +1,99 @@
 ---
 name: kedata-qa-automation
-description: "Use this skill to automate QA for a Kedata project: build contract-valid test data from API_CONTRACTS.md and DATA_CATALOG.md, then run the TEST_PLAN.md scenarios as Playwright E2E and as ego-browser sessions for dogfooding, bug investigation, and logged-in flows. Trigger when the user says \"write the E2E tests\", \"automate QA\", \"dogfood this\", \"investigate this bug in the browser\", or \"generate test data\"."
-version: 1.0.0
+description: "Use this skill to run QA against a URL with Playwright. It opens a real browser against the URL the user gives, or against the local environment when one is running, and executes the cases from TEST_PLAN.md. If no test plan exists, it stops and asks the user to run kedata-test-plan first. Trigger when the user says \"test this URL\", \"run the E2E\", \"open the browser and check\", \"automate QA\", or \"dogfood this\"."
+version: 1.1.0
 author: Kedata Indonesia
 ---
 
 # Skill: Kedata QA Automation
 
 ## Purpose
-Turn the approved test plan into **running checks**. `kedata-test-plan` says *what* must be true and traces every case to an artifact; this skill makes those cases executable in two ways:
+Run the approved test cases against a live environment, in a real browser, with Playwright. `kedata-test-plan` decides *what* must be true; this skill opens the browser and checks it.
 
-1. **Playwright** — deterministic, headless, CI-gated E2E for the scenarios in `TEST_PLAN.md`.
-2. **ego-browser** (ego-lite) — an interactive Chromium the agent drives through the user's real logged-in profile, for dogfooding, bug investigation, and any flow whose value is the real session rather than a repeatable assertion.
+Two ways in, and only these two:
 
-The differentiator is **data that matches the contract**. Generated test data is the commonest cause of a "failing" suite that is actually testing nothing: a field the catalog marks required is omitted, an enum gets a value it cannot hold, a foreign key points at a row that was never seeded. Every fixture this skill produces is derived from `DATA_CATALOG.md` and `API_CONTRACTS.md`, and a test that fails on its own data is a broken test, not a broken product.
+1. **A URL the user provides** — staging, preview, production, or any deployed environment. Run against that.
+2. **No URL given** — look for a running local environment and use that. If nothing is running, say so and ask for a URL. Never guess a port.
+
+The differentiator is **data that matches the contract**. A case fails because the product is wrong, not because the fixture invented a field the catalog does not have. Every value typed into a form or sent as setup comes from `DATA_CATALOG.md` and `API_CONTRACTS.md`.
 
 ## When to Use
 * User command: `/kedata-qa-automation`
-* Autonomous trigger: When the user says "write the E2E tests", "automate QA", "dogfood this", "investigate this bug in the browser", "the test data is wrong", or "generate fixtures". Run AFTER `kedata-test-plan` is approved and the feature under test is implemented.
-* **Do NOT use** to decide *what* to test — that is `kedata-test-plan`. This skill consumes its cases; it does not invent scenarios.
-* **Do NOT use** to review a diff — that is `kedata-review`. A QA run produces evidence a review can cite.
+* Autonomous trigger: When the user says "test this URL", "run the E2E", "open the browser and check", "automate QA", "dogfood this", or "check the flow works".
+* **Do NOT use** to decide what to test. That is `kedata-test-plan`. If there is no test plan, this skill stops and asks the user to run it.
+* **Do NOT use** to review a diff. A run here produces evidence that `kedata-review` can cite.
 
 ## Prerequisites & Context Gathering
-Before writing a test or opening a browser, the agent MUST:
-1. **Read `TEST_PLAN.md` (mandatory).** `docs/` first, then root. Extract: §3 the traceability matrix (which case proves which AC), §4 the cases (ID, preconditions, steps, input, expected result), §6 fixtures, §7 which suite runs where. **If missing, STOP** — there is nothing to automate; hand off to `/kedata-test-plan`.
-2. **Read the contracts (mandatory for any data).** `API_CONTRACTS.md` — request and response shapes, required fields, enums, status codes. `DATA_CATALOG.md` — entity fields, types, nullability, uniqueness, foreign keys. A fixture that contradicts either is a bug in the fixture.
-3. **Read `ENVIRONMENT_VARIABLES.md`.** Test environment config comes from it. Never hardcode a URL, port, or credential that the catalog already names.
-4. **Read `DESIGN_BRIEF.md` §5 and §8 (for UI flows).** Screen paths and the empty, error, and loading states are what the E2E asserts against.
-5. **Locate existing tests.** `tests/e2e/` (or the path the repo already uses). If a suite exists, extend it in place — never create a second E2E tree.
-6. **Check the toolchain.** `npx playwright --version` for the scripted suite. `ego-browser skill` for the interactive one — if `ego-browser` is not on `PATH`, follow [its install guide](https://github.com/citrolabs/ego-lite/blob/main/skills/ego-browser/references/install.md) and stop until the user has installed ego lite. Do not fall back to driving the user's daily browser.
+Before opening a browser, the agent MUST:
+1. **Read `TEST_PLAN.md`.** Check `docs/` first, then root. Extract the cases: ID, preconditions, steps, input, expected result. **If it is missing, or it has no cases for the flow the user wants checked, STOP.** Do not invent cases. Ask the user to run `/kedata-test-plan` first, and say which flow has no coverage. Resume only when cases exist.
+2. **Resolve the target.** A URL from the user wins. Otherwise check for a running local environment: the dev script in `package.json`, a `Dockerfile` or `compose.yml`, and `ENVIRONMENT_VARIABLES.md` for the port. Probe that port before assuming it is up. Nothing running and no URL given: ask for one.
+3. **Read the contracts before typing any data.** `API_CONTRACTS.md` for shapes and status codes, `DATA_CATALOG.md` for fields, types, and limits. A value that contradicts either is a bug in the test, not a finding about the product.
+4. **Read `DESIGN_BRIEF.md` §5 and §8 for UI flows.** Screen paths and the empty, error, and loading states are what the assertions check.
+5. **Check Playwright.** `npx playwright --version`. If it is not installed, install it into the project and install its browser (`npx playwright install chromium`). Playwright owns the browser; do not reach for a separately installed browser app.
 
 ## Interview Protocol (How to Grill)
-1. **One flow at a time.** Confirm which `TEST_PLAN.md` cases this run covers before writing any of them.
-2. **Trace every test.** Each spec names the case ID it implements (`AC3`, `§18 #7`). A test with no case ID is either attached to one or deleted.
-3. **Extract the data, don't invent it.** Field names, enums, and limits come from the catalog. Ask only when the catalog is silent.
-4. **Decide the runner per case.** Repeatable and assertable → Playwright. Needs the user's real login, or is an investigation rather than a check → ego-browser. Say which and why.
-5. **Name the evidence.** Every run must say where its log and screenshots land before it runs.
+1. **Confirm the target first.** Repeat back the URL, or the local address you found, and wait. Running against the wrong environment wastes the run.
+2. **Confirm which cases.** Name the `TEST_PLAN.md` case IDs this run will execute. No case ID, no run.
+3. **Extract the data, don't invent it.** Field values come from the catalog. Ask only where the catalog is silent.
+4. **Say where the evidence will land** before the run starts.
 
 ## Execution Workflow
 
 ### Step 1: Build Contract-Valid Test Data
-**Goal:** fixtures that cannot drift from the catalog.
-* For each entity the cases touch, derive a fixture set from `DATA_CATALOG.md`: one **valid**, one **boundary** (min/max length, zero, empty collection, last-item), one **invalid per constraint** (missing required field, bad enum, duplicate unique key, dangling foreign key).
-* Cross-check every field against `API_CONTRACTS.md`: the fixture's shape must be a legal request body, and the invalid fixtures must be the ones that produce the contract's documented error statuses.
-* Respect foreign keys: seed the referenced row first. A fixture whose parent does not exist is not a test, it is a setup bug.
-* Auth fixtures per persona from `PRD.md` §4, so RBAC cases log in as the right role.
-* **No real PII.** Use obviously fake values (`qa-user-001@example.test`). Never copy production data into a fixture.
-* Put shared data in `tests/e2e/fixtures/` and reset state per test (transaction rollback or an isolated test database), so order never matters.
-**Bedrock signal:** every fixture field traces to a catalog column, and every invalid fixture traces to a documented error status.
+**Goal:** the inputs the cases type in cannot drift from the catalog.
+* For each case, take its input from `DATA_CATALOG.md`: a valid value, the boundary value the case names (min, max, empty, zero), and the invalid value that should produce the contract's documented error status.
+* Cross-check against `API_CONTRACTS.md`. The valid input must be a legal request; the invalid input must be one the contract says it rejects, with the status the contract names.
+* Seed dependent data first. A case whose precondition is "an order exists" needs that order created through the API before the browser opens, using the same contract-valid data.
+* Auth cases log in as the persona from `PRD.md` §4. Credentials come from `ENVIRONMENT_VARIABLES.md` or a `.env.test`, never from the source.
+* **No real PII.** Obviously fake values only (`qa-user-001@example.test`).
+**Bedrock signal:** every value entered traces to a catalog column, and every expected error traces to a documented status.
 
-### Step 2: Write the Playwright Suite
-**Goal:** the `TEST_PLAN.md` E2E cases, runnable in CI.
-* One spec file per feature, named for the feature. Each test's title carries its case ID: `test('AC3: member sees only their own orders', ...)`.
-* Drive the UI the way a user does — role selectors and labels, not CSS structure — so a restyle does not break the suite. `kedata-design-frontend` may change markup; the test should not care.
-* Assert the **expected result from the case**, not a coincidence of the current UI: the status code or the visible outcome, the empty state from `DESIGN_BRIEF.md` §8, the 403 for the disallowed role.
-* Cover the failure path the plan names (invalid input, permission denied, empty state), not only the happy path.
-* Retries hide flakes; do not add retries to make a red test green. Fix the data or the wait.
-**Bedrock signal:** every E2E case in the plan's smoke suite has a spec, and each spec names its case ID.
+### Step 2: Write the Playwright Specs
+**Goal:** one spec per case, runnable against either target.
+* The target is `baseURL`, taken from the resolved URL. The same spec runs against the provided URL and the local environment; only the config changes.
+* Each test title carries its case ID: `test('AC3: member sees only their own orders', ...)`.
+* Drive the page the way a user does — roles and labels, not CSS structure — so a restyle does not break the run.
+* Assert the **expected result from the case**: the visible outcome, the empty state from `DESIGN_BRIEF.md` §8, the status the contract names. Not whatever the screen happens to show today.
+* A case with a failure path gets its failure asserted too. Do not stop at the happy path.
+**Bedrock signal:** every case in this run has a spec, and each spec names its case ID.
 
-### Step 3: Run ego-browser for Session and Investigation Work
-**Goal:** the flows Playwright cannot or should not own.
-* Before any browser task, run `ego-browser skill` and follow its output. It prints the usage guide for the installed ego lite version. The guide ends with a line beginning `[ego-browser:skill] end of guide`; if that line is absent the output was truncated — save it to a file and read it in parts.
-* Use it for: dogfooding a flow end to end in the user's real session, reproducing a reported bug against the logged-in app, and checking a fix live before the Playwright spec is written.
-* Keep Playwright and ego-browser apart. Scripted assertions belong in Playwright, where CI can run them headless. ego-browser is for the session context Playwright does not have.
-* When ego-browser reproduces a bug, capture the screenshot and the steps, then write the Playwright spec that fails on it. The investigation finds it; the spec keeps it fixed.
-**Bedrock signal:** every ego-browser session ends with a note of what was checked and where its screenshot went.
+### Step 3: Open the Browser and Run
+**Goal:** the user can see the run happen.
+* Run headed, not headless: `npx playwright test --headed --workers=1`. The user asked to see the browser open. Headless is for CI, and only when the user says so.
+* One worker, so the windows open in case order and the user can follow along.
+* Slow the actions enough to watch (`--slowmo`, or a pause between steps) when the user is watching. Remove it for a CI run.
+* Let the run finish. Do not kill the browser on the first failure — Playwright captures that case and moves to the next, so one run covers every case.
+* A failure stays a failure. Do not add retries to turn a red case green.
+**Bedrock signal:** the browser opened against the resolved target, and every case in the run produced a result.
 
 ### Step 4: Capture Evidence
-**Goal:** output that `kedata-audit` and `kedata-review` can cite.
-* Playwright: `playwright.config` sets `outputDir` to `test-results/` and retains screenshots and traces **on failure**. That directory is gitignored; CI uploads it as an artifact.
-* ego-browser: save screenshots under `test-results/ego/` with the case ID or bug reference in the filename.
-* Write a one-line-per-case result summary to `test-results/qa-report.md`: `case ID | runner | pass/fail | evidence path`. This is the file a review reads; do not make anyone re-run the suite to learn what happened.
-* Never commit `test-results/`. Evidence lives in CI artifacts, not in git.
-**Bedrock signal:** a failing run leaves a screenshot and a report row; a passing run leaves a report row.
+**Goal:** output that `kedata-audit` and `kedata-review` can cite without re-running.
+* `playwright.config` sets `outputDir` to `test-results/` and keeps a screenshot and trace **on failure**. The directory is gitignored; CI uploads it as an artifact.
+* Write `test-results/qa-report.md`, one row per case: `case ID | target URL | pass/fail | evidence path`. Name the target, so a result against localhost is never mistaken for one against staging.
+* Never commit `test-results/`.
+**Bedrock signal:** every case has a row, and every failure has a screenshot.
 
 ### Step 5: Report
-* State which plan cases ran, which runner each used, and the pass/fail count.
-* For every failure: the case ID, the expected result from the plan, the actual result, and the evidence path. Say whether it looks like a product bug or a fixture bug, and why.
-* Name the cases in the plan's smoke suite that this run did **not** cover.
-* Hand off: product bugs go to the tracker (a review or `kedata-audit` can file them); a fixture that contradicts the catalog is fixed here, in this skill.
+* State the target URL and where it came from (given by the user, or detected locally).
+* For each case: pass or fail, the expected result from the plan, and the actual result.
+* For each failure, say whether it looks like a product bug or a test bug, and why.
+* Name the plan's smoke-suite cases that this run did not cover.
+* Hand off: a product bug goes to the tracker; a fixture that contradicts the catalog is fixed here.
 
 ## Constraints & Guardrails
-* **DO NOT** invent test data. Every field comes from `DATA_CATALOG.md` or `API_CONTRACTS.md`. Where they are silent, ask — do not guess a plausible value.
-* **DO NOT** invent scenarios. Cases come from `TEST_PLAN.md`. A flow worth testing that has no case is a gap in the plan: flag it for `/kedata-test-plan`, do not smuggle it in here.
-* **DO NOT** let a fixture contradict the contract to make a test pass. If the valid fixture is rejected, the product is wrong, not the fixture.
-* **DO NOT** use real PII or production data in fixtures.
-* **DO NOT** drive the user's everyday browser, and do not clear cookies, cache, or storage without reading ego-browser's clearing-state guidance first — some clears reach the whole profile.
-* **DO NOT** retry a failing test to turn it green.
-* **DO NOT** commit `test-results/` or any captured session data.
-* **DO NOT** vendor ego-browser. It is a bootstrap skill that defers to the installed ego lite app (`ego-browser skill` prints the current guide), so vendoring it would only freeze a stale copy. Reference it: `npx skills add citrolabs/ego-lite`.
+* **DO NOT** invent cases. No `TEST_PLAN.md`, or no case for the flow: stop and ask the user to run `/kedata-test-plan`. Do not draft cases yourself to keep moving.
+* **DO NOT** invent test data. Values come from `DATA_CATALOG.md` and `API_CONTRACTS.md`. Where they are silent, ask.
+* **DO NOT** guess the target. No URL and no running local environment: ask for a URL. Never probe random ports or fall back to production on your own.
+* **DO NOT** run headed against production unless the user named that URL. Say the target back before running.
+* **DO NOT** let a fixture contradict the contract to make a case pass. If valid data is rejected, the product is wrong.
+* **DO NOT** use real PII, production data, or credentials committed to source.
+* **DO NOT** drive the user's everyday browser. Playwright launches its own.
+* **DO NOT** retry a failing case to turn it green.
+* **DO NOT** commit `test-results/` or captured session data.
 
 ## Evidence a Consumer Can Trust
 | Output | Where | Consumed by |
 |--------|-------|-------------|
-| Playwright specs | `tests/e2e/` | CI, `kedata-review` (does the diff keep the suite green) |
+| Playwright specs | `tests/e2e/` | CI, `kedata-review` |
 | Failure screenshots + traces | `test-results/` (gitignored, CI artifact) | `kedata-review`, `kedata-audit` |
 | Run summary | `test-results/qa-report.md` | `kedata-review`, `kedata-audit` |
-| ego-browser screenshots | `test-results/ego/` | bug investigation, dogfooding notes |
