@@ -132,6 +132,10 @@ project-root/
 
 **Definition of Done:** feature per implementation plan task; screens match brief + mockups; loading/error/empty states handled; tests added; lint + type checks + build pass; responsive + dark theme verified.
 
+## Third-Party Scripts (GA4/gtag, pixel, dsb.)
+* **gtag shim harus push `arguments`, bukan spread array.** `(...args) => dataLayer.push(args)` memasukkan entry sebagai array polos dan gtag.js **mengabaikannya diam-diam** — `config` tidak pernah terdaftar, nol hit, GA melaporkan "not installed" walau script termuat (kejadian nyata di pdfeditor, PR #104). Selalu pola snippet resmi: `function gtag(){ dataLayer.push(arguments) }`, atau pakai modul `nuxt-gtag` (pola docflow-landing: `initMode: 'manual'` + consent gate).
+* **Verifikasi tag analytics di browser visible**, bukan headless — headless menekan hit GA (`navigator.webdriver=true`). Bukti minimal: `gtag('get', id, 'client_id')` mengembalikan nilai + request `g/collect` dijawab 204.
+
 ## Constraints & Guardrails
 * **DO NOT** decide or improvise the stack — read it from plan §4 / PRD §7; if missing, STOP and escalate.
 * **DO NOT** use `localStorage`/global mutable state for business/server data — query library or `useFetch`.
