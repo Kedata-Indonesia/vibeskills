@@ -5,6 +5,16 @@ engineering discipline — readable for every AI coding assistant (Claude, Curso
 Kimi, Hermes, etc.) via the [`skills`](https://www.npmjs.com/package/skills)
 ecosystem.
 
+Three skills adapt other people's work under MIT. Each keeps the author's
+copyright, names the source and the version, and records exactly what changed
+in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+
+| Skill | Adapted from | Licence |
+| --- | --- | --- |
+| `kedata-design-frontend` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) v2.1.5 | MIT, Copyright (c) 2026 Leonxlnx |
+| `kedata-ponytail*` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) v5.3.3 | MIT, Copyright (c) 2026 DietrichGebert |
+| `kedata-seo` | [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) v2.5.0 | MIT, Copyright (c) 2026 agricidaniel |
+
 ## Install
 
 ```bash
@@ -47,6 +57,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-design-frontend` | design | Anti-slop art direction for pages and app screens: reads DESIGN_BRIEF.md, deals one of 20 researched directions from a bundled library, enforces the house rules with a real-browser inspector, then looks at its own screenshots and fixes. Adapted from tasteskill v2 |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
+| `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
 
 ## Companion Skills
 
@@ -73,6 +84,18 @@ approved plan/contracts stay the source of truth.
 
 ```bash
 npx skills add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review
+```
+
+**Vendored — `kedata-seo`** is an adaptation of
+[claude-seo](https://github.com/AgriciDaniel/claude-seo) v2.5.0 (MIT), collapsed from a
+26-skill plugin into one audit skill. The approved artifacts stay the contract; a finding that
+changes copy or a URL goes through `kedata-change`. Source, version, licence and what was not
+vendored (the installer, the agents, the paid extensions, the community footer) are in
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). To run the full plugin instead:
+
+```bash
+# inside Claude Code
+/plugin marketplace add AgriciDaniel/claude-seo
 ```
 
 **Vendored — the `kedata-ponytail*` family** is an adaptation of
@@ -103,6 +126,7 @@ For a new feature, run skills in order:
 7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
 8. `/kedata-deploy` — turn plan §3 into Dockerfile/compose/CI + a DEPLOYMENT.md runbook (rollout + rollback)
 9. `/kedata-review` — review the PR before merging
+9.5 *(public page)* `/kedata-seo` — audit the built page or its URL for crawl, index, schema, and content quality. A finding that changes approved copy or a URL goes through `/kedata-change`.
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
 
 **Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.
