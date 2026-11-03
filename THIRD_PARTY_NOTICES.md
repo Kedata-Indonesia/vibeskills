@@ -120,3 +120,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+---
+
+## claude-seo
+
+- **Upstream:** https://github.com/AgriciDaniel/claude-seo
+- **Version vendored:** v2.5.0, commit [`219ff48`](https://github.com/AgriciDaniel/claude-seo/commit/219ff485bb016314bb4c15bfc7978df61c668a4f) (2026-10-22)
+- **Licence:** MIT, Copyright (c) 2026 agrici daniel
+- **Vendored into:** `skills/engineering/kedata-seo/`
+
+One skill, not the plugin. Upstream is 26 sub-skills, 19 agents, a Python
+runtime, and optional paid extensions. That does not fit this registry: the
+`npx skills` scanner accepts exactly two levels under `skills/`, and a Kedata
+install must not pull a private runtime or a community footer.
+
+| Upstream | Here | What changed |
+| --- | --- | --- |
+| `skills/seo` + `skills/seo-page` | `kedata-seo` | Collapsed into one audit. Triggers renamed. Kedata context added: approved artifacts stay the contract, findings that change copy or URLs go through `kedata-change`. |
+| `skills/seo/references/quality-gates.md` | `references/quality-gates.md` | Vendored. The plugin-root checker command replaced with a manual check. |
+| `skills/seo/references/schema-types.md` | `references/schema-types.md` | Vendored. The pointer to an unvendored deprecation note removed. |
+| `skills/seo/references/cwv-thresholds.md` | `references/cwv-thresholds.md` | Vendored. The pointer to the unvendored agentic-category note removed. |
+
+Not vendored: the installer, `scripts/`, `agents/`, `extensions/`, `hooks/`,
+`schema/`, the remaining reference files, and the community footer. Paid data
+sources (Search Console, Moz, DataForSEO, SE Ranking, Profound) stay out of
+scope. Install the upstream plugin directly if you want the full suite.
+
+### Licence text
+
+```
+MIT License
+
+Copyright (c) 2026 agricidaniel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
