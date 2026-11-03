@@ -5,6 +5,9 @@ engineering discipline — readable for every AI coding assistant (Claude, Curso
 Kimi, Hermes, etc.) via the [`skills`](https://www.npmjs.com/package/skills)
 ecosystem.
 
+**Overview and session flow:** [vibecoding.kedata.cloud](https://vibecoding.kedata.cloud/) — what
+each skill does, the order to run them in, and the files they hand off.
+
 Three skills adapt other people's work under MIT. Each keeps the author's
 copyright, names the source and the version, and records exactly what changed
 in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
