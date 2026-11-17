@@ -61,6 +61,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
 | `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
+| `kedata-writing` | writing | Prose for anything a project publishes — tender proposals, briefs, reports, documentation, READMEs, client emails, ID↔EN translation. Frames the reader and the decision first, keeps every claim in an evidence ledger, drafts in four passes, then passes a measured gate (`scripts/prose-check.mjs`) |
 
 ## Companion Skills
 
@@ -110,6 +111,13 @@ Lean never overrides an approved artifact — shrinking one goes through `kedata
 Source, version, licence and the per-skill changes are in
 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
 
+**Pattern source — `kedata-writing`.** The AI-tell checklist and the gate patterns in
+`skills/writing/kedata-writing/scripts/prose-check.mjs` derive from
+[blader/humanizer](https://github.com/blader/humanizer) (MIT) and Wikipedia's "Signs of AI
+writing". No upstream file is vendored; the patterns were reduced to what a regex can check
+honestly, re-written as expressions, and split into hard-fail and warning severities. Source,
+version and the change list are in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+
 ## Suggested Session Flow
 
 For a new feature, run skills in order:
@@ -132,6 +140,7 @@ For a new feature, run skills in order:
 9.5 *(public page)* `/kedata-seo` — audit the built page or its URL for crawl, index, schema, and content quality. A finding that changes approved copy or a URL goes through `/kedata-change`.
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
 
+**Anytime:** `/kedata-writing` — prose a client or a reviewer will read: tender proposals, reports, documentation, READMEs, emails, and ID↔EN translation. It reads the approved artifacts as facts, keeps an evidence ledger, and measures the draft before delivery.
 **Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.
 **Anytime:** `/kedata-audit` — proactively scan the whole repo and file prioritized, deduplicated issues to the tracker (bugs, security, tech debt, test gaps).
 **Anytime:** `/kedata-ponytail` — lean mode for the session (lite/full/ultra). `/kedata-ponytail-review` and `/kedata-ponytail-audit` are the lean lens beside `kedata-review` and `kedata-audit`; `/kedata-ponytail-debt` lists deferred shortcuts. Lean never overrides an approved artifact.
@@ -151,7 +160,8 @@ skills/
 ├── frontend/               # language-specific frontend skills
 ├── design/                 # visual craft skills (design-frontend: art direction + gate)
 ├── engineering/            # cross-cutting engineering skills (system, review, repo)
-└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts)
+├── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts)
+└── writing/                # prose skills (proposals, reports, docs, emails, translation)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.

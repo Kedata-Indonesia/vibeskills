@@ -407,6 +407,15 @@ flowchart TD
 > they report only. Lean never overrides an approved artifact; shrinking one goes through `kedata-change`.
 > `/kedata-ponytail-debt` lists the `shortcut:` deferrals left behind.
 
+### Cross-cutting — Writing `[X]` *(prose a client reads)*
+
+**`/kedata-writing`** — *turn artifacts into a document that holds up*
+
+- **When:** tender proposals, reports, documentation, READMEs, client emails, ID↔EN translation — anything a client, a procurement officer, or a reviewer reads.
+- **Input:** the approved artifacts (they are the fact source), the reader and the decision they make, the hard format budget, and an inventory of evidence.
+- **Output:** the document in `docs/`, an evidence ledger with `verified` / `assumption` / `open` status per claim, and a passing `scripts/prose-check.mjs` run (sentence and paragraph caps, banned phrases, unresolved assumptions).
+- **Rule:** it never invents a number, citation, or certification. A claim without a source becomes a question or an `[ASSUMPTION]` marker, and scope changes still go through `kedata-change`.
+
 ---
 
 ## 4. Full Linear View (the "golden path")
@@ -431,6 +440,7 @@ flowchart TD
         CHG["<b>[X]</b> kedata-change — change control"]
         AUD["<b>[X]</b> kedata-audit — repo-wide discovery → issues"]
         PONY["<b>[X]</b> kedata-ponytail* — lean discipline + lean lens"]
+        WRT["<b>[X]</b> kedata-writing — proposals, reports, docs"]
     end
 ```
 
@@ -464,6 +474,7 @@ flowchart TD
 | — | `kedata-ponytail-debt` | `[X]` | `/kedata-ponytail-debt` | `shortcut:` comments | ledger (optionally `docs/PONYTAIL_DEBT.md`) |
 | — | `kedata-ponytail-gain` | `[X]` | `/kedata-ponytail-gain` | — | benchmark scoreboard (display only) |
 | — | `kedata-ponytail-help` | `[X]` | `/kedata-ponytail-help` | — | reference card |
+| — | `kedata-writing` | `[X]` | `/kedata-writing` | artifacts + reader/decision frame + evidence inventory | the document + evidence ledger + prose-check report |
 
 \* `kedata-reverse` is mandatory **only when** you enter a brownfield repo with missing artifacts; otherwise it is skipped entirely.
 
