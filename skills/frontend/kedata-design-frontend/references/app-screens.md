@@ -264,13 +264,11 @@ Keep the style's one move intact and take every other value from the defaults in
 or the product is used in a way the style does not suit. With an existing brand, pass
 `--keep palette,type`, map its colours onto the roles in §9 and keep the style's colour budget.
 
-**Then choose its face, before any markup.** The sheet's "Its face" list gives two or three ways this
-style takes a face from the brief, and "Signature elements" lists the library's elements whose words
-appear in the brief (a power flow for an energy home, a sell-out strip for a bakery, a cover matrix
-and a kind-encoded timeline for a leave planner). Write in your notes, next to the screen's question:
-the face you chose, the signature element (from the sheet, or your own built from the product's
-things), and where each appears on the first screen. A style dealt to two products must not give them
-the same face: in four rounds, the screens that skipped this step were scored as the same kit.
+**Then choose its face, before any markup.** Follow the "Give the product a face" checklist above — the
+face from the sheet, the product's mark, one signature element, the one chart hue on the main data
+element, its people as themselves, words of the trade. Write the face and the signature element in your
+notes next to the screen's question, and confirm both show on the first screenshot; a style dealt to two
+products must not give them the same face.
 
 ### 2.4 Build the shell
 

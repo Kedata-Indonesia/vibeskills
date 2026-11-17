@@ -16,25 +16,10 @@ The direction sheet deals you a type system (faces, weights, settings). This fil
 
 ## 1. What the study measured
 
-From 202 measurable sites out of the 247 studied (Chrome, 1440×900 and 390×844):
-
-| | Median | Middle half | Note |
-| --- | --- | --- | --- |
-| Hero headline size | 72px (5.0vw) | 43–109px | Top-scored sites: 6.0vw median |
-| Largest type on the page | 6.4vw | up to 10.4vw | Top-scored sites 8.4vw, weak sites 5.0vw |
-| Hero headline on a phone | 40px | 32–59px | |
-| Hero tracking | -0.01em | -0.03 to 0 | Tighter as size grows |
-| Hero leading | 1.0 | 0.95–1.1 | |
-| Body size | 16px | 14–18px | |
-| Headline ÷ body size | 4.3 | | Top-scored sites 4.7 |
-| Typefaces in real use | 2 | 31% use one, 45% two, 22% three | |
-| Hero weight | regular 48%, medium 18%, bold or heavier 22% | | Big type does not need to be bold |
-| Hero in capitals | 24% | | |
-| Hero centred | 39% | | 52% on the weak sites |
-
-Two things to take from it. First, size contrast is the main lever and the best sites pull it harder.
-Second, weight is not: half of the heroes are set in a regular weight. Scale and spacing make type
-confident; bold is one option among several.
+The type metrics (hero size and scale, tracking, leading, body size, typeface count) are canonical in
+`research.md` §5. Two things to take from them. First, size contrast is the main lever and the best sites
+pull it harder. Second, weight is not: half of the heroes are set in a regular weight. Scale and spacing
+make type confident; bold is one option among several.
 
 ## 2. The scale: few sizes, far apart
 
