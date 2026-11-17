@@ -1,8 +1,13 @@
 ---
 name: kedata-backend-go
-description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Go + Gin. Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Go-specific standards: swaggo Swagger, activity logging, clean architecture (internal/ layout), httperr error handling, and deployment per the plan's platform choice."
+description: "Use when writing or reviewing Kedata Go + Gin backend code: swaggo, activity logs, clean architecture. Do NOT use for other languages."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - backend
+    - go
 ---
 
 # Skill: Kedata Backend Engineering — Go + Gin
@@ -28,7 +33,7 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 
 Ask the user for clarification IF: a schema change has no migration plan; the endpoint conflicts with an existing contract; the task touches an area the plan doesn't cover (→ escalate the plan, don't improvise).
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Project Structure
 Follow the house Go layout:
@@ -111,7 +116,7 @@ The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) 
 * **DO NOT** use string concatenation in DB queries (SQL/NoSQL injection).
 * Keep functions small and focused; ask before assuming; propose options; flag risks.
 
-## Example Output Structure
+## Examples
 Error handling pattern:
 ```go
 if err != nil {
@@ -139,3 +144,16 @@ Swagger handler annotation:
 // @Router /api/v1/auth/forgot-password [post]
 func (h *AuthHandler) ForgotPassword(c *gin.Context) { ... }
 ```
+
+## Limitations
+
+- Scoped to Kedata backend work in Go + Gin.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

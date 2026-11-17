@@ -57,7 +57,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-frontend-nuxt` | frontend | Frontend standards for Vue 3 + Nuxt 3: pages/, Pinia, vee-validate + zod, $fetch composables |
 | `kedata-prd` | product | Interview-driven PRD: 9 grilling domains + edge-case sweep, 18-section house template, sign-off gate |
 | `kedata-design-brief` | product | Interview-driven DESIGN_BRIEF.md: brand identity, design tokens, screens, components, states — the input for mockup design |
-| `kedata-design-frontend` | design | Anti-slop art direction for pages and app screens: reads DESIGN_BRIEF.md, deals one of 20 researched directions from a bundled library, enforces the house rules with a real-browser inspector, then looks at its own screenshots and fixes. Adapted from tasteskill v2 |
+| `kedata-design-frontend` | frontend | Anti-slop art direction for pages and app screens: reads DESIGN_BRIEF.md, deals one of 20 researched directions from a bundled library, enforces the house rules with a real-browser inspector, then looks at its own screenshots and fixes. Adapted from tasteskill v2 |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
 | `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
@@ -70,7 +70,7 @@ artifact is always the contract: a companion supplies craft, never requirements.
 
 **Vendored — `kedata-design-frontend`** is an adaptation of
 [taste-skill](https://www.tasteskill.dev/) v2 (`design-taste-frontend`, MIT), held in
-`skills/design/kedata-design-frontend/` so the whole collection installs in one command. It pairs
+`skills/frontend/kedata-design-frontend/` so the whole collection installs in one command. It pairs
 with `kedata-design-brief` (which writes the contract) and `kedata-frontend-*` (which implements
 it). Upstream source, version, licence and the list of changes made here are recorded in
 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). It needs Node 22+ and an installed
@@ -157,14 +157,15 @@ skills/
 │       ├── SKILL.md              # REQUIRED — the skill itself
 │       └── agents/
 │           └── openai.yaml       # optional — display metadata
-├── frontend/               # language-specific frontend skills
-├── design/                 # visual craft skills (design-frontend: art direction + gate)
+├── frontend/               # frontend skills: language standards + design-frontend (art direction + gate)
 ├── engineering/            # cross-cutting engineering skills (system, review, repo)
 ├── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts)
 └── writing/                # prose skills (proposals, reports, docs, emails, translation)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.
+
+Because of this layout, SkillEvaluator reports a `SCHEMA.folder_hierarchy` finding for each skill. It is an accepted deviation, recorded in `skillevaluator-policy.yaml` (`SCHEMA.folder_hierarchy: info`) — pass `--policy skillevaluator-policy.yaml` to `skillevaluator validate`/`quality-check` so it stays INFO instead of MEDIUM.
 
 **Frontmatter requirements** (enforced by the CLI — a skill missing these is
 skipped, and a repo with zero valid skills fails to install):

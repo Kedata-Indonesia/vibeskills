@@ -1,8 +1,13 @@
 ---
 name: kedata-ask
-description: "Use this skill when the user does not know where the codebase currently stands in the Kedata delivery pipeline, or asks 'what should I do next?', 'where is this project at?', or is new to the repo. It inspects which approved artifacts exist, tells the user which pipeline step the codebase is at, what must happen next, and which skill to run."
+description: "Use when you do not know where a codebase stands in the Kedata pipeline and need the next skill. Do NOT create or edit artifacts."
 version: 1.2.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - orientation
 ---
 
 # Skill: Kedata Ask — Where Is This Codebase?
@@ -41,7 +46,7 @@ Artifacts are checked at `docs/<FILE>.md` first, then root `<FILE>.md`. Only the
 * Autonomous trigger: When the user says "what should I do next?", "where is this project at?", "what's the status of this repo?", "I'm new here — what has been done?", or asks which skill to use; at the start of any session where the repo state is unknown.
 
 ## Prerequisites & Context Gathering
-Before reporting, the agent MUST inspect the repo (do NOT ask the user — the artifacts answer):
+Before reporting, the agent MUST inspect the repo (the artifacts answer — no need to prompt for input):
 
 1. **Check which pipeline artifacts exist** (`docs/` first, then root):
    * `IDEA_BRIEF.md` *(optional pre-PRD artifact — its absence does NOT block the pipeline)*
@@ -60,7 +65,7 @@ Before reporting, the agent MUST inspect the repo (do NOT ask the user — the a
    * Code exists but the gating artifacts are missing — offer `kedata-reverse` (reconstruct a baseline) before continuing.
    * The user has a specific goal in mind (e.g. "I want to add a feature") that contradicts the artifact-derived next step — report both, then follow their goal.
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Inspect
 * Run the artifact checks above and record found/missing for each.
@@ -82,14 +87,14 @@ Find the **furthest completed stage** by the presence of its artifact (each stag
 * Anytime: an approved artifact must move → `kedata-change`; proactive backlog wanted → `kedata-audit`.
 
 ### Step 3: Report Status
-Present a compact status report (see Example Output Structure below):
+Present a compact status report (see Examples below):
 * **Pipeline position** — which stage the codebase is at, with evidence (artifacts found/missing).
 * **Next step** — exactly what must happen next.
 * **Skill to use** — the skill to run for the next step, and its command.
 * **Blockers / notes** — e.g. contracts missing before coding can start; stack not decided in the plan; mockups not produced.
 
 ### Step 4: Hand-Off
-* If the next skill is not installed, tell the user how to install it: `npx skills@latest add Kedata-Indonesia/vibeskills -s <skill>`.
+* If the next skill is not installed, tell the user how to install it: `npx skills@1.9.0 add Kedata-Indonesia/vibeskills -s <skill>`.
 * End with a clear, single next action — not a list of options.
 
 ## Constraints & Guardrails
@@ -102,7 +107,7 @@ Present a compact status report (see Example Output Structure below):
 * **DO NOT** dump the whole pipeline table unless the user asks — keep the report to where they are, what's next, and what to run.
 * Keep the report short and decisive: position, next step, skill, blockers.
 
-## Example Output Structure
+## Examples
 
 ## 📍 Where this codebase is
 
@@ -119,15 +124,15 @@ Present a compact status report (see Example Output Structure below):
 | `docs/TEST_PLAN.md` | ❌ missing |
 | Code | ❌ none yet |
 
-## ➡️ Next step
+## ➡ Next step
 Draft the test plan — it turns the PRD's acceptance criteria and edge cases into the cases
 the stack skills implement and the review verifies coverage against.
 
 **Run:** `/kedata-test-plan` (reads PRD.md §5/§18 + IMPLEMENTATION_PLAN.md + contracts, produces TEST_PLAN.md).
 
-**Not installed?** `npx skills@latest add Kedata-Indonesia/vibeskills -s kedata-test-plan`
+**Not installed?** `npx skills@1.9.0 add Kedata-Indonesia/vibeskills -s kedata-test-plan`
 
-## ⚠️ Blockers
+## ⚠ Blockers
 - None — this is the correct next step.
 
 ---
@@ -138,3 +143,17 @@ the stack skills implement and the review verifies coverage against.
 - `docs/IMPLEMENTATION_PLAN.md` ✅ · contracts ✅ · test plan ✅ · Go code present in `backend/`, no frontend yet
 - Stack from plan §4: Go + Gin backend, Nuxt frontend · plan §3: VM + Docker Compose
 - Next: implement the remaining frontend → **run `/kedata-frontend-nuxt`**; then configure deployment → **`/kedata-deploy`** (VM + Compose per plan §3); after both are done, run `/kedata-review` before opening the PR, then `/kedata-repo` to open the MR/PR.
+
+## Limitations
+
+- Scoped to read-only orientation over the pipeline artifacts.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It never creates or edits files.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

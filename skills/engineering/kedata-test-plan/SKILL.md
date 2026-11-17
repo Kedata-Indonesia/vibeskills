@@ -1,8 +1,13 @@
 ---
 name: kedata-test-plan
-description: "Use this skill to turn the approved PRD and contracts into a TEST_PLAN.md — the traceability bridge from acceptance criteria and edge cases to concrete test cases, fixtures, environments, and exit criteria. Reads PRD §5/§18, the implementation plan §4/§5/§10, and the contracts, then produces the test plan every stack skill and the review verify against. Trigger when the user says \"write a test plan\", \"plan the tests\", \"QA plan\", or before implementation starts."
+description: "Use when turning PRD acceptance criteria and edge cases into a traceable TEST_PLAN.md. Do NOT use before the PRD is approved."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - testing
 ---
 
 # Skill: Kedata Test Plan Writer
@@ -39,7 +44,7 @@ Before the interview starts, the agent MUST:
 7. **Don't over-grill.** Stop when answers repeat or the user says "you decide" (→ Open Question).
 8. **End with the readback.** "X ACs, Y edge cases, Z endpoints covered; smoke suite = N cases. Correct me if wrong."
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — Test Strategy & Levels
 **Goal:** the shape of the test pyramid, from plan §4.
@@ -136,7 +141,7 @@ Before the interview starts, the agent MUST:
 * **DO NOT** rewrite an existing plan from scratch — update in place and bump the version.
 * **DO NOT** renumber the sections — the numbering is a stable contract downstream references depend on.
 
-## Example Output Structure
+## Examples
 A complete test plan reaches this specificity: a level split with coverage targets, a traceability matrix with a row per AC/edge case, per-endpoint contract tests with all status codes, fixtures per entity/persona, environment + CI mapping, and milestone exit criteria. The skeleton below is the **shape** — replace every `[bracket]` and placeholder. No `[bracket]` may survive:
 
 # Test Plan: [Project Name] (KEP-123)
@@ -206,3 +211,16 @@ What is in scope (features/milestones) and explicitly out (with reason).
 | Approver + date | [Name, date] |
 | Open questions | Q1 … / Q2 … |
 | File location | `docs/TEST_PLAN.md` |
+
+## Limitations
+
+- Scoped to turning the PRD and contracts into a traceable test plan.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

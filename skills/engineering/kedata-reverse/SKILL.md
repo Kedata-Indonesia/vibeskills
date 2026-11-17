@@ -1,8 +1,13 @@
 ---
 name: kedata-reverse
-description: "Use this skill to bring an existing (brownfield) codebase into the Kedata pipeline — reverse-engineer the missing artifacts (PRD, API_CONTRACTS.md, DATA_CATALOG.md, ENVIRONMENT_VARIABLES.md, a baseline IMPLEMENTATION_PLAN.md) from the code, tests, config, and git history so the pipeline can run. Trigger when the user says \"adopt this repo\", \"we inherited this codebase\", \"there are no docs\", \"reverse-engineer the spec\", or when code exists but the approved artifacts do not."
+description: "Use when reverse-engineering PRD, contracts, and a baseline plan from an existing codebase. Do NOT use for greenfield ideas."
 version: 1.0.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - brownfield
 ---
 
 # Skill: Kedata Reverse — Brownfield Onboarding
@@ -41,7 +46,7 @@ Before reconstructing, the agent MUST:
 7. **Don't over-grill.** Stop when the code answers; only ask where inference is unsafe.
 8. **End with the readback.** "N endpoints, M entities, K env vars reconstructed; X items inferred, Y unknowns. Correct the inferences before we call this baseline."
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — Repository Reconnaissance
 **Goal:** know what exists before reconstructing anything.
@@ -134,7 +139,7 @@ Before reconstructing, the agent MUST:
 * **DO NOT** create duplicate files — update any existing partial artifacts in place.
 * **DO NOT** renumber sections — reconstructed artifacts use the same stable numbering as the originals.
 
-## Example Output Structure
+## Examples
 A complete reconstruction reaches this specificity: every route/entity/env var captured as a contract entry, a PRD that mirrors the observed product with Observed/Inferred/Unknown tags, a baseline plan matching the manifests, and a gap report. The skeleton below is the **shape** — replace every `[bracket]`. No `[bracket]` may survive:
 
 # Reconstruction Report: [Project Name]
@@ -183,3 +188,17 @@ A complete reconstruction reaches this specificity: every route/entity/env var c
 
 ## 7. Recommended Next Step
 Confirm the inferences above (bump artifacts to `Approved`), then run `/kedata-ask` to locate the pipeline stage. Open items → `/kedata-change`.
+
+## Limitations
+
+- Scoped to reconstructing artifacts from an existing codebase.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- Reconstructed artifacts stay `Reconstructed` until a human confirms.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

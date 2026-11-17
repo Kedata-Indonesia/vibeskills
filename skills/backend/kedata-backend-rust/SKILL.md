@@ -1,8 +1,13 @@
 ---
 name: kedata-backend-rust
-description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Rust (optionally with the Axum framework). Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Rust-specific standards: utoipa OpenAPI docs, activity logging, clean architecture (src/ layout), thiserror domain errors, cargo test, and deployment per the plan's platform choice. Pairs with the rust-expert-best-practices-code-review skill (wispbit-ai/skills) for idiomatic Rust."
+description: "Use when writing or reviewing Kedata Rust backend code: utoipa, activity logs, thiserror, cargo test. Do NOT use for other stacks."
 version: 1.2.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - backend
+    - rust
 ---
 
 # Skill: Kedata Backend Engineering — Rust (Axum optional)
@@ -37,7 +42,7 @@ writing, refactoring, and reviewing Rust. Load it alongside this skill; it does 
 approved artifacts.
 
 * **Install once per project:**
-  `npx skills add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review`.
+  `npx skills@1.9.0 add https://github.com/wispbit-ai/skills --skill rust-expert-best-practices-code-review`.
 * **Load when:** before writing/reviewing/refactoring Rust — structs, functions, enums, traits,
   error handling, `Result` types, public APIs, or performance work. Read the individual rule files
   under the skill's `rules/` for detail.
@@ -51,7 +56,7 @@ approved artifacts.
   (e.g. keep `thiserror` domain errors and `?`-based propagation per Step 4 — both align with
   `result-error-returns` / `avoid-panic`). Note any deliberate deviation in the PR.
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Project Structure
 Follow the house Rust layout (workspace-ready):
@@ -129,7 +134,7 @@ The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) 
 * **DO NOT** let the companion `rust-expert-best-practices-code-review` skill override the approved plan/contracts — it guides idiom only; Kedata's mandatory standards and the artifacts win on conflict.
 * Keep functions small and focused; ask before assuming; propose options; flag risks.
 
-## Example Output Structure
+## Examples
 Domain error with thiserror:
 ```rust
 #[derive(Debug, thiserror::Error)]
@@ -162,3 +167,16 @@ pub async fn forgot_password(
     Ok(Json(Response::ok()))
 }
 ```
+
+## Limitations
+
+- Scoped to Kedata backend work in Rust (optionally Axum).
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

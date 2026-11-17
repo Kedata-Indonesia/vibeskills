@@ -1,8 +1,13 @@
 ---
 name: kedata-ponytail-debt
-description: 'List every `shortcut:` comment (and older `ponytail:` ones) as a debt ledger. One-shot report, changes nothing. Use for "ponytail debt", "what did we defer", "list the shortcuts", /kedata-ponytail-debt. Adapted from ponytail (DietrichGebert, MIT).'
+description: "Use when scanning and quantifying tech debt so it can be prioritized and paid down. Do NOT use for security audits."
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - tech-debt
 ---
 
 # Kedata Ponytail Debt
@@ -12,6 +17,14 @@ author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 Every deliberate ponytail shortcut is marked with a `shortcut:` comment naming
 its ceiling and upgrade path (older code may say `ponytail:`). This collects them into one ledger so a deferral
 can't quietly become permanent.
+
+## Purpose
+
+Surface and quantify tech debt in a codebase so it can be prioritized and paid down deliberately.
+
+## Prerequisites
+
+Read the target code and the surrounding module before proposing changes. Have the project's test/lint command available for any change; a read-only report needs neither.
 
 ## Kedata context
 
@@ -49,3 +62,27 @@ End with `<N> markers, <M> with no trigger.` Nothing found: `No shortcut debt. C
 
 Reads and reports only, changes nothing. To persist it, ask and it writes the
 ledger to `docs/PONYTAIL_DEBT.md`. One-shot.
+
+## Instructions
+
+1. Run the scan described in **Scan**.
+2. Use the debt report format in **Output**.
+3. Validate inputs and surface failures — do not swallow errors.
+
+## Examples
+
+Example output row: `| Area | Debt | Cost | Suggested fix |` for each area.
+
+## Limitations
+
+- Scoped to tech-debt discovery and reporting.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- Validate inputs and surface failures — do not swallow errors.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |
