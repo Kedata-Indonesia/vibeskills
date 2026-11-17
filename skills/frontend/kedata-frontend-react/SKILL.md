@@ -1,8 +1,13 @@
 ---
 name: kedata-frontend-react
-description: "Use this skill when writing, converting, or reviewing Kedata frontend code in React 19 + TanStack Start. Reads the stack, screens, and API decisions from the approved artifacts (implementation plan + PRD + design brief + contracts), then enforces React-specific standards: TanStack Router/Query, Zustand, react-hook-form + zod, axios, Vitest, and design preservation from the brief. Pairs with the vendored kedata-design-frontend visual-craft layer for anti-slop UI."
+description: "Use when writing or reviewing Kedata React 19 + TanStack Start code with design fidelity. Do NOT use for other stacks."
 version: 1.3.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - frontend
+    - react
 ---
 
 # Skill: Kedata Frontend Engineering — React + TanStack Start
@@ -30,7 +35,7 @@ Ask the user for clarification IF: a design reference conflicts with a new requi
 
 ## Companion Skill — kedata-design-frontend (visual-craft layer)
 This skill enforces *engineering* standards; **`kedata-design-frontend`**
-(vendored in this collection under `skills/design/`, adapted from
+(vendored in this collection under `skills/frontend/`, adapted from
 [tasteskill.dev](https://www.tasteskill.dev/)) enforces *visual* craft — the anti-slop rules
 (typography, spacing, color, motion, banned patterns) that stop the UI from looking generated.
 Load it before building or restyling any public-facing page or app screen; it complements
@@ -53,7 +58,7 @@ this skill, it does not replace the brief or the contracts.
   Kedata brand tokens. If the brief mandates a device it bans (e.g. a logo on a
   gradient), keep the brief and note the override in the PR.
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Project Structure
 Follow the house React layout:
@@ -79,7 +84,7 @@ project-root/
 │   ├── types/
 │   └── styles/
 ├── tests/{unit,integration,e2e}
-└── .env  (VITE_API_BASE_URL)
+└── .env.example  (VITE_API_BASE_URL, no secrets)
 ```
 
 ### Step 2: Architecture Rules
@@ -97,7 +102,7 @@ project-root/
 * Anti-slop craft: for public pages load `kedata-design-frontend` and run its `lint.mjs`/`inspect.mjs` gate (see Companion Skill) — preserve the brief's tokens via `--keep palette,type`.
 
 ### Step 4: Auth Rules
-* Access token in Zustand + `localStorage`; refresh token via backend httpOnly cookie.
+* Session token in Zustand + `localStorage` (short TTL, CSP, and `SameSite` cookies to limit XSS token theft); refresh token via backend httpOnly cookie.
 * Axios interceptor refreshes on 401, redirects to `/portal/login` on failure.
 * Protected routes via `RequireAuth` / `RequireAdmin` wrappers.
 
@@ -115,7 +120,7 @@ project-root/
 ### Step 7: Testing
 * Write the tests `TEST_PLAN.md` specifies for this task (§4 cases incl. loading/error/empty, §5 fixtures).
 * Vitest + React Testing Library for hooks/utils/components; integration with MSW; Playwright E2E for critical flows.
-* Run before finishing: `npm run lint`, `npx tsc --noEmit`, `npm run test`.
+* Run before finishing: `npm run lint`, `npx -p typescript@7.0.2 tsc --noEmit`, `npm run test`.
 
 ### Step 8: Self-Check & Definition of Done
 **Self-check — ALL must pass before presenting:**
@@ -143,7 +148,7 @@ project-root/
 * **DO NOT** log secrets or tokens; sanitize user-generated HTML; validate input on both client (zod) and server.
 * Keep components small and focused; ask before assuming; propose options; flag risks.
 
-## Example Output Structure
+## Examples
 Typed service (reads API_CONTRACTS.md):
 ```ts
 // services/registration.service.ts
@@ -173,3 +178,16 @@ export function RegistrationList({ params }: Props) {
   return <div className="grid gap-4 md:grid-cols-3">{data.items.map(...)}</div>
 }
 ```
+
+## Limitations
+
+- Scoped to Kedata frontend work in React 19 + TanStack Start.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

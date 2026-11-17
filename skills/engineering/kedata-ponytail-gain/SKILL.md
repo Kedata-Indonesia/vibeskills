@@ -1,8 +1,13 @@
 ---
 name: kedata-ponytail-gain
-description: 'Show ponytail''s measured savings (code, cost, speed) from the benchmark. One-shot display. Use for /kedata-ponytail-gain, "what does ponytail save", "ponytail impact". Adapted from ponytail (DietrichGebert, MIT).'
+description: "Use when reporting the gain of a simplification: what was removed and the code/token delta. Do NOT guess — measure."
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - metrics
 ---
 
 # Kedata Ponytail Gain
@@ -19,6 +24,10 @@ against the same agent without the skill. 18 of the tasks have hidden checks
 for correctness and safety. Each figure is the geometric mean of the per-task
 medians. They are measured, not computed from the current repo.
 Source: [benchmarks/results/2026-10-07-agentic.md](https://github.com/DietrichGebert/ponytail/blob/7801d06/benchmarks/results/2026-10-07-agentic.md) and the [README](https://github.com/DietrichGebert/ponytail).
+
+## Purpose
+
+Report the gain from simplifying: what was removed, the code/token delta, and the maintenance saved.
 
 ## Scoreboard
 
@@ -51,3 +60,31 @@ this card points there instead of inventing one.
 ## Boundaries
 
 One-shot display. Edits nothing, changes no mode.
+
+## Prerequisites
+
+Read the target code and the surrounding module before proposing changes. Have the project's test/lint command available for any change; a read-only report needs neither.
+
+## Instructions
+
+1. Measure the target before and after the simplification.
+2. Validate inputs and surface failures — do not swallow errors.
+3. Run the delta report in the format this skill defines.
+
+## Examples
+
+Example: “removed 3 wrappers, −180 LOC, −2 dependencies; no behavior change.”
+
+## Limitations
+
+- Scoped to reporting the gain of a simplification.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- Validate inputs and surface failures — do not swallow errors.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

@@ -1,8 +1,13 @@
 ---
 name: kedata-deploy
-description: "Use this skill to turn the implementation plan's deployment decision (§3) into real deployment artifacts and a DEPLOYMENT.md runbook — Dockerfile(s), docker-compose or Cloud Run config, CI/CD pipeline, secrets wiring, migrations, health checks, rollout, and rollback. Reads the plan, contracts, and test plan, then produces the deployable surface. Trigger when the user says \"deploy this\", \"set up CI/CD\", \"write the Dockerfile/compose\", or before the first staging deploy."
+description: "Use when turning plan §3 into Dockerfile/compose/Cloud Run, CI/CD, and a DEPLOYMENT.md runbook. Do NOT re-decide the platform."
 version: 1.0.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - deployment
 ---
 
 # Skill: Kedata Deploy
@@ -37,7 +42,7 @@ Before doing anything, the agent MUST:
 5. **Don't over-grill.** Stop when answers repeat or the user says "you decide" (→ Open Question).
 6. **End with the readback.** "Plan §3 says [platform], one app service + [worker], region asia-southeast2, CI on push to main, rollback via [method]. Correct me if wrong."
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — Deployable Inventory
 **Goal:** what ships, as how many units.
@@ -147,7 +152,7 @@ Before doing anything, the agent MUST:
 * **DO NOT** use multi-level subdomains on Cloudflare (`app.kedata.id` ✓, `api.app.kedata.id` ✗); use SSL Full.
 * **DO NOT** renumber the sections — the numbering is a stable contract downstream references depend on.
 
-## Example Output Structure
+## Examples
 A complete deploy surface reaches this specificity: one Dockerfile per service honoring its platform's rules, a real compose/cloud config, every env var provisioned per environment, a gated CI pipeline running the test plan suites, and a rollback that names the exact command. The skeleton below is the **shape** — replace every `[bracket]`. No `[bracket]` may survive:
 
 # Deployment: [Project Name] (KEP-123)
@@ -216,3 +221,18 @@ Health endpoints, log destination, minimum alarms.
 | Approver + date | [Name, date] |
 | Open questions | Q1 … / Q2 … |
 | File location | `docs/DEPLOYMENT.md` |
+
+## Limitations
+
+- Scoped to turning the plan's platform decision into deploy artifacts.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It never re-decides the platform; it stops if plan §3 is TBD.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |
+| Plan §3 is 'TBD' | Platform not decided | Run `kedata-implementation-plan` to lock it first |

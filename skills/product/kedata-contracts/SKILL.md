@@ -1,8 +1,13 @@
 ---
 name: kedata-contracts
-description: "Use this skill to interview the user and draft the engineering contract docs — API_CONTRACTS.md, DATA_CATALOG.md, and ENVIRONMENT_VARIABLES.md — from the approved implementation plan. These are the source of truth that backend, frontend, and review consume; contract-first is mandatory when FE/BE are split. Trigger when the user says \"draft the API contract\", \"write the data catalog\", or \"prepare the engineering reference docs\"."
+description: "Use when drafting API_CONTRACTS.md, DATA_CATALOG.md, and ENVIRONMENT_VARIABLES.md from the plan. Do NOT add scope."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - product
+    - api
 ---
 
 # Skill: Kedata Contracts — Engineering Reference Docs
@@ -40,7 +45,7 @@ Before the interview starts, the agent MUST:
 6. **Record as you go.** Write each doc's section immediately after its domain.
 7. **Don't over-grill.** Stop when answers are repetitive or the user says "you decide" (→ record as Open Question in the doc header).
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — API Contract (`API_CONTRACTS.md`)
 **Goal:** every endpoint from plan §6 expanded to a buildable contract.
@@ -87,7 +92,7 @@ Starter questions:
 - What goes in `.env.example`?
 
 Grill follow-ups:
-- "Which vars differ per environment? What are the exact dev values (local DB, local secrets)?"
+- "Which vars differ per environment? What are the exact non-secret dev values (local DB, ports, public URLs)? For secrets, record only the variable name and where the value lives (Secret Manager key or `.env.example` name) — never the value itself."
 - "How are secrets provisioned per the plan §3 platform — Secret Manager (Cloud Run) vs `.env`/docker secrets (VM)?"
 - "Which vars are required at startup (fail-fast) vs optional with defaults?"
 - "Which vars are needed for the first milestone to run locally?"
@@ -142,8 +147,8 @@ Grill follow-ups:
 * **DO NOT** create duplicate docs — update the existing `docs/` (or root) files in place.
 * **DO NOT** renumber the doc structures below — the section ordering is a stable contract for consumers.
 
-## Example Output Structure
-The reference docs that define "complete" for Kedata contracts are the shapes below. Every `[bracket]` and placeholder must be replaced with the confirmed answers — no placeholders survive:
+## Examples
+The reference docs that define "complete" for Kedata contracts are the shapes below. Every `[bracket]` and placeholder must be replaced with the confirmed answers — no placeholders survive. Substitute every secret value with a reference (Secret Manager key, docker secret name, or `.env.example` variable name), never a real secret:
 
 ### `API_CONTRACTS.md`
 # API Contracts: [Project Name]
@@ -231,8 +236,22 @@ The reference docs that define "complete" for Kedata contracts are the shapes be
 | `PROJECT_ID` | GCP project | dev | staging | prod | No |
 
 ## 4. Secrets Handling
+- **Never write real secret values into these docs** — record the variable name, whether it is secret, and its provisioning reference (Secret Manager key, docker secret name, or `.env.example` placeholder) only.
 - Cloud Run (plan §3): secrets via Secret Manager, referenced as env vars
 - VM + Docker Compose (plan §3): `.env` file (0600 perms), docker secrets for production
 
 ## 5. Open Questions
 - Q1: ...
+
+## Limitations
+
+- Scoped to drafting API, data, and environment reference docs.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

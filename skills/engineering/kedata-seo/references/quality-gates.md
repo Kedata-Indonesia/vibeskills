@@ -20,7 +20,7 @@
 ## Location Page Thresholds
 
 ### Warning Level (30+ pages)
-- ⚠️ **WARNING** at 30+ location pages
+- ⚠ **WARNING** at 30+ location pages
 - Enforce 60%+ unique content per page
 - Content must include:
   - Unique local information (landmarks, neighborhoods)

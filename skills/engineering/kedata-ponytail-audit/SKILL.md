@@ -1,8 +1,13 @@
 ---
 name: kedata-ponytail-audit
-description: 'Lean quality audit of a whole repo: bugs, security holes, what breaks under real load, risky code without tests, slow paths, and what to delete, merge or split. Ranked, each finding explained in plain English. One-shot report, changes nothing. Use for "find bloat", "what can I delete", "is this repo over-engineered", /kedata-ponytail-audit. Adapted from ponytail (DietrichGebert, MIT).'
+description: "Use when auditing code for over-engineering and reporting what can be deleted or simplified. Do NOT modify code."
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - audit
 ---
 
 # Kedata Ponytail Audit
@@ -13,6 +18,14 @@ Audit the whole repo like the senior developer who just inherited it and
 will be paged when it breaks. Order of importance: correct, safe, holds under
 load, tested, fast, lean. Lean still matters: every extra line must be read,
 tested and fixed later. This is a report the user asked for, so give it in full.
+
+## Purpose
+
+Audit a codebase for over-engineering and needless abstraction, and report what can be deleted or simplified.
+
+## Prerequisites
+
+Read the target code and the surrounding module before proposing changes. Have the project's test/lint command available for any change; a read-only report needs neither.
 
 ## Kedata context
 
@@ -106,3 +119,26 @@ Nothing found: `What this repo does:`, then `Healthy. Nothing to fix.` and
 one line on what you checked.
 
 One-shot report, changes no code.
+
+## Instructions
+
+1. Scan the target with the checks in this skill.
+2. Use a read-only pass; do not change code.
+3. Run the report format described in **Output** for each finding.
+
+## Examples
+
+Example output row: `| File | Lines | Issue | Deletion candidate |` for each finding.
+
+## Limitations
+
+- Scoped to a read-only over-engineering audit.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

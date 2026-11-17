@@ -11,7 +11,7 @@ licence, and exactly what was changed here.
 - **Docs:** https://www.tasteskill.dev/docs
 - **Version vendored:** v2.1.5, commit [`12af471`](https://github.com/Leonxlnx/taste-skill/commit/12af471f627f866411b4bd785b19646d3672784c) (2026-10-25)
 - **Licence:** MIT, Copyright (c) 2026 Leonxlnx
-- **Vendored into:** `skills/design/kedata-design-frontend/`
+- **Vendored into:** `skills/frontend/kedata-design-frontend/`
 - **Skill name:** `design-taste-frontend` → `kedata-design-frontend`
 
 ### What was vendored unchanged

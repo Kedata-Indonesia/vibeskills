@@ -1,8 +1,13 @@
 ---
 name: kedata-audit
-description: "Use this skill to scan an entire codebase (not a single diff) and turn findings into a prioritized, deduplicated backlog of GitHub/GitLab issues — bugs, security holes, enhancements, tech debt, missing tests, and doc/deploy drift — plus an AUDIT_REPORT.md. Reuses the kedata-review checklist repo-wide, traces findings to the approved artifacts, and files issues only after a dry-run confirmation. Trigger when the user says \"audit the codebase\", \"find issues\", \"create a backlog\", \"scan the repo for problems\", or after kedata-reverse."
+description: "Use when scanning a whole repo to file deduplicated issues (bugs, security, debt, tests). Do NOT use to gate a merge."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - audit
 ---
 
 # Skill: Kedata Audit — Repo-wide Codebase Audit → Issues
@@ -40,7 +45,7 @@ Before scanning, the agent MUST:
 6. **Don't over-scan.** Stop a category when returns are repetitive; prefer signal over exhaustiveness.
 7. **End with the readback.** "N findings; M above threshold; K already tracked; proposing J issues. Confirm to file."
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — Scope, Categories & Policy
 **Goal:** what to scan and what is worth filing.
@@ -141,7 +146,7 @@ Before scanning, the agent MUST:
 * **DO NOT** exceed the issue cap in one run — file the top N, report the rest.
 * **DO NOT** create a second `AUDIT_REPORT.md` — update in place.
 
-## Example Output Structure
+## Examples
 A complete audit reaches this specificity: scanners run per stack, a findings table where each row has `file:line` + artifact/check + severity + confidence, a dedupe pass, a dry-run list, filed issues with actionable bodies, and a report. The skeleton below is the **shape** — replace every `[bracket]`. No `[bracket]` may survive:
 
 # Audit Report: [Project Name]
@@ -206,3 +211,18 @@ A complete audit reaches this specificity: scanners run per stack, a findings ta
 Artifact: [API_CONTRACTS.md §1.2 / Review §12 / plan §3]
 Detected by: kedata-audit [run date]
 ```
+
+## Limitations
+
+- Scoped to repo-wide discovery that files issues; it does not gate merges.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It files issues only after a dry-run confirmation.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |
+| Duplicate issues proposed | Backlog not deduped | Let the dry-run dedupe against open issues before filing |

@@ -1,0 +1,15 @@
+# SkillEvaluator validation policy — accepted deviation.
+#
+# This repo uses the documented `npx skills` two-level discovery layout:
+#   skills/<category>/<skill-name>/SKILL.md
+# SkillEvaluator's default schema expects a flat skills/<skill-name>/.
+# Tier 1 still passes (the finding is emitted with fail_on_medium=false);
+# this override records the accepted deviation and drops the noise from
+# MEDIUM to INFO. See SKILL_EVALUATION.md §4 (P4).
+#
+# Use with:  skillevaluator validate <skill> --policy skillevaluator-policy.yaml ...
+
+profile: kedata-category-layout
+
+severity_overrides:
+  SCHEMA.folder_hierarchy: info

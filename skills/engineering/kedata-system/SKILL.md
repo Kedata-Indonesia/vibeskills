@@ -1,8 +1,13 @@
 ---
 name: kedata-system
-description: "Use this skill at the start of any engineering session inside a Kedata repo — it loads the baseline development rules: read the approved plan artifacts first (implementation plan, PRD, design brief), follow house conventions, and produce production-ready code through the plan → confirm → code → test → verify workflow."
+description: "Use when starting a Kedata engineering session: read artifacts first, plan, code, test, verify. Do NOT decide the stack."
 version: 1.2.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - baseline
 ---
 
 # Skill: Kedata System — Engineering Session Baseline
@@ -40,7 +45,7 @@ Before writing any code, the agent MUST read the relevant approved artifacts IN 
 
 Confirm with the user before coding: which task (from §5 of the plan)? which milestone?
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Understand the Task
 Read the task from the implementation plan §5 and the linked issue:
@@ -201,7 +206,7 @@ Follow the **deployment platform decision in the implementation plan §3** — t
 * **DO NOT** proceed past the implementation plan or changes summary without user confirmation.
 * Keep responses dense; ask before assuming; propose options; flag risks; show your work.
 
-## Example Output Structure
+## Examples
 Implementation plan for the task (before coding, for non-trivial tasks):
 ```markdown
 ## Task: [KEP-123] Add password reset endpoint
@@ -240,3 +245,17 @@ Changes summary (before accepting work):
 - [ ] make swagger passes
 - [ ] Swagger UI shows new endpoints
 ```
+
+## Limitations
+
+- Scoped to the engineering session baseline.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It is behavioral guidance only and produces no artifact.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

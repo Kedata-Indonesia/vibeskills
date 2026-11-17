@@ -1,8 +1,13 @@
 ---
 name: kedata-ponytail-help
-description: 'Quick reference for the Kedata ponytail levels, skills and commands. One-shot display. Use for /kedata-ponytail-help, "ponytail help", "how do I use ponytail". Adapted from ponytail (DietrichGebert, MIT).'
+description: "Use when explaining the ponytail principle and routing to the right ponytail skill. Do NOT run the other skills."
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - reference
 ---
 
 # Kedata Ponytail Help
@@ -11,6 +16,10 @@ author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
 
 Display this reference card when invoked. One-shot, do NOT change mode,
 write flag files, or persist anything.
+
+## Purpose
+
+Explain the ponytail principle and point to the right ponytail skill for the task at hand.
 
 ## Levels
 
@@ -46,3 +55,29 @@ Say "stop ponytail" or "normal mode". Resume anytime with `/kedata-ponytail`.
 
 Upstream docs + examples: https://github.com/DietrichGebert/ponytail
 Source, version and licence for this adaptation: `THIRD_PARTY_NOTICES.md`.
+
+## Prerequisites
+
+Read the target code and the surrounding module before proposing changes. Have the project's test/lint command available for any change; a read-only report needs neither.
+
+## Instructions
+
+1. Match the user's request to the right ponytail skill (audit, debt, gain, review).
+2. Use the table in this skill to explain when to run each one.
+
+## Examples
+
+Example: “I want to know what to delete” → run `kedata-ponytail-audit`.
+
+## Limitations
+
+- Scoped to explaining and routing the ponytail skills.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

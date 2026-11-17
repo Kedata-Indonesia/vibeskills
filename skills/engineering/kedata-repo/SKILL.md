@@ -1,8 +1,13 @@
 ---
 name: kedata-repo
-description: "Use this skill for GitHub/GitLab communication in a Kedata repo: draft and open PR/MR descriptions in the house template, summarize a branch's changes, link issues, and gather repo context via the platform CLI (gh / glab). Trigger when the user asks to open a pull request, write a PR/MR description, or handle an issue."
+description: "Use when drafting and opening PR/MR descriptions in the Kedata house template via gh or glab. Do NOT merge or approve."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - git
 ---
 
 # Skill: Kedata Repo — GitHub/GitLab Communication
@@ -25,7 +30,9 @@ Before drafting anything, the agent MUST gather repo context:
    * The diff spans multiple unrelated features — suggest splitting into separate PRs/MRs.
    * There is no issue number to link.
 
-## Execution Workflow
+## Instructions
+
+Run the helper via `run_script("scripts/repo-context.sh")` (or `bash scripts/repo-context.sh`).
 
 ### Step 1: Gather Context
 * Run `bash scripts/repo-context.sh` (or pass an explicit base: `bash scripts/repo-context.sh develop`).
@@ -54,7 +61,13 @@ Before drafting anything, the agent MUST gather repo context:
 * **DO NOT** push or open anything without the user's confirmation (draft the body first, then open on request).
 * Keep the Summary short; put the detail in Changes.
 
-## Example Output Structure
+## Available Scripts
+
+| Script | Purpose | Arguments |
+|---|---|---|
+| `scripts/repo-context.sh` | Detect GitHub/GitLab/git-only, print branch, commits since base, diff stat, changed files, issue key, and existing PR/MR | `[base]` (optional base branch) |
+
+## Examples
 
 ## Summary
 Add password reset flow for users who forgot their passwords.
@@ -98,3 +111,18 @@ Add password reset flow for users who forgot their passwords.
 
 ## Related Issues
 Closes #123
+
+## Limitations
+
+- Scoped to PR/MR communication via gh or glab.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It assumes `gh`/`glab` auth is present; a git-only repo yields a draft only.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |
+| `gh`/`glab` not authenticated | CLI not logged in | `gh auth login` / `glab auth login`, then retry |

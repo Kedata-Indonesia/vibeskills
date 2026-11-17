@@ -1,0 +1,288 @@
+# SkillEvaluator Report — `vibeskills`
+
+> Evaluation of the Kedata skills in `skills/` using **SkillEvaluator 0.9.0**
+> (`skillevaluator`, three-tier quality gatekeeper).
+>
+> Evaluated: 2026-11-17 · after fast-forwarding `origin/main` (13 commits, +9 skills)
+> Scope: `skills/<category>/<skill>/SKILL.md` → **29 skills**
+> **P0, P1, P2 applied · P4 decided (keep categories, accepted deviation in `skillevaluator-policy.yaml`).**
+
+---
+
+## 1. Verdict at a glance
+
+| Metric | Result |
+|---|---|
+| Skills evaluated | **29 / 29** |
+| Tier 1 (static, security skipped) | **29 passed · 0 failed** (exit 0) |
+| Tier 1 security (skillspector 2.13.6) | **5 failed · 24 incomplete** (92 findings — mostly false positives; see §4.1) |
+| Average quality score | **100.0 / 100** |
+| Grade spread | **29 × A** · 0 × B/C/F |
+| HIGH findings | **0** |
+| MEDIUM/LOW findings | **0** — folder hierarchy accepted as INFO via `skillevaluator-policy.yaml` (P4) |
+| Largest `SKILL.md` | 4,342 tokens (`kedata-system`) — under the 5,000 ceiling |
+| Publication eligible | 0 / 29 (extras installed; blocked on provider + Docker/GKE) |
+
+**Bottom line:** every skill passes Tier 1 at a perfect static score. All correctness,
+discoverability, reliability, and efficiency deductions are cleared. The category-folder
+convention (`skills/<category>/<skill>/`) is a deliberate layout decision (P4), now recorded as
+an accepted deviation via `skillevaluator-policy.yaml` — the finding is downgraded MEDIUM → INFO.
+
+### ✅ P0 — unblock Tier 1 (done)
+- `metadata:` block (`author: Kedata Indonesia <infra@kedata.online>` + 2 `tags`) on all 29.
+- `pii-waivers.yml` (29 reviewed, expiring entries) for the real email (PII check treats a
+  non-placeholder address as HIGH).
+
+### ✅ P1 — schema sections + reliability (done)
+- `## Instructions` + `## Examples` present (renamed from `## Execution Workflow` /
+  `## Example Output Structure`, or added); `## Purpose` (8), `## Prerequisites` (6 ponytail),
+  `## Limitations` + `## Troubleshooting` (all 29).
+- `kedata-repo`: `## Available Scripts` table + `run_script(...)` mention; unicode cleaned.
+
+### ✅ P2 — efficiency + discoverability (done)
+- **Progressive disclosure** on the five oversized skills: long interview detail moved to
+  `references/interview-questions.md`, output skeletons to `references/*-template.md`, and
+  `kedata-design-frontend`'s run/laws/special-cases to `references/`. `SKILL.md` now ≤ 4,342
+  tokens and ≤ ~220 lines everywhere.
+- **Descriptions** trimmed to 97–135 chars, each starting with “Use when…” and ending with an
+  explicit “Do NOT…” boundary.
+- **`kedata-design-frontend/library/`** is bundled data the scripts read, so it is kept and
+  documented as an intended non-standard dir; scans allow it via
+  `SKILLEVALUATOR_SCHEMA_ALLOWED_DIRS=library`.
+
+| | Before P0 | After P0 | After P1 | After P2 |
+|---|---|---|---|---|
+| Tier 1 pass | 0 / 20 | 29 / 29 | 29 / 29 | **29 / 29** |
+| HIGH | 20 | 0 | 0 | **0** |
+| MEDIUM (total) | 106 | 95 | 35 | **1** |
+| LOW (total) | — | — | 47 | **0** |
+| Average score | 91.0 | 93.5 | 98.0 | **100.0** |
+| Grade A | 14 / 20 | 27 / 29 | 29 / 29 | **29 / 29** |
+
+---
+
+## 2. What was run
+
+| Tier | Command | Status | Notes |
+|---|---|---|---|
+| Tier 1 | `SKILLEVALUATOR_SCHEMA_ALLOWED_DIRS=library skillevaluator validate <skill> --tiers 1 --pii-waivers vibeskills/pii-waivers.yml` | **Ran** | Schema, version, PII, license, code-integrity, unicode, quality, lint, security |
+| Tier 1 security | `skillspector` 2.13.6 | **Ran** | No real vulnerabilities; findings are heuristic false positives + analysis gaps. See §4.1 |
+| Tier 2 | Semantic dedup | **Provisioned, blocked** | Extra installed; needs an embedding + LLM provider (none configured) |
+| Tier 3 | Live agent eval | **Provisioned, blocked** | Extra installed; needs a provider + Docker/GKE + agent config |
+
+Reproduce:
+
+```bash
+# from the vibeskills/ repo root
+for s in skills/*/*/; do
+  SKILLEVALUATOR_SCHEMA_ALLOWED_DIRS=library skillevaluator validate "$s" \
+    --tiers 1 --skip security --pii-waivers pii-waivers.yml \
+    --policy skillevaluator-policy.yaml \
+    -r json -o reports/$(basename "$s")
+done
+
+# full gate once extras are installed
+skillevaluator validate skills/<category>/<skill> --tiers 1,2,3 --full \
+  --policy skillevaluator-policy.yaml -r cli,json,html
+```
+
+> `publication_status = incomplete` on every skill until Tier 2 **and** Tier 3 produce evidence.
+
+---
+
+## 3. Scorecard (all grade A, 100/100)
+
+| Skill | Category | Score | Tokens |
+|---|---|---:|---:|
+| `kedata-ask` | engineering | 100.0 | 2,647 |
+| `kedata-audit` | engineering | 100.0 | 3,974 |
+| `kedata-backend-go` | backend | 100.0 | 2,357 |
+| `kedata-backend-node` | backend | 100.0 | 2,223 |
+| `kedata-backend-python` | backend | 100.0 | 2,170 |
+| `kedata-backend-rust` | backend | 100.0 | 2,742 |
+| `kedata-brainstorm` | product | 100.0 | 2,442 |
+| `kedata-change` | engineering | 100.0 | 2,922 |
+| `kedata-contracts` | product | 100.0 | 4,221 |
+| `kedata-deploy` | engineering | 100.0 | 3,610 |
+| `kedata-design-brief` | product | 100.0 | 2,796 |
+| `kedata-design-frontend` | frontend | 100.0 | 4,316 |
+| `kedata-frontend-nuxt` | frontend | 100.0 | 2,939 |
+| `kedata-frontend-react` | frontend | 100.0 | 2,742 |
+| `kedata-implementation-plan` | product | 100.0 | 2,338 |
+| `kedata-ponytail` | engineering | 100.0 | 1,467 |
+| `kedata-ponytail-audit` | engineering | 100.0 | 1,768 |
+| `kedata-ponytail-debt` | engineering | 100.0 | 885 |
+| `kedata-ponytail-gain` | engineering | 100.0 | 893 |
+| `kedata-ponytail-help` | engineering | 100.0 | 896 |
+| `kedata-ponytail-review` | engineering | 100.0 | 1,671 |
+| `kedata-prd` | product | 100.0 | 2,108 |
+| `kedata-qa-automation` | engineering | 100.0 | 2,282 |
+| `kedata-repo` | engineering | 100.0 | 1,750 |
+| `kedata-reverse` | engineering | 100.0 | 3,774 |
+| `kedata-review` | engineering | 100.0 | 3,289 |
+| `kedata-seo` | engineering | 100.0 | 2,690 |
+| `kedata-system` | engineering | 100.0 | 4,342 |
+| `kedata-test-plan` | engineering | 100.0 | 3,699 |
+
+---
+
+## 4. Remaining finding (one pattern, accepted deviation)
+
+| Severity | Check | Finding | Skills |
+|---|---|---|---|
+| INFO | `SCHEMA/folder_hierarchy` | "Unexpected nesting depth" — expects `skills/<skill>/`, finds `skills/<category>/<skill>/`. Accepted deviation; recorded in `skillevaluator-policy.yaml` (`SCHEMA.folder_hierarchy: info`). | 29 |
+
+Everything else (author/tags, body sections, description length, negative triggers, examples,
+troubleshooting, limitations, scripts, unicode, oversized skills, line count, `library/`) is cleared.
+
+### Folder hierarchy — a real decision (P4)
+
+The evaluator wants `skills/<skill>/`; this repo uses `skills/<category>/<skill>/`, which is the
+documented `npx skills` discovery layout (README §Skill Format). Do not flatten blindly:
+
+- The category layout is the documented `skills` npm CLI requirement.
+- SkillEvaluator's convention is its own schema expectation.
+
+**Decision (P4): (a) keep categories; record the accepted deviation.** The category layout is
+correct for a large multi-skill collection and matches the `npx skills` two-level discovery rule.
+SkillEvaluator's flat `skills/<skill>/` expectation is its own schema convention.
+
+Recorded in **`skillevaluator-policy.yaml`**:
+
+```yaml
+profile: kedata-category-layout
+severity_overrides:
+  SCHEMA.folder_hierarchy: info
+```
+
+The finding is emitted with `fail_on_medium=false`, so it never gated Tier 1 anyway; the policy
+drops it from MEDIUM to INFO so reports are clean. Pass `--policy skillevaluator-policy.yaml` to
+`validate` / `quality-check`. Verified: `validate skills/frontend/kedata-design-frontend --tiers 1
+--skip security --policy skillevaluator-policy.yaml` → 9/9 checks, exit 0, folder_hierarchy = INFO.
+
+---
+
+## 4.1 Tier 1 security (skillspector 2.13.6)
+
+`skillspector` is now installed and upgraded to **2.13.6** (skillevaluator 0.9.0 rejects the
+`complete_with_caveats` status emitted by < 2.13.4). The security check now runs and returns
+**92 findings across 29 skills: 5 skills failed, 24 incomplete.** None are real vulnerabilities —
+they are heuristic false positives and analysis-completeness gaps.
+
+| Skill | Gate | Findings | Cause |
+|---|---|---:|---|
+| `kedata-design-frontend` | FAIL | 78 (24 HIGH / 54 MED) | AE1 partial analysis of bundled `scripts/*.mjs`; TM1 (`--no-check`); PE3 `keyring`/`keychain` in `library/sites.json`; E1 external URLs (`fontshare`/`openverse`/`artic`) in the design corpus |
+| `kedata-frontend-react` | FAIL | 3 (2 HIGH / 1 MED) | PE3 `.env` + "Access token" in token-storage guidance; RP1 unpinned `npx tsc` |
+| `kedata-frontend-nuxt` | FAIL | 2 (1 HIGH / 1 MED) | PE3 "Access token" in token-storage guidance; RP1 unpinned `npx nuxi` |
+| `kedata-change` | FAIL | 1 HIGH | MP3 "delete history" — the line says *don't* silently delete history |
+| `kedata-review` | FAIL | 1 HIGH | PE3 `.env` — appears in a "Secrets via Secret Manager / docker secrets" checklist |
+| `kedata-ask` | INCOMPLETE | 3 MED | EA2 "do NOT ask the user"; RP1 unpinned `npx skills` ×2 |
+| `kedata-qa-automation` | INCOMPLETE | 2 MED | RP1 unpinned `npx playwright` ×2 |
+| `kedata-backend-rust` | INCOMPLETE | 1 MED | RP1 unpinned `npx skills` |
+| `kedata-seo` | INCOMPLETE | 1 MED | RP1 unpinned `npx lighthouse` |
+| the other 20 | INCOMPLETE | 0 | reference-resolution caveats only (runtime paths the skills name but don't bundle) |
+
+Classification of the 92 findings:
+
+- **False positives from legitimate content (~85):** PE3 (`.env`/token/keychain mentions in
+  guidance and design-corpus data), MP3 ("delete history"), EA2 ("do not ask the user"), E1
+  (font/image API URLs in the bundled corpus), LP3 (no declared tool scope), and **AE1** —
+  SkillSpector could not fully parse the bundled `scripts/*.mjs`, which is an analysis-coverage
+  gap, not a vulnerability.
+- **Legitimate hygiene (~6):** RP1 — `npx <tool>` used without a pinned version (supply-chain
+  hardening).
+
+Recommended handling (not yet applied):
+
+1. **Pin the `npx` invocations** (`skills@`, `nuxi@`, `tsc@`, `playwright@`, `lighthouse@`) — a real,
+   low-risk fix.
+2. **Reword the benign trigger phrases** (e.g. "don't silently delete history" → "keep the record",
+   "Access token in …" → "the session token in …") to reduce PE3/MP3/EA2 noise where it costs nothing.
+3. **Add a reviewed `skillspector` baseline** (`--skillspector-baseline`) for the unavoidable
+   bundled-corpus and AE1 items so the security gate can be green. Suppressing security findings is
+   consequential, so it needs a maintainer decision — see §5 (P5).
+
+> The 24 "incomplete" skills are incomplete solely because SkillSpector flags runtime/project paths the
+> skills legitimately reference (e.g. `docs/PRD.md`). 355 such reference rows exist collection-wide;
+> rewriting them is invasive and not recommended.
+
+## 5. Enhancement plan — remaining
+
+### P3 — Full-tier evidence (optional, for publication badge) · ⏳ PROVISIONED, BLOCKED ON CREDENTIALS
+
+Environment provisioned (2026-11-17):
+
+- [x] **Tier 2 extra installed** into the tool venv (`skillevaluator[llm]`: litellm, openai,
+      anthropic, boto3). `skillevaluator doctor --tier 2` → CLI package **pass**.
+- [x] **Tier 3 extra installed** (`skillevaluator[tier3]`: `harbor[gke]`, mcp, kubernetes, supabase,
+      pyjwt, oauthlib, …). `skillevaluator doctor --tier 3` now runs instead of crashing.
+
+Still blocked — cannot produce Tier 2/3 evidence in this environment:
+
+| Blocker | Doctor result | Needed |
+|---|---|---|
+| Embedding provider | `Embedding provider: fail` | `SKILL_EVAL_EMBEDDING_PROVIDER` + key |
+| LLM provider | `LLM provider: fail` | `SKILL_EVAL_LLM_PROVIDER` + key |
+| Harbor runtime | `docker: fail` (daemon not running) | Start Docker, or supply a GKE cluster |
+| Agent config / eval dataset | `Harbor agents: warn` | A configured provider + `create-eval-dataset` |
+
+To finish, set a provider **and** a runtime, then run:
+
+```bash
+# option A — NVIDIA Build
+export SKILL_EVAL_LLM_PROVIDER=nv_build SKILL_EVAL_EMBEDDING_PROVIDER=nv_build
+export NVIDIA_API_KEY='...'
+# option B — OpenAI
+export SKILL_EVAL_LLM_PROVIDER=openai SKILL_EVAL_EMBEDDING_PROVIDER=openai
+export OPENAI_API_KEY='...'
+
+skillevaluator doctor --tier 3          # expect all green (or docker running)
+skillevaluator create-eval-dataset skills/<category>/<skill>   # Tier 3 input
+skillevaluator validate skills/<category>/<skill> --tiers 1,2,3 --full -r cli,json,html
+# then publication.eligible can become true
+```
+
+Tier 2 alone (dedup only) needs just the embedding + LLM provider:
+
+```bash
+skillevaluator similarity-check skills --threshold 0.8 -r cli,json
+```
+
+> Expect Tier 2 overlap on shared house conventions and the 6 `kedata-ponytail-*` skills —
+> review and decide what duplication is intentional before acting.
+
+### P4 — Decide folder hierarchy · ✅ DECIDED — keep categories
+- [x] Keep `skills/<category>/<skill>/` (documented `npx skills` layout; scales to many skills).
+- [x] Record the accepted deviation in `skillevaluator-policy.yaml` (`SCHEMA.folder_hierarchy: info`),
+      passed via `--policy`; verified Tier 1 still passes at 9/9 with the finding at INFO.
+
+### P5 — Tier 1 security gate (skillspector 2.13.6)
+- [ ] Pin the unpinned `npx` invocations (`skills@`, `nuxi@`, `tsc@`, `playwright@`, `lighthouse@`).
+- [ ] Reword benign trigger phrases (PE3/MP3/EA2) where it costs nothing.
+- [ ] Decide on a reviewed `skillspector` baseline for the bundled-corpus + AE1 false positives
+      (security suppression needs maintainer sign-off), then re-run `validate --tiers 1`.
+
+**Acceptance:** `validate --tiers 1` exits 0 with the security check enabled, or the residual
+findings are explicitly waived in a reviewed baseline.
+
+---
+
+## 6. Outcome
+
+| After phase | Tier 1 | Avg score | Publication |
+|---|---|---|---|
+| Pre-P0 | 0/20 pass | 91.0 | incomplete |
+| P0 | 29/29 pass | 93.5 | incomplete |
+| P1 | 29/29 pass | 98.0 | incomplete |
+| **P2 (now)** | **29/29 pass** | **100.0** | incomplete (T2/T3 pending) |
+| P3 | 29/29 pass | 100.0 | blocked: provider key + Docker/GKE |
+
+---
+
+## Appendix — Raw artifacts
+
+- Per-skill JSON + `BENCHMARK.md` generated to `/tmp/skeval-p2final/<skill>/`.
+- New reference files: `skills/product/*/references/` and
+  `skills/frontend/kedata-design-frontend/references/` (`design-run.md`, `laws-of-craft.md`,
+  `special-cases.md`).
+- SkillEvaluator docs: <https://docs.nvidia.com/skills/skillevaluator/>

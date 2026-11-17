@@ -1,8 +1,13 @@
 ---
 name: kedata-change
-description: "Use this skill when requirements, scope, or a request change after artifacts are approved — a bug that is really a spec gap, a stakeholder change, a scope cut/add, or a production hotfix. It runs change control: classify the change, trace its impact across PRD → design brief → plan → contracts → test plan, cascade the edits in order with version bumps, and re-approve. Trigger when the user says \"change the requirements\", \"scope change\", \"the spec changed\", \"we need to add/remove X\", or when code and docs have drifted."
+description: "Use when a spec or scope change lands: classify it and cascade edits across PRD, plan, contracts, tests. Do NOT use for new ideas."
 version: 1.0.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - change-control
 ---
 
 # Skill: Kedata Change Control
@@ -31,7 +36,7 @@ Before doing anything, the agent MUST:
 4. **Check the code state:** is the affected area built, in progress, or untouched? (affects whether this is a doc-only change, a re-work, or a hotfix).
 5. **Ask the user for clarification IF:** the request is ambiguous, the base/current versions conflict, or the change is large enough that a full pipeline re-run is cheaper than a cascade.
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Domain 1 — Capture the Change
 **Goal:** a precise, testable statement of what is changing.
@@ -63,7 +68,7 @@ Before doing anything, the agent MUST:
 * Order: `IDEA_BRIEF? → PRD → DESIGN_BRIEF? → IMPLEMENTATION_PLAN → contracts (API/DATA/ENV) → TEST_PLAN → DEPLOYMENT?`.
 * Update the Decisions Record / version in each touched artifact; mark superseded decisions as `[SUPERSEDED by CR-n]`.
 * Keep numbering stable — never renumber sections; never create a second copy.
-* For removed scope: mark the removed items and the reason (audit trail), don't silently delete history.
+* For removed scope: mark the removed items and the reason (audit trail); keep the record, never remove it silently.
 **Bedrock signal:** every artifact in the impact table is updated, version-bumped, and internally consistent with the one above it.
 
 ### Step 5: Domain 5 — Code & Task Sync
@@ -119,7 +124,7 @@ Before doing anything, the agent MUST:
 * **DO NOT** resume implementation on a medium/major change without re-approval.
 * **DO NOT** re-litigate decisions outside the change's scope — keep the change tight and traced.
 
-## Example Output Structure
+## Examples
 A complete change record reaches this specificity: a one-sentence change with source, a class + path, an impact table across artifacts, the version bumps, the task re-map, and a recorded re-approval. The skeleton below is the **shape** — replace every `[bracket]`. No `[bracket]` may survive:
 
 # Change Request: CR-[n] — [short title]
@@ -162,3 +167,16 @@ Current baseline after change: PRD vX · Plan vY · Contracts vZ · Test Plan vW
 
 ## 7. Open Questions
 - Q1: …
+
+## Limitations
+
+- Scoped to change control across the approved artifacts.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

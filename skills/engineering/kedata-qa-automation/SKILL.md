@@ -1,8 +1,13 @@
 ---
 name: kedata-qa-automation
-description: "Use this skill to run QA against a URL with Playwright. It opens a real browser against the URL the user gives, or against the local environment when one is running, and executes the cases from TEST_PLAN.md. If no test plan exists, it stops and asks the user to run kedata-test-plan first. Trigger when the user says \"test this URL\", \"run the E2E\", \"open the browser and check\", \"automate QA\", or \"dogfood this\"."
+description: "Use when automating QA tests aligned to the approved test plan and running them in CI. Do NOT replace exploratory testing."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - qa
 ---
 
 # Skill: Kedata QA Automation
@@ -29,7 +34,7 @@ Before opening a browser, the agent MUST:
 2. **Resolve the target.** A URL from the user wins. Otherwise check for a running local environment: the dev script in `package.json`, a `Dockerfile` or `compose.yml`, and `ENVIRONMENT_VARIABLES.md` for the port. Probe that port before assuming it is up. Nothing running and no URL given: ask for one.
 3. **Read the contracts before typing any data.** `API_CONTRACTS.md` for shapes and status codes, `DATA_CATALOG.md` for fields, types, and limits. A value that contradicts either is a bug in the test, not a finding about the product.
 4. **Read `DESIGN_BRIEF.md` §5 and §8 for UI flows.** Screen paths and the empty, error, and loading states are what the assertions check.
-5. **Check Playwright.** `npx playwright --version`. If it is not installed, install it into the project and install its browser (`npx playwright install chromium`). Playwright owns the browser; do not reach for a separately installed browser app.
+5. **Check Playwright.** `npx playwright@1.65.1 --version`. If it is not installed, install it into the project and install its browser (`npx playwright@1.65.1 install chromium`). Playwright owns the browser; do not reach for a separately installed browser app.
 
 ## Interview Protocol (How to Grill)
 1. **Confirm the target first.** Repeat back the URL, or the local address you found, and wait. Running against the wrong environment wastes the run.
@@ -37,7 +42,7 @@ Before opening a browser, the agent MUST:
 3. **Extract the data, don't invent it.** Field values come from the catalog. Ask only where the catalog is silent.
 4. **Say where the evidence will land** before the run starts.
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Build Contract-Valid Test Data
 **Goal:** the inputs the cases type in cannot drift from the catalog.
@@ -59,7 +64,7 @@ Before opening a browser, the agent MUST:
 
 ### Step 3: Open the Browser and Run
 **Goal:** the user can see the run happen.
-* Run headed, not headless: `npx playwright test --headed --workers=1`. The user asked to see the browser open. Headless is for CI, and only when the user says so.
+* Run headed, not headless: `npx playwright@1.65.1 test --headed --workers=1`. The user asked to see the browser open. Headless is for CI, and only when the user says so.
 * One worker, so the windows open in case order and the user can follow along.
 * Slow the actions enough to watch (`--slowmo`, or a pause between steps) when the user is watching. Remove it for a CI run.
 * Let the run finish. Do not kill the browser on the first failure — Playwright captures that case and moves to the next, so one run covers every case.
@@ -97,3 +102,21 @@ Before opening a browser, the agent MUST:
 | Playwright specs | `tests/e2e/` | CI, `kedata-review` |
 | Failure screenshots + traces | `test-results/` (gitignored, CI artifact) | `kedata-review`, `kedata-audit` |
 | Run summary | `test-results/qa-report.md` | `kedata-review`, `kedata-audit` |
+
+## Examples
+
+Example: turn a PRD §5 acceptance criterion into a Playwright test that runs in CI.
+
+## Limitations
+
+- Scoped to automated QA testing aligned to the test plan.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+- It does not replace exploratory testing; it automates the test plan.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

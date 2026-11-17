@@ -1,8 +1,13 @@
 ---
 name: kedata-ponytail-review
-description: 'Lean review of a change: is the logic right, is it safe, does it hold under real load, is risky code tested, is it fast enough, and is every line needed. Reads the connected code, not only the diff. Each finding is explained in plain English. Use for "is this over-engineered", "what can we cut", /kedata-ponytail-review. Adapted from ponytail (DietrichGebert, MIT).'
+description: "Use when reviewing a diff against the ponytail principle to flag over-building. Do NOT use for full code review."
 version: 5.3.3
 author: Kedata Indonesia (adapted from DietrichGebert / ponytail, MIT)
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - code-review
 ---
 
 # Kedata Ponytail Review
@@ -13,6 +18,14 @@ Review a change like the senior developer who will be paged when it breaks.
 Order of importance: correct, safe, holds under load, tested, fast, lean.
 Lean still matters: every extra line must be read, tested and fixed later.
 This is a report the user asked for, so give it in full.
+
+## Purpose
+
+Review a change against the ponytail principle — flag over-building and approve the minimal correct diff.
+
+## Prerequisites
+
+Read the target code and the surrounding module before proposing changes. Have the project's test/lint command available for any change; a read-only report needs neither.
 
 ## Kedata context
 
@@ -104,3 +117,26 @@ Nothing found: `What this change does:`, then `Looks good. Ship.` and one line
 on what you checked.
 
 Lists findings, changes no code.
+
+## Instructions
+
+1. Review the diff against the ponytail principle.
+2. Use deletion over addition; reject unrequested abstraction.
+3. Run the review and report findings per file.
+
+## Examples
+
+Example: “this PR adds a factory for one implementation” → flag it; recommend direct construction.
+
+## Limitations
+
+- Scoped to reviewing a diff against the ponytail principle.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

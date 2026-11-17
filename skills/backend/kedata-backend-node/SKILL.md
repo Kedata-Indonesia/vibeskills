@@ -1,8 +1,13 @@
 ---
 name: kedata-backend-node
-description: "Use this skill when writing, refactoring, or reviewing Kedata backend code in Node.js + Express. Reads the stack and endpoint/data decisions from the approved artifacts (implementation plan + PRD + contracts), then enforces Node-specific standards: swagger-jsdoc docs, activity logging, clean architecture (src/ layout), zod validation, Jest/Vitest, and deployment per the plan's platform choice."
+description: "Use when writing or reviewing Kedata Node.js + Express code: swagger-jsdoc, activity logs, zod, Jest/Vitest. Do NOT use for other stacks."
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - backend
+    - nodejs
 ---
 
 # Skill: Kedata Backend Engineering — Node.js + Express
@@ -28,7 +33,7 @@ Before writing code, the agent MUST read the approved artifacts IN ORDER:
 
 Ask the user for clarification IF: a schema change has no migration plan; the endpoint conflicts with an existing contract; the task touches an area the plan doesn't cover (→ escalate, don't improvise).
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Project Structure
 Follow the house Node layout:
@@ -108,7 +113,7 @@ The generated config and runbook live in `DEPLOYMENT.md` (from `kedata-deploy`) 
 * **DO NOT** hardcode secrets; use env vars / Secret Manager.
 * Keep functions small and focused; ask before assuming; propose options; flag risks.
 
-## Example Output Structure
+## Examples
 Controller with zod validation:
 ```ts
 export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
@@ -130,3 +135,16 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   return res.status(500).json({ data: {}, message: "", error: "internal error" })
 })
 ```
+
+## Limitations
+
+- Scoped to Kedata backend work in Node.js + Express.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |

@@ -1,8 +1,13 @@
 ---
 name: kedata-review
-description: "Use this skill when reviewing a pull request, auditing pending changes, or when the user asks for a code review. Reads the approved artifacts first (implementation plan, PRD, contracts, design brief), then runs the Kedata code-review checklist against them — security, correctness, contract compliance, tests, observability, docs — and reports findings in priority order."
+description: "Use when reviewing a pull request against the approved artifacts: contract, security, tests, docs. Do NOT use for whole-repo audits."
 version: 1.3.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - engineering
+    - code-review
 ---
 
 # Skill: Kedata Code Review
@@ -36,7 +41,7 @@ Before reviewing, the agent MUST:
    * The PR type is unclear (feature, hotfix, refactor, docs-only).
    * The artifacts are missing — review what you can, but flag "cannot verify contract compliance — API_CONTRACTS.md missing".
 
-## Execution Workflow
+## Instructions
 
 ### Step 1: Verify Against the Contract (Mandatory)
 The code must match the approved artifacts. Any mismatch = request changes:
@@ -129,7 +134,7 @@ Failures = approve with suggestions:
 | # | Check |
 |---|-------|
 | 45 | Follows the plan §3 platform: stateless rules for Cloud Run ($PORT, no local FS) vs compose stack for VM |
-| 46 | Secrets via Secret Manager (Cloud Run) or docker secrets/.env (VM) |
+| 46 | Secrets via Secret Manager (Cloud Run) or docker secret / mounted env file (VM) |
 | 47 | No `api.app.kedata.id`-style multi-level subdomains (Cloudflare rule) |
 | 48 | Matches `DEPLOYMENT.md` (build/services/migrations/rollout) — a diff that contradicts the runbook needs the runbook updated via `kedata-deploy` |
 
@@ -165,7 +170,7 @@ Run the deep checklist for the stack in play (from plan §4):
 * **DO NOT** assume a stack — read it from plan §4 before applying language checks.
 * Keep the review priority-ordered: contract violations first, then blockers, then suggestions.
 
-## Example Output Structure
+## Examples
 
 ### Request Changes (contract violation or mandatory failure)
 ## ❌ Changes Requested
@@ -200,3 +205,16 @@ Great work! 🎉
 ## ✅ LGTM
 
 Trivial change — all checks pass. Merging.
+
+## Limitations
+
+- Scoped to reviewing a single diff against the artifacts.
+- Best-effort guidance: it depends on the inputs above and cannot verify runtime behavior.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Required artifact missing (PRD / plan / contracts) | Upstream stage not run | Run the upstream skill or `kedata-reverse` first |
+| Output conflicts with the approved docs | Docs and work drifted | Run `kedata-change`, then re-run this skill |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via its slash command |
