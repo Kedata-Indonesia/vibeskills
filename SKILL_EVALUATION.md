@@ -5,7 +5,7 @@
 >
 > Evaluated: 2026-11-17 · after fast-forwarding `origin/main` (13 commits, +9 skills)
 > Scope: `skills/<category>/<skill>/SKILL.md` → **29 skills**
-> **P0–P2 applied · P4 decided (keep categories, `skillevaluator-policy.yaml`) · P5 done (reviewed `skillspector-baseline.yaml`, security advisory).**
+> **P0–P2 applied · P4 decided (`skillevaluator-policy.yaml`) · P5 done (`skillspector-baseline.yaml`) · Tier 2 embedding dedup done.**
 
 ---
 
@@ -16,6 +16,7 @@
 | Skills evaluated | **29 / 29** |
 | Tier 1 (static, security skipped) | **29 passed · 0 failed** (exit 0) |
 | Tier 1 security (skillspector 2.13.6) | **0 active findings** after reviewed `skillspector-baseline.yaml` (81 false positives waived); coverage caveats remain — see §4.1 |
+| Tier 2 dedup (embedding) | **Ran** — 13 SIMILAR pairs (MEDIUM), all accepted; 0 errors — see §4.2 |
 | Average quality score | **100.0 / 100** |
 | Grade spread | **29 × A** · 0 × B/C/F |
 | HIGH findings | **0** |
@@ -67,7 +68,7 @@ an accepted deviation via `skillevaluator-policy.yaml` — the finding is downgr
 |---|---|---|---|
 | Tier 1 | `SKILLEVALUATOR_SCHEMA_ALLOWED_DIRS=library skillevaluator validate <skill> --tiers 1 --pii-waivers vibeskills/pii-waivers.yml` | **Ran** | Schema, version, PII, license, code-integrity, unicode, quality, lint, security |
 | Tier 1 security | `skillspector` 2.13.6 + `--skillspector-baseline skillspector-baseline.yaml` | **Ran (advisory)** | 0 active findings after the reviewed baseline; residual is scanner coverage (`INCOMPLETE`), not vulnerabilities. See §4.1 → P5 |
-| Tier 2 | Semantic dedup | **Provisioned, blocked** | Extra installed; needs an embedding + LLM provider (none configured) |
+| Tier 2 | `skillevaluator similarity-check skills --threshold 0.8` | **Ran (embedding)** | 13 SIMILAR pairs (MEDIUM), all accepted; intra-skill `Context Deduplication` needs an LLM provider (not configured). See §4.2 |
 | Tier 3 | Live agent eval | **Provisioned, blocked** | Extra installed; needs a provider + Docker/GKE + agent config |
 
 Reproduce:
@@ -242,27 +243,67 @@ runs as an **advisory** step — `security-scan --skillspector-baseline skillspe
 the collection reports **0 active findings**. Regenerate the baseline only after a reviewed re-scan
 (fingerprints bind to file content + scanner version).
 
+## 4.2 Tier 2 — semantic deduplication
+
+Ran `skillevaluator similarity-check skills --threshold 0.8` with an OpenAI-compatible embedding
+endpoint (vLLM, `Qwen/Qwen3-Embedding-0.6B`, 1024-d). Result: **13 SIMILAR pairs (MEDIUM), 0 errors** —
+embedding dedup passes; the collection has no duplicate skills.
+
+| Score | Pair | Classification |
+|---:|---|---|
+| 0.874 | `kedata-ponytail` ↔ `kedata-ponytail-audit` | intentional — wrapper family |
+| 0.868 | `kedata-design-frontend` ↔ `kedata-design-brief` | intentional — companion pair (craft vs contract) |
+| 0.844 | `kedata-frontend-nuxt` ↔ `kedata-frontend-react` | intentional — same standards, two stacks |
+| 0.842 | `kedata-ask` ↔ `kedata-system` | shared pipeline vocabulary |
+| 0.834 | `kedata-ponytail-audit` ↔ `kedata-ponytail-debt` | intentional — wrapper family |
+| 0.829 | `kedata-ponytail` ↔ `kedata-ponytail-review` | intentional — wrapper family |
+| 0.827 | `kedata-ponytail-audit` ↔ `kedata-ponytail-gain` | intentional — wrapper family |
+| 0.821 | `kedata-ponytail` ↔ `kedata-ponytail-gain` | intentional — wrapper family |
+| 0.821 | `kedata-ask` ↔ `kedata-repo` | shared pipeline vocabulary |
+| 0.818 | `kedata-ponytail-debt` ↔ `kedata-ponytail-gain` | intentional — wrapper family |
+| 0.816 | `kedata-ponytail` ↔ `kedata-ponytail-debt` | intentional — wrapper family |
+| 0.807 | `kedata-repo` ↔ `kedata-system` | shared pipeline vocabulary |
+| 0.801 | `kedata-ask` ↔ `kedata-reverse` | shared pipeline vocabulary |
+
+**Decision:** all 13 overlaps are accepted. The six `kedata-ponytail-*` skills are a deliberate wrapper
+family around one principle; the `design-*` and `frontend-*` pairs are companions; `ask`/`system`/`repo`/
+`reverse` share the pipeline vocabulary. Descriptions already carry the P2 "Use when… / Do NOT…" boundaries
+— rewriting them for a lower cosine score would trade discoverability for a metric.
+
+**Intra-skill `Context Deduplication`** (the second Tier 2 validator) needs an LLM provider. Only an
+embedding endpoint was available, so it is skipped: `validate --tiers 1,2` is blocked on that check, while
+the embedding-only dedup (`similarity-check`) passes.
+
+Reproduce:
+
+```bash
+export SKILL_EVAL_EMBEDDING_PROVIDER=openai-compatible
+export SKILL_EVAL_EMBEDDING_BASE_URL='http://<host>:9999/embedding/v1'
+export SKILL_EVAL_EMBEDDING_API_KEY='dummy'
+export SKILL_EVAL_EMBEDDING_MODEL='Qwen/Qwen3-Embedding-0.6B'
+skillevaluator similarity-check skills --threshold 0.8 -r cli,json -o reports/tier2
+```
+
 ## 5. Enhancement plan — remaining
 
-### P3 — Full-tier evidence (optional, for publication badge) · ⏳ PROVISIONED, BLOCKED ON CREDENTIALS
+### P3 — Full-tier evidence (optional, for publication badge) · ⏳ TIER 2 (embedding) DONE; TIER 3 BLOCKED
 
-Environment provisioned (2026-11-17):
+- [x] **Tier 2 — embedding dedup done (2026-11-18):** `similarity-check --threshold 0.8` against
+      `Qwen/Qwen3-Embedding-0.6B` (1024-d). 13 SIMILAR pairs (MEDIUM), all accepted; 0 errors. See §4.2.
+- [x] Tier 2/Tier 3 extras installed (`skillevaluator[llm]`, `skillevaluator[tier3]`).
 
-- [x] **Tier 2 extra installed** into the tool venv (`skillevaluator[llm]`: litellm, openai,
-      anthropic, boto3). `skillevaluator doctor --tier 2` → CLI package **pass**.
-- [x] **Tier 3 extra installed** (`skillevaluator[tier3]`: `harbor[gke]`, mcp, kubernetes, supabase,
-      pyjwt, oauthlib, …). `skillevaluator doctor --tier 3` now runs instead of crashing.
-
-Still blocked — cannot produce Tier 2/3 evidence in this environment:
+Still blocked:
 
 | Blocker | Doctor result | Needed |
 |---|---|---|
-| Embedding provider | `Embedding provider: fail` | `SKILL_EVAL_EMBEDDING_PROVIDER` + key |
-| LLM provider | `LLM provider: fail` | `SKILL_EVAL_LLM_PROVIDER` + key |
-| Harbor runtime | `docker: fail` (daemon not running) | Start Docker, or supply a GKE cluster |
+| LLM provider (intra-skill `Context Deduplication` + Tier 3) | `LLM provider: fail` | `SKILL_EVAL_LLM_PROVIDER` + key |
+| Harbor runtime | `docker: fail` (daemon not running) | Start Docker, or a GKE cluster |
 | Agent config / eval dataset | `Harbor agents: warn` | A configured provider + `create-eval-dataset` |
 
-To finish, set a provider **and** a runtime, then run:
+> The provided endpoint served only `Qwen/Qwen3-Embedding-0.6B` (no chat model), so the LLM-backed
+> intra-skill dedup and Tier 3 stay blocked on an LLM provider. Embedding-only dedup passes.
+
+To finish Tier 3, set an LLM provider **and** a runtime:
 
 ```bash
 # option A — NVIDIA Build
@@ -272,20 +313,11 @@ export NVIDIA_API_KEY='...'
 export SKILL_EVAL_LLM_PROVIDER=openai SKILL_EVAL_EMBEDDING_PROVIDER=openai
 export OPENAI_API_KEY='...'
 
-skillevaluator doctor --tier 3          # expect all green (or docker running)
-skillevaluator create-eval-dataset skills/<category>/<skill>   # Tier 3 input
+skillevaluator doctor --tier 3
+skillevaluator create-eval-dataset skills/<category>/<skill>
 skillevaluator validate skills/<category>/<skill> --tiers 1,2,3 --full -r cli,json,html
 # then publication.eligible can become true
 ```
-
-Tier 2 alone (dedup only) needs just the embedding + LLM provider:
-
-```bash
-skillevaluator similarity-check skills --threshold 0.8 -r cli,json
-```
-
-> Expect Tier 2 overlap on shared house conventions and the 6 `kedata-ponytail-*` skills —
-> review and decide what duplication is intentional before acting.
 
 ### P4 — Decide folder hierarchy · ✅ DECIDED — keep categories
 - [x] Keep `skills/<category>/<skill>/` (documented `npx skills` layout; scales to many skills).
@@ -314,8 +346,9 @@ SkillEvaluator reports legitimate runtime-path references and the bundled-JS par
 | P0 | 29/29 pass | 93.5 | incomplete |
 | P1 | 29/29 pass | 98.0 | incomplete |
 | **P2** | **29/29 pass** | **100.0** | incomplete (T2/T3 pending) |
-| **P4/P5 (now)** | **30/30 pass** | **100.0** | incomplete (T2/T3 pending); security advisory = 0 active findings |
-| P3 | 30/30 pass | 100.0 | blocked: provider key + Docker/GKE |
+| **P4/P5** | **30/30 pass** | **100.0** | incomplete; security advisory = 0 active findings |
+| **Tier 2 (now)** | **30/30 pass** | **100.0** | incomplete (Tier 3 pending); embedding dedup = 13 accepted overlaps |
+| P3 (Tier 3) | 30/30 pass | 100.0 | blocked: LLM provider + Docker/GKE |
 
 ---
 
