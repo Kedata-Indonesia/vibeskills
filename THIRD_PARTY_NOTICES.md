@@ -181,7 +181,7 @@ SOFTWARE.
 - **Version referenced:** 2.5.1, commit [`b48c832`](https://github.com/blader/humanizer/commit/b48c832) (2026-11-10)
 - **Licence:** MIT, Copyright (c) 2025 Siqi Chen
 - **Underlying source of the pattern list:** [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), WikiProject AI Cleanup, CC BY-SA
-- **Adapted into:** `skills/writing/kedata-writing/scripts/prose-check.mjs` and the "AI tells" section of its `SKILL.md`
+- **Adapted into:** `skills/product/kedata-writing/scripts/prose-check.mjs` and the "AI tells" section of its `SKILL.md`
 
 ### What was adapted
 

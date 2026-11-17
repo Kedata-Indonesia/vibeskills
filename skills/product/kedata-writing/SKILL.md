@@ -3,6 +3,11 @@ name: kedata-writing
 description: Use this skill to write, rewrite, or review any prose a Kedata project publishes — tender proposals, idea and design briefs, reports, documentation, READMEs, and client emails — in Indonesian or English, with every claim sourced or flagged, the house prose rules applied, and a measured pass before delivery. It owns the words; it does not re-interview product scope (kedata-prd owns the PRD) and it does not design screens. Trigger when the user says "write the proposal", "rapikan dokumen ini", "draft the report", "tulis dokumentasi", "translate this for the client", or hands over a document that must survive a skeptical reader.
 version: 1.1.0
 author: Kedata Indonesia
+metadata:
+  author: Kedata Indonesia <infra@kedata.online>
+  tags:
+    - product
+    - writing
 ---
 
 # Skill: Kedata Writing — Documents That Hold Up
@@ -43,6 +48,17 @@ Before writing anything, the agent MUST:
 2. **Read the artifacts that carry the facts.** `docs/PRD.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/TEST_PLAN.md`, `README.md`, deploy notes, and any measurement output. Facts come from files, not from memory of an earlier conversation.
 3. **Inventory the evidence you actually have.** Screenshots, live URLs, test results, commit history, metrics, certificates, team CVs. A claim you cannot support gets flagged, not invented.
 4. **Confirm the deliverable's hard constraints**: page limit, font and margin rules, required section list, language, submission format (DOCX/PDF/portal field), and deadline. Tender documents are read by a checklist first — a missing required section scores zero regardless of prose quality.
+
+## Instructions
+Work in this order; the steps below expand each one.
+1. **Frame** the reader, the decision, the thesis, the evidence, the length, and the language (Step 1).
+2. **Build the evidence ledger** — every claim gets a source or an open-question flag (Step 2).
+3. **Skeleton before prose** — section order and one assertion per section (Step 3).
+4. **Draft in four passes**, never one (Step 4).
+5. **Apply the house prose rules** (Step 5).
+6. **Measure before delivering** with `scripts/prose-check.mjs` (Step 6).
+7. **Review mode** when the user hands over an existing document (Step 7).
+8. **Deliver and hand off**, then delete the frame comment (Step 8).
 
 ## Step 1: Frame the Document (grill before drafting)
 One short round of questions, then write the frame down. Six answers are mandatory:
@@ -200,33 +216,7 @@ Rules for review mode:
 - If the document lives in a repo and ships as a file (DOCX/PDF), also commit the source markdown so the next revision starts from text, not from a binary.
 
 ## Document-Type Playbooks
-
-### Tender / proposal (`[O]` — mirrors the buyer's template)
-Required shape: understanding of the requirement → proposed solution → capability evidence → team and experience → timeline and milestones → price and commercial terms → risk and compliance.
-- Page one answers "can they do this and at what price"; procurement scores before it reads prose.
-- Every capability sentence carries proof: a project name, a client, a date, a measurable outcome.
-- Mirror the buyer's section names and numbering. Never rename a required section.
-- Price tables are exact: no ranges, no "starting from", no placeholders left in the submitted file.
-
-### Report / laporan
-Required shape: what was asked → what was done → what was found → what it means → what happens next.
-- Findings carry evidence (measurement, screenshot, log line), then interpretation, then recommendation — in that order.
-- Separate fact from judgement with explicit language: "measured 3.1s" versus "we judge this too slow for the target".
-- Close with decisions needed and owners, not with a summary of the introduction.
-
-### Documentation / README
-- First screen: what this is, who it is for, how to run it, where to go next. Installation before architecture.
-- Every command is copy-paste runnable and was actually run before being written down.
-- State prerequisites and the failure mode when they are missing.
-
-### Client email / cover letter
-- First line states the purpose and the ask. No greeting paragraph before the point.
-- One screen maximum; details live in the attachment the email names.
-- Name the next action, the owner, and the date.
-
-### Executive summary (any document)
-- Written last, from the finished document, in ≤ 250 words.
-- Contains: the decision required, the three supporting facts, the main risk. No new information.
+Pick the playbook for the deliverable — tender/proposal, report, documentation/README, client email, executive summary — from `references/document-type-playbooks.md` and apply its required shape.
 
 ## Bilingual Rules (ID ↔ EN)
 - Write the document in the language of its **reader**, not the language of the requester.
@@ -249,7 +239,7 @@ Required shape: what was asked → what was done → what was found → what it 
 * **DO NOT** claim compliance or certification the evidence ledger does not hold.
 * **DO NOT** change scope to make the document stronger — route scope changes to `kedata-change` first.
 
-## Example Output Structure
+## Examples
 A delivered document reaches this shape — every bracket replaced with confirmed content, never shipped as a placeholder:
 
 ```
@@ -276,3 +266,18 @@ Claim sentence. Evidence sentence with a source. Implication sentence.
 ```
 
 Before delivery, the file passes `node scripts/prose-check.mjs` with exit code 0 and every human gate in Step 6 is ticked.
+
+## Limitations
+- Owns prose only: it does not re-interview product scope or design screens — route those to `kedata-prd`, `kedata-design-brief`, or `kedata-change`.
+- `scripts/prose-check.mjs` measures sentence/paragraph length and banned patterns; it cannot judge whether a claim is true or a document answers the right question — those stay human gates.
+- Best-effort guidance: output quality depends on the source artifacts and evidence supplied; it cannot verify facts it was not given.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `prose-check.mjs` fails on length | Sentence or paragraph over the limit | Split the sentence or paragraph; keep the fact, cut the filler |
+| Banned phrase still present | Draft passed before the gate ran | Re-run the gate; replace each flagged phrase with the concrete claim |
+| Document answers the wrong question | Frame (Step 1) skipped | Re-run Step 1; write the one-sentence thesis, then re-skeleton |
+| Placeholder shipped (`TBD`, `[name]`) | Delivery checklist not ticked | Resolve every open question or mark it `[ASSUMPTION]` before delivery |
+| Skill did not trigger | Abstract or overlapping description | Invoke it explicitly via `/kedata-writing` |
