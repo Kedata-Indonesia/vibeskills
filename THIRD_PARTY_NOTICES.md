@@ -172,3 +172,57 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+
+---
+
+## blader/humanizer (pattern source for `kedata-writing`)
+
+- **Upstream:** https://github.com/blader/humanizer
+- **Version referenced:** 2.5.1, commit [`b48c832`](https://github.com/blader/humanizer/commit/b48c832) (2026-11-10)
+- **Licence:** MIT, Copyright (c) 2025 Siqi Chen
+- **Underlying source of the pattern list:** [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), WikiProject AI Cleanup, CC BY-SA
+- **Adapted into:** `skills/writing/kedata-writing/scripts/prose-check.mjs` and the "AI tells" section of its `SKILL.md`
+
+### What was adapted
+
+The pattern *families* only — significance inflation, weasel attribution, filler and hedging, signposting and chatbot artifacts, generic closers, copula avoidance, negative parallelism, promotional language, plus the Indonesian tells. Each family was reduced to the phrases that survive in Kedata documents, re-written as regular expressions, and split into two severities: hard-fail and warning.
+
+### What was not vendored
+
+No upstream file is copied. There is no vendored `SKILL.md`, no before/after examples, no voice-calibration section, and no Hermes port text. The prose in `kedata-writing` is Kedata's own.
+
+### What was changed
+
+| Item | Change |
+| --- | --- |
+| Pattern coverage | Reduced from 34 patterns to the subset a regex can check honestly; patterns that need judgement stay as human gates (heading case, metaphor, rhythm) |
+| Severity | Split into `HARD` (fails the run) and `SOFT` (warning, fails only under `--strict`) |
+| Enforcement | Turned into a zero-dependency Node script with line numbers and a `--json` mode, not a rewriting instruction |
+| Indonesian | Added Indonesian tells that upstream does not carry |
+| Attribution | Recorded here, and in the `SKILL.md` "AI tells" section |
+
+### Licence text
+
+```
+MIT License
+
+Copyright (c) 2025 Siqi Chen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
