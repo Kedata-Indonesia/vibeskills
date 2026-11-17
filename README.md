@@ -61,7 +61,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
 | `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
-| `kedata-writing` | writing | Prose for anything a project publishes — tender proposals, briefs, reports, documentation, READMEs, client emails, ID↔EN translation. Frames the reader and the decision first, keeps every claim in an evidence ledger, drafts in four passes, then passes a measured gate (`scripts/prose-check.mjs`) |
+| `kedata-writing` | product | Prose for anything a project publishes — tender proposals, briefs, reports, documentation, READMEs, client emails, ID↔EN translation. Frames the reader and the decision first, keeps every claim in an evidence ledger, drafts in four passes, then passes a measured gate (`scripts/prose-check.mjs`) |
 
 ## Companion Skills
 
@@ -112,7 +112,7 @@ Source, version, licence and the per-skill changes are in
 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
 
 **Pattern source — `kedata-writing`.** The AI-tell checklist and the gate patterns in
-`skills/writing/kedata-writing/scripts/prose-check.mjs` derive from
+`skills/product/kedata-writing/scripts/prose-check.mjs` derive from
 [blader/humanizer](https://github.com/blader/humanizer) (MIT) and Wikipedia's "Signs of AI
 writing". No upstream file is vendored; the patterns were reduced to what a regex can check
 honestly, re-written as expressions, and split into hard-fail and warning severities. Source,
@@ -159,8 +159,7 @@ skills/
 │           └── openai.yaml       # optional — display metadata
 ├── frontend/               # frontend skills: language standards + design-frontend (art direction + gate)
 ├── engineering/            # cross-cutting engineering skills (system, review, repo)
-├── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts)
-└── writing/                # prose skills (proposals, reports, docs, emails, translation)
+└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts, writing)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.

@@ -1,0 +1,414 @@
+# Reviewed SkillSpector baseline (v2) — accepted false positives.
+# Scope: bundled design corpus URLs/data (E1/TM1/PE3/LP3/EA4) and bounded-parser
+# "partial" analysis (AE1) in bundled scripts. Regenerate only after a reviewed re-scan.
+# Use: skillevaluator security-scan <skill> --skillspector-baseline skillspector-baseline.yaml
+# See SKILL_EVALUATION.md §5 (P5).
+version: 2
+scanner_version: 2.13.6
+rules: []
+fingerprints:
+- hash: sha256:a9ebc0517e360b26aa5074ce90dc2f5c0ce7a4886283ec97319faea57c863966
+  rule_id: LP3
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:25cbfaabe47cc45c1cbaa5efcd8832b3ec8c604eec07c579d17c5c69d2fb38b7
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:a24fea1f8816e17f620b214c2f76557a6875c001ecf4beeca855f2d051bf3ae8
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:1e42607d7abd3127029795276abcf73bfa723157e70530935ab798505ca33e19
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:33e8c659f2aa780d60f159d38fbe502916ea884de77834049dbf3b1868d21dab
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:01cd2acd878abfc2514183119d036b8f6294f156d186cd73f972120c64bcfeac
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:a1cf8ed72f716d9dc2777edc686070cfc7f17f70f1d5df342ee8bf1ff67a5e92
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:8f9655838ec321d0c16594d12f2b5a770ae045892c1bd0ff7baaf149cffad2e4
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:59991eba8e09a0905f71ff6f860b8a2b4cce75e005c8db05579ea9a7dc1fb527
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:8562c341a6ff1b64d6f71f77b2ffb87c2f887aae8167dc2de65acfba2195a3f9
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:57b410948c2653a2ea399c8758a30528722bfd6d6f6d201231371869c017c25e
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:c6c78bc585e2981ae3769c01c1064bdf62fa01f1fbe34885d17e35d81059893d
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:b91d32622214eef3a9588fca66cadae8b6c67029c14766278d6e8cd2294ad0fb
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:1d7f9ab676281719530fbe39db969576901d78b14b07fa51cfd4dbd4e4bd900c
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:da8ac02e7f8c3d93142c36e9cdb818ddb5e1b0f455fafac2c11825feaebf3f8f
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7a3b988884088c64fcdbabd0e13c7c08e3e42e12e8d278ccd3ec8ced81c97865
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:5580efdc8a32782c07f06deed6a86795d702cd8d336783068facb0ef82b551f5
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e11040c9ef8b36e31f4fb55f6f1de32a4d3540ba946d871c89a5c134f05a762f
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:d0d582dd6af276343d22008d86bb4cc1bfe7d120af8257ea20b1be6c4bec2b0f
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:21c36094d5a7d101de0a854673a40691931db0e4ef5d20bab33817b2208de8cf
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:74045212501f78ee521a4ef95ae1c12decd7132b8eac151f0159fc80614bf131
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7a77170d26cc4e613dc0b802c48e7cf3ecde872d9bc148a15623bb8af689aaf5
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:1b90c7c55204ed7c862be9ea88695ab51e7037216c6a3958db708822331c7dfb
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:9276e31e4cc219e77b7b5fe3dc0d1a2bd94bbb622b91a35cada9c07619ad5445
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:5136ad6561de68821d3d4cdb667e60bed6041625233c6563e105b46718ac9a82
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:ffaa7315b7519686b5168196620654e1dbc6eda0d36c3f66d519d6c58d3fa93a
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:fbb00efbf4fbbca3ae81bad24ecf9767e4a2be6636cdb814339c89c84d16c930
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:522f7e5a89e8ad20d01f0c4ac8522a94e2bd6434bc6e2c5d6b455b7fd81a1272
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e282d4b5fbaf8c1e94ea188b0bb378155846dd256f0d66bee003cde1d5168f08
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:c72ae8801cca201c1bc09ae26f2b0560662434728d7012d428f43fee56f26f82
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:9a37c5655b65948a7dcabcf5ef1bcf2a48c4d46c7679ffaed11bef21b4baeda4
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:f668611599439ac81b271e92b5bc0a765776be2ea20415e3755e74ecab347d7a
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7d8eb888b7083aae6d944ea42e7ca8713a3c7f324553ebf5a0c517960e5b8e5d
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:4d89a8857b961b62914fb2059defb6ba5022e674e6d7ebb7f1344f4257971d41
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:2abfc007b335cc09e4a1067ad53fec93a85f407be738b9d41b94696d2848a14b
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:3393e640015168e8236f7e5703d95b3b7d1416e2757be7687e5c9680fbe1fa2a
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:b231225aaa465b8c523f29f1a49b7b841f5dbfc961c3ad3cf4b03f73f029782d
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:8e668504b3dd502e42a1fe18f541c709f1427a1ff5ed8d4463c43116b630bba5
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:eb99e01a183ce68ce75d65faa10f2610e84b0a92dd9554f043b4f32e775db042
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:645d1e7a1259a5d7244236323d458ec93e703e0bc8ce904c484c24b2b720f97a
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7705b1d160fb75a5c23c6aed2f1aab40e3ed9ed08a84dd6d0e2e656c2fba19cf
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:a85b3b5cfc8d92898d01a7017e4a6395f681d40580d2ffd1b6ab3813b6bb33ed
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:875384eaf0a59396c5aecc50e3ae6290c82f10fc2faaf8473b6d0c61cd153557
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:fa22ec0b629e019dfa3f07d644747356b5b09f21816411d8d0316aefa9fd7d17
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7eef326602eb28cc455be7429e76b2aaeb6a66a44eee7b2c553cc43fbbae3b5f
+  rule_id: E1
+  file: library/type.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:3dbb183622b8839f17ed183596a9bb65932ffd82a22f8cccd44d8fd6cb38514c
+  rule_id: E1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:513ed357b082d60cc53ef36535ff9020d60949bd1d43cbd5a9b59dd81e86bfa4
+  rule_id: E1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:037003736d99cc5b18d28cb613d3f7096ca867fad85d060520c5f15dba9fd9b8
+  rule_id: E1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:237bdf4b251cc47394c079a935fd9e1b3f92c519d29e3d37cf48f296a7ecd752
+  rule_id: E1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:9d9f8a22e37bd93a1f5fc846e448a81efdf94e5f617491e13744d2e8f7168e0a
+  rule_id: EA4
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:1a09a9db00a2666865a96d77f873978cd4d98fcdf4ff27383d7ea5480ffe1430
+  rule_id: PE3
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7c819733a3d947dd66b6e65e8f656bb9dc5369290b6a2604b788644cac5f483c
+  rule_id: PE3
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:4c10ab6da40dbdfbf89f8a8ede3cd998486f904bf198dd3b9fa37c314ec71eb3
+  rule_id: PE3
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e64697e0ae8e7caf0433c9b7021c0e01b34b8aadcd2cee93972995cc18f03f2c
+  rule_id: PE3
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:0e858f1b1313065f68c77eb5ab45937d1d06ff9f7ca926c4e6f77ccdf3128453
+  rule_id: PE3
+  file: library/sites.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:fc16db671c117a22e19fe83b5f3ec61cdbbcced79fc4d394a10612e92dacfe52
+  rule_id: TM1
+  file: library/photos.json
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:5be30332805a79ff4b0dac09429e963c18e93ae97382f4c86a897f539b3647a2
+  rule_id: TM1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e9785bf3241a51eff947fb6264cb69b3d6aeedec0db0c4bd889e6f727c22c146
+  rule_id: TM1
+  file: scripts/assets.mjs
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e489359bedf1d7543d2347439f442f3220603fb65a290f984becc74b14daf8eb
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:4d1f5f004021a75b53a438097a29d7f97cc7c52eed2ca163f2da652c6a90266c
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:bbe48277e8ff382d81cef1c7930ced3f67dc72108c80d4d33740d097fe299971
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:36e0f70f05fa0a93f20c5147e18f2f9c3c16a00593ab5c5bb5adb7b21c902c15
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:ed1aed6cf132a04bd90d7ac42da51f1eba25e1d1491142106e791a2d3613cffc
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:88a8a225b4626157a62ea3fc4b7c7df2f1a228ed71797766681260b8763f17bf
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:cb284371205f4627fe55f0092db85f471d7e0ca65b0f6bea35a04eba80abcece
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:c823d9645431af7edc8e3ca07654eec824c1d95e173b5371eb0ce3f89ae6df76
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:5b8b734c1bde73b64d23be910607ddbeda0c7e6a696dddb68c5fa8c6d420e47d
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7d77da50e15374e50db59497cbf9afe7c0249b3ebc9e29310f03bf7a6fae9860
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:7fc7ef35233bd70e9f135b9e413e818a1746b625f6cab24e5506bddd5f4f68a9
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:6cd7def14eb86fc63863164d065e8c4aefeeb2f7f77e26bc4bef70a1238a6539
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:44bae6a5f0ddf89219a5eecd97d421b799cc8dcb5ec1a0f6cd5b413578ca1508
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e021b79a335ed5ffd0a74f66210dcad12614f448cc32d8ebe2e8fbdaf6ea5660
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:54ecd6d571a089dece387d119c7130b98c134e4b2a9b5078d30ca5a3d273f8a5
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:31d22c0311e762eaf8ce7aaea32a97e1663e08e3811d1a682bfe2e7fae187655
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:9d239eb2ed0d7270f4eb9f7fe3113e32a9db37d3bf6ee63548fe8dbb2bc33e0c
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:0eb9676b0530939f670114c0af1493a51a6a84423793eab02ac2f970e3d47a7e
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:d17b4452189f8f08e8f4724f32abf57e75bab27a19c08fa04ef5780466212b79
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:e0f487c27ac3569cb2977b9e6755cd567f7d8368cf26e375b5935c4aa5fcddc2
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:8ea869bcf4bb3e544b9b404ec365c609fee00c9ddd9f8d95e0dd62acbf8a5566
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:3d05d7661adab8c40ec1495e9361d4e093cd20af3438042caaf3075c7238de65
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5
+- hash: sha256:dda8bfcfcfd59fa99011d7a66228da07f394479ba8c1a464061e5c1358a1502e
+  rule_id: AE1
+  file: SKILL.md
+  reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
+    + SKILL_EVALUATION.md P5

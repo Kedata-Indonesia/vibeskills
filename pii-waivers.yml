@@ -263,3 +263,12 @@ waivers:
     owner: kedata-maintainers
     created: 2026-11-17
     expires: 2027-11-17
+  - id: PII-030
+    category: emails
+    file: skills/product/kedata-writing/SKILL.md
+    line: 7
+    evidence_sha256: 61a037d10d9e7d029a47a344378ed08ff810cda1966eaded0a49091bce4474c8
+    reason: Official Kedata maintainer contact used for skill attribution
+    owner: kedata-maintainers
+    created: 2026-11-18
+    expires: 2027-11-18
