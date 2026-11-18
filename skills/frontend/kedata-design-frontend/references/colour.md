@@ -17,19 +17,10 @@ decided rather than tinted.
 
 ## 1. What the study measured
 
-- 41% of the studied pages are dark, 59% light. A quarter sit on pure white; 12% on pure black.
-- Schemes, as the panel classed them: monochrome plus one accent 23%, light neutral 22%, dark neutral
-  14%, several flat colours 13%, strictly two-tone 12%, colour carried by photographs 9%, one saturated
-  field 6%.
-- Buttons are neutral (black, white, grey) on 52% of sites. A coloured button is a choice, not a
-  requirement.
-- Gradient fills appear on 22% of the top-scored sites and 52% of the weak ones; gradient text on 2%
-  against 13%.
-- One site in 246 has a terracotta primary button and none has a violet one. Those are colours of
-  generated pages, not of the gallery. Warm off-white grounds do occur (32 sites), nearly always with
-  a dark or green ink rather than an orange accent.
-- Top-scored sites change the page's field colour between sections more often (a median of two section
-  grounds against one).
+The raw palette figures — dark/light split, scheme mix, neutral-button share, gradient rates, and the
+terracotta/violet rarity — are canonical in `research.md` §7. The takeaways that matter here: a coloured
+button is a choice, not a requirement; gradient fills and gradient text skew heavily toward weak sites;
+and top-scored sites change the page's field colour between sections more often than weak ones.
 
 ## 2. The roles
 

@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-frontend-nuxt",
+  "evals": [
+    {
+      "id": "kedata-frontend-nuxt-001",
+      "prompt": "We're working in the Kedata Nuxt 3 app — the approved IMPLEMENTATION_PLAN.md and DESIGN_BRIEF.md are in the repo root. Can you build out the Users management screen? It needs a paginated data table with a search box and role filter, a 'New user' slide-over form, and proper loading, error, and empty states. It should hit GET /api/v1/users for the list and POST /api/v1/users to create.",
+      "expected_output": "A Nuxt 3 Users page under pages/ that renders a paginated, searchable, role-filterable data table plus a 'New user' slide-over form, wired to GET /api/v1/users and POST /api/v1/users through a typed API composable, with explicit loading, error, and empty states, and styling that matches the approved DESIGN_BRIEF.md tokens and components.",
+      "assertions": [
+        "The agent's response contains a Nuxt page component (e.g., pages/users.vue) that calls /api/v1/users and renders the table with search and role-filter controls.",
+        "The implementation includes explicit loading, error, and empty state branches for both the user list and the create-user form.",
+        "The agent's output references the design brief's tokens and component names (colors, spacing, existing components) rather than introducing new visual values.",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-frontend-nuxt",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "ef553e8498e4205b4768dfe69bbe1a453e7030898b6c50bb55f67f9916d9163b"
+      }
+    ],
+    "generated_at": "2026-11-18T01:06:57.564087+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

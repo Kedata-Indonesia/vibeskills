@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-ponytail-review",
+  "evals": [
+    {
+      "id": "kedata-ponytail-review-001",
+      "prompt": "I've got uncommitted changes sitting on my branch for the notification-prefs work — before I open the PR, can you go through the diff and tell me if I'm over-building? I want to know which lines don't earn their place and what the minimal version would look like.",
+      "expected_output": "A lean-lens review of the named uncommitted diff that names each over-built element by file and line, gives the concrete cost or failure case for it, and states the smaller alternative (delete, reuse an existing helper with its path, use stdlib/native, drop the single-implementation abstraction, drop unset config, merge near-copies, or split a multi-job function). The report also states the load/scale assumption it judged the change against and ends with a clear verdict on whether the diff is minimal or needs trimming.",
+      "assertions": [
+        "The agent's report identifies at least one specific over-built element in the diff by file and line (e.g. an abstraction with one implementation, config nobody sets, a new dependency replacing a few stdlib lines, or dead/unused code)",
+        "For each flagged item the agent states the concrete case or cost and the smaller alternative, rather than a generic 'this could be simpler'",
+        "The agent's final response states the load assumption it judged the change against and gives an explicit verdict on whether the diff is minimal",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-ponytail-review",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "242d016418b1f56d367cfdc52c42546ee413b94286abeba525e3b3df0ab80668"
+      }
+    ],
+    "generated_at": "2026-11-18T00:52:05.018150+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

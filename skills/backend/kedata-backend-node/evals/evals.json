@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-backend-node",
+  "evals": [
+    {
+      "id": "kedata-backend-node-001",
+      "prompt": "I need to add a POST /api/v1/orders endpoint to our Express + Prisma backend. Can you write the controller, service, and repository layers, add the swagger-jsdoc annotations for the endpoint, validate the request body with zod, and make sure creating an order writes an activity log entry? Also add a Jest test for the happy path.",
+      "expected_output": "A working POST /api/v1/orders implementation split across controller, service, and repository layers, with a zod request schema, swagger-jsdoc OpenAPI annotations covering the request body and success/error responses, a fire-and-forget activity log write containing user_id, action, resource_type, resource_id, metadata, ip_address, user_agent, request_id, and timestamp, plus a Jest test covering the successful order creation path.",
+      "assertions": [
+        "The agent produced code organized into separate controller, service, and repository files for the orders endpoint",
+        "The agent's endpoint code includes swagger-jsdoc annotations documenting the request body and both success and error responses",
+        "The agent's order-creation flow writes an activity log entry asynchronously so a logging failure does not fail the request, and includes a Jest test for the happy path",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-backend-node",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "89b8c650fe07f8b4672dfcc36cfc4e7ce2afc889ec1d44d39f455b980c4b767f"
+      }
+    ],
+    "generated_at": "2026-11-18T00:31:02.353113+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-prd",
+  "evals": [
+    {
+      "id": "kedata-prd-001",
+      "prompt": "We want to build a self-service refund flow so customers can request refunds on their own instead of emailing support. Before anyone writes any code, can you help me put together a proper PRD? I need the requirements nailed down, the edge cases thought through, and something I can take to the team for sign-off.",
+      "expected_output": "A complete Product Requirements Document for the self-service refund flow, produced through a structured domain-by-domain interview, covering the problem statement, target users, in/out of scope, user flows, data and API considerations, systematically probed edge cases (e.g. partial refunds, expired windows, duplicate requests, refunds on discounted or already-refunded orders), non-functional requirements, open questions, and a sign-off section — with no implementation code written.",
+      "assertions": [
+        "The agent interviews the user domain by domain (problem, users, scope, flows, data, API, edge cases, non-functional, delivery) and asks specific follow-up questions rather than filling a template from the initial prompt alone.",
+        "The agent's final output is a PRD document containing a problem statement, scope, user flows, an explicit list of edge cases, recorded open questions, and a sign-off/review section.",
+        "The agent does not write or propose implementation code, and instead closes by presenting the PRD for review and sign-off.",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-prd",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "a0d71b0346b385fa7d8594a549178170763c845030e5f17bb05355083c71e39a"
+      }
+    ],
+    "generated_at": "2026-11-18T01:18:06.526740+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

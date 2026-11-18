@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-seo",
+  "evals": [
+    {
+      "id": "kedata-seo-001",
+      "prompt": "We're about to ship our new pricing page at https://example.com/pricing — can you run an SEO audit on it and tell me what's broken and what to fix first?",
+      "expected_output": "A prioritized SEO audit report for the pricing page covering on-page and technical checks (title, meta description, single H1 and heading order, canonical, robots directives, Open Graph/Twitter tags, image alt text, internal links, structured data, and Core Web Vitals where measurable), with each finding scored and grouped into severity bands, the smallest concrete fix named for each issue, and any check that could not be completed (e.g., client-rendered HTML, missing field data) explicitly flagged as unknown rather than guessed.",
+      "assertions": [
+        "The agent's final response reports the page's on-page elements by name — title, meta description, H1 count/heading order, canonical, robots, and social tags — with a pass/fail or score for each.",
+        "The agent's final response lists the identified issues ordered by priority/severity and states the smallest specific fix for each one.",
+        "The agent explicitly names any check it could not verify from the fetched HTML or available data as unknown instead of inventing a value.",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-seo",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "c06bccd1074718cf7171b773ace28a7e54692426c333a77f6b184c62a81f6bd2"
+      }
+    ],
+    "generated_at": "2026-11-18T00:59:29.431932+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

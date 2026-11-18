@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-ponytail-debt",
+  "evals": [
+    {
+      "id": "kedata-ponytail-debt-001",
+      "prompt": "Can you scan this repo for all the `shortcut:` / `ponytail:` comments we've left behind and give me a ledger of the tech debt? I want to see what was simplified, what ceiling was named, and what the upgrade trigger is — and please call out any markers that don't name a trigger at all, since those are the ones that quietly rot.",
+      "expected_output": "A tech-debt ledger of every `shortcut:`/`ponytail:` marker in the repo, grouped by file, where each row gives the file:line, what was simplified, the named ceiling, and the upgrade trigger pulled from the comment; markers lacking an upgrade path or trigger are tagged `no-trigger`; the report closes with a total count of markers and how many have no trigger (or states the ledger is clean if none were found).",
+      "assertions": [
+        "The agent's final response presents ledger rows grouped by file, each row containing a file:line reference plus the simplified item, its ceiling, and its upgrade trigger",
+        "The agent explicitly tags or lists the markers that name no upgrade path or trigger as `no-trigger`",
+        "The agent's response ends with a summary count of total markers and the number with no trigger (or reports 'No shortcut debt. Clean ledger.' when nothing is found)",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-ponytail-debt",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "3a88ca8ae59ac97738eb7791cab45052e1caf00f1eb0e169e9de086ffc2a4c32"
+      }
+    ],
+    "generated_at": "2026-11-18T00:48:27.618933+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

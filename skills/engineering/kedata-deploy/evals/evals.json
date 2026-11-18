@@ -1,0 +1,31 @@
+{
+  "skill_name": "kedata-deploy",
+  "evals": [
+    {
+      "id": "kedata-deploy-001",
+      "prompt": "We just finished docs/IMPLEMENTATION_PLAN.md for our Kedata project and §3 locks us into a single VM running Docker Compose (one app service plus a worker). Can you turn that into the actual deploy setup — Dockerfile, docker-compose.yml, the CI/CD pipeline, and a DEPLOYMENT.md runbook we can hand to ops?",
+      "expected_output": "A complete VM + Docker Compose deployment surface for the app service and worker: a Dockerfile and docker-compose.yml matching the runtime, port, and env matrix from the plan and ENVIRONMENT_VARIABLES.md, a CI/CD pipeline that builds and gates on the test suites before deploying on push to main, and a DEPLOYMENT.md runbook covering build, secrets handling, database migrations with backup, health checks, rollout, and rollback — all consistent with the platform already chosen in plan §3.",
+      "assertions": [
+        "The agent's response contains a Dockerfile and docker-compose.yml defining both the app service and the worker, with the port and environment variables taken from the plan and env matrix rather than invented.",
+        "The agent produced a DEPLOYMENT.md runbook that includes build steps, secrets handling, migration/backup procedure, health checks, rollout, and a concrete rollback path.",
+        "The agent's CI/CD configuration triggers on push to main and runs the deploy-gating test suites before deploying, without proposing a different platform than the VM + Docker Compose decision in plan §3."
+      ],
+      "expected_skill": "kedata-deploy",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "25333ab0f2ab1981ed84662457c0e5c1b60fa23a48118bf4547ff95a2f504d2d"
+      }
+    ],
+    "generated_at": "2026-11-18T00:43:57.583167+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

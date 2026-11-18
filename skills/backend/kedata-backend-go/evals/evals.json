@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-backend-go",
+  "evals": [
+    {
+      "id": "kedata-backend-go-001",
+      "prompt": "I need to add a POST /api/v1/employees endpoint to our Kedata Go + Gin service. Can you write the handler, service, and repository layers for it so it matches our house standards?",
+      "expected_output": "Go + Gin code for a create-employee endpoint split into handler, service, and repository layers, with swaggo godoc annotations on the handler, an activity-log/audit call recording the create action, httperr-style error handling, and a note that the schema/contract should come from the approved DATA_CATALOG.md and API_CONTRACTS.md.",
+      "assertions": [
+        "The agent's response contains a Gin handler function annotated with swaggo godoc comments including @Summary, @Param, @Success, @Failure, and @Router",
+        "The agent's code includes an activity log / audit service call that records the employee creation",
+        "The agent organized the code into separate handler, service, and repository layers with an interface for the repository",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-backend-go",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "ec7936868c7415fbf685b3ad32d2b0bce4f0f4eee68d1f2c0d311838f170c3ca"
+      }
+    ],
+    "generated_at": "2026-11-18T00:31:04.791496+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

@@ -21,23 +21,10 @@ how to crop and place them, and what to do when there are none.
 
 ## 1. What the study measured
 
-- On 60% of the studied sites one piece of media covers at least half of the first screen; on half of
-  them it covers nearly all of it. Top-scored sites: 68% and 56%. Weak sites: 48% and 39%.
-- Only 15% of heroes have no media at all, and those are deliberate typographic statements.
-- Media has square corners on 73% of sites. Where corners are rounded the usual radius is about 12px,
-  applied to every image alike.
-- Top-scored pages carry far more imagery (a median of 37 images against 5 on weak pages): the strong
-  sites show, the weak ones tell.
-- What the imagery is, by the panel's classification: a mix of kinds 32%, photography 14%, generative
-  or WebGL scenes 13%, real product interface 12%, 3D renders 11%, illustration 9%, video 6%, type only
-  3%.
-- Among the 54 sites the panel scored under 6.8, legibility (text lost over a busy image, or too
-  little contrast) was named as a weakness in 13.
-- In the October 2026 study of 91 Awwwards Sites of the Day (section 12), the median page carries 7
-  pictures (top sites 8, the lowest 2) and footage appears on 42% of sites (half of the top ones, one
-  of the 16 lowest).
-- Pictures come in whole screens: 42% of scrolled screens hold none and 19% are 90% picture or more.
-- 94% of pictures have square corners, and on a typical site two ratios hold three-quarters of them.
+The figures — hero-media coverage, image counts, corner radii, the imagery-kind mix, and the October
+app-screen study — are canonical in `research.md` §8 (and §12 for the Awwwards study). The takeaway for
+this file: strong pages show far more imagery than weak ones, and pictures arrive as whole screens rather
+than scattered decoration.
 
 ## 2. Decide what imagery exists
 

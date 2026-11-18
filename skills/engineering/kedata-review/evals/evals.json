@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-review",
+  "evals": [
+    {
+      "id": "kedata-review-001",
+      "prompt": "Hey, can you review PR #482 on the payments-service repo before I merge it? It adds the POST /v1/refunds endpoint and touches the refund handler, migration, and tests. Check it against our approved artifacts — I want to know if it's actually safe to merge, not just a generic code smell pass.",
+      "expected_output": "A priority-ordered review of PR #482's diff that verifies the changes against the approved artifacts and ends with an explicit merge recommendation. Findings cover: whether the new POST /v1/refunds endpoint's path, method, request/response shapes, and status codes match API_CONTRACTS.md; whether the migration matches DATA_CATALOG.md and any new config is reflected in ENVIRONMENT_VARIABLES.md; security concerns (authz, input validation, secrets, logging of sensitive data); whether the diff's tests cover the acceptance criteria and edge cases traced in TEST_PLAN.md rather than merely existing; and whether Swagger/docs were updated. Each finding is labeled by gate and severity, and any contract mismatch is called out as a blocking request-changes item.",
+      "assertions": [
+        "The agent's review report lists findings grouped or labeled by gate (contract, security, tests, docs) with a severity or priority for each, rather than a flat list of generic comments.",
+        "The agent explicitly compares the POST /v1/refunds request/response shapes and status codes in the diff against API_CONTRACTS.md and states whether they match or where they diverge.",
+        "The agent's final response ends with an explicit merge recommendation (approve or request changes) tied to the blocking findings it identified.",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-review",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "73a686aaa82e68626eeb23b375b8c9025a7480c2e799983d740b348ceeeaf16b"
+      }
+    ],
+    "generated_at": "2026-11-18T00:58:09.630286+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

@@ -187,7 +187,7 @@ A complete reconstruction reaches this specificity: every route/entity/env var c
 | secret in code | `SECRET = "..."` in config.go | move to env, rotate |
 
 ## 7. Recommended Next Step
-Confirm the inferences above (bump artifacts to `Approved`), then run `/kedata-ask` to locate the pipeline stage. Open items → `/kedata-change`.
+See Step 9 for the sign-off and hand-off.
 
 ## Limitations
 

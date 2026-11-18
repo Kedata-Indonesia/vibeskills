@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-brainstorm",
+  "evals": [
+    {
+      "id": "kedata-brainstorm-001",
+      "prompt": "I've got a rough idea I want to sanity-check before I sink months into it: a mobile app where small coffee shops pool their unsold pastries into a discounted 'surprise box' that customers reserve late in the afternoon. Can you help me figure out whether this is actually worth pursuing — would shops and customers really use it, and could it make money?",
+      "expected_output": "A business-perspective validation of the raw idea that pressure-tests the problem, target market and size, existing competitors, value proposition, business model and unit economics, build/sell feasibility, go-to-market, and the risks that could kill it — separating what the user knows from what they merely believe, surfacing the assumptions that must hold, and closing with an explicit verdict (proceed, pivot, park, or kill). No PRD or feature requirements are produced.",
+      "assertions": [
+        "The agent interviewed the user across business dimensions (problem, target market, competition, value proposition, economics, feasibility, go-to-market, risks) rather than listing product features or drafting requirements.",
+        "The agent challenged the user's market and usage claims by asking for evidence and distinguishing what the user knows from what they believe.",
+        "The agent's final response states an explicit verdict (proceed, pivot, park, or kill) along with the key assumptions that must be true for the idea to work, and does not produce a PRD.",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-brainstorm",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "4caecbb388c487456a1648b0b8c627e5cca67049aafff23a02d2977116fd5015"
+      }
+    ],
+    "generated_at": "2026-11-18T01:11:31.791924+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}
