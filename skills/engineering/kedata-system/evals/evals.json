@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-system",
+  "evals": [
+    {
+      "id": "kedata-system-001",
+      "prompt": "I just cloned the kedata-billing repo and I'm picking up task 3 from the implementation plan — the invoice export endpoint. Where do I start?",
+      "expected_output": "A per-task implementation plan for the invoice export endpoint that is grounded in the repo's approved artifacts: the stack, architecture, endpoint shape, and data model are taken from IMPLEMENTATION_PLAN.md, PRD.md, and the contracts rather than invented, with any missing artifact flagged and confirmation requested before code is written.",
+      "assertions": [
+        "The agent's response references the stack, architecture, and endpoint/data-model details found in the repo's approved artifacts (implementation plan, PRD, contracts) instead of proposing or choosing a stack of its own",
+        "The agent presents a concrete implementation plan for the invoice export task and asks for confirmation before writing any code",
+        "The agent states which artifacts it read and explicitly flags any required artifact that is missing or unreadable",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-system",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "cf332e45f140a8257285800129e40b40c2c968fed04336c4bc41b347660190d7"
+      }
+    ],
+    "generated_at": "2026-11-18T01:02:44.972021+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

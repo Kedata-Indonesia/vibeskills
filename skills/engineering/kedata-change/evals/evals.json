@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-change",
+  "evals": [
+    {
+      "id": "kedata-change-001",
+      "prompt": "We just got word from the client that the reporting module now needs a bulk CSV export endpoint — the PRD was approved last week, the implementation plan is half-built, and the API contracts are already written. Can you fold this change into all the docs so nothing downstream is left stale?",
+      "expected_output": "A traced, version-bumped update across the artifact chain: the new bulk CSV export requirement is captured with its source and urgency, classified by impact, and applied in dependency order to the PRD, implementation plan, API contracts, and test plan, with each touched artifact's version and status updated and a summary of what changed in each file plus what still needs re-approval.",
+      "assertions": [
+        "The agent's response identifies which artifacts the change touches (PRD, implementation plan, API contracts, test plan) and states the dependency order in which they will be edited",
+        "The agent reports a concrete edit for each affected artifact — the new requirement/AC in the PRD, the added task in the plan, the new endpoint definition in the contracts, and the new test cases in the test plan",
+        "The agent's final response lists the new version and status of every artifact it modified, plus any items flagged for re-approval",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-change",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "12de30ccc33c610927d620cbd62d9e399e5d9477fc8e68099baa812eb82aea97"
+      }
+    ],
+    "generated_at": "2026-11-18T00:43:45.769795+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}

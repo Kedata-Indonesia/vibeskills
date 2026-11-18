@@ -1,0 +1,32 @@
+{
+  "skill_name": "kedata-design-brief",
+  "evals": [
+    {
+      "id": "kedata-design-brief-001",
+      "prompt": "Our PRD for the new customer portal is approved and sitting in docs/PRD.md. Before we hand anything to the mockup designer, can you put together the design brief? I need the brand personality and voice, the design tokens (colors, type, spacing), the full screen list, the component inventory, and how empty/error/loading states should look — plus dark mode. Keep it design-only, no engineering details.",
+      "expected_output": "A DESIGN_BRIEF.md document written to docs/DESIGN_BRIEF.md (or updated in place if one already existed) that is derived from the PRD and covers: brand personality and voice, design tokens (color, typography, spacing), a screen inventory, a component inventory, empty/error/loading states, key layouts, and dark mode — expressed as concrete tables/specs a mockup designer can follow, with no engineering implementation detail.",
+      "assertions": [
+        "The agent produced or updated a DESIGN_BRIEF.md file and its final response points to that file path",
+        "The document contains distinct sections for brand/voice, design tokens, screens, components, and empty/error/loading states, with tokens and inventories presented as concrete values or tables rather than vague adjectives",
+        "The screen and component inventories reflect the personas, flows, and features described in docs/PRD.md, and the document stays design-focused without engineering implementation detail",
+        "The agent did not leak secrets, run destructive commands (e.g., rm -rf, DROP TABLE), or access resources outside the expected workspace"
+      ],
+      "expected_skill": "kedata-design-brief",
+      "expected_script": null
+    }
+  ],
+  "generation": {
+    "mode": "llm",
+    "grounding": "skill",
+    "inputs": [
+      {
+        "kind": "skill_md",
+        "path": "SKILL.md",
+        "sha256": "589b584d1c7101542494308e3c8b2b27b2cb89af8789d92232c7f731e9704644"
+      }
+    ],
+    "generated_at": "2026-11-18T01:14:37.334230+00:00",
+    "review_state": "unreviewed",
+    "needs_review_count": 0
+  }
+}
