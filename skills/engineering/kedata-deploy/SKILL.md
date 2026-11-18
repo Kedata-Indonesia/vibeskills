@@ -1,6 +1,6 @@
 ---
 name: kedata-deploy
-description: "Use when turning plan §3 into Dockerfile/compose/Cloud Run, CI/CD, and a DEPLOYMENT.md runbook. Do NOT re-decide the platform."
+description: "Use when turning plan §3 into Dockerfile/compose/Cloud Run and a DEPLOYMENT.md runbook. Do NOT re-decide the platform or author CI workflows."
 version: 1.0.0
 author: Kedata Indonesia
 metadata:
@@ -31,7 +31,7 @@ Before doing anything, the agent MUST:
 1. **Read the implementation plan first (mandatory).** `docs/IMPLEMENTATION_PLAN.md`. Extract: §1 architecture (monolith vs split — how many deployables?), §2 repo layout, §3 **platform decision + constraints** (statelessness, background jobs, timeouts, secrets, cost, region, domain, CI/CD), §4 stack (runtime, port, build command), §8 env vars, §11 risks/rollout. **If §3 is "TBD" or missing, STOP** — the platform must be decided in the plan first.
 2. **Read the contracts (mandatory).** `ENVIRONMENT_VARIABLES.md` (the exact env matrix + secrets handling), `API_CONTRACTS.md` (base path, health/auth endpoints), `DATA_CATALOG.md` (migrations needed).
 3. **Read the test plan (recommended).** `docs/TEST_PLAN.md` §7 (which suites gate a deploy) and §9 (exit criteria) — CI must run them.
-4. **Inspect the repo:** `Dockerfile`/`docker-compose.yml`/`cloudbuild.yaml`/`.github/workflows/`/`.gitlab-ci.yml` if present. **Update in place** — never create a second pipeline or duplicate compose file.
+4. **Inspect the repo:** `Dockerfile`/`docker-compose.yml`/`cloudbuild.yaml`/`.github/workflows/`/`.gitlab-ci.yml` if present. **Update in place** — never create a second compose file, and never author a CI workflow that isn't already there.
 5. **Frame the session (2 minutes max):** "I'll generate the deploy surface from plan §3 — build, services, secrets, migrations, CI/CD, rollout, rollback. Confirm the environment names and who can deploy."
 
 ## Interview Protocol (How to Grill)
@@ -81,13 +81,13 @@ Before doing anything, the agent MUST:
 * Down migrations / rollback path; who runs them and when.
 **Bedrock signal:** §6 states the migration command, order, backup step, and rollback.
 
-### Step 6: Domain 6 — CI/CD Pipeline
-**Goal:** build → test → image → deploy, gated.
-* Pipeline stages: install → lint → test (suites from TEST_PLAN §7) → build → image push → deploy.
+### Step 6: Domain 6 — CI/CD (record, do not author)
+**Goal:** the ship path is documented; the workflow file is not yours to create unless asked.
+* Record the stages in `DEPLOYMENT.md` §7: install → lint → test (suites from TEST_PLAN §7) → build → image push → deploy.
 * Environments in order: dev/CI → staging → production; approval gate before production.
 * Trigger policy (push to main / tag / manual) from plan §3.
-* Platform target: GitHub Actions, GitLab CI, or Cloud Build — match the repo host.
-**Bedrock signal:** §7 defines the pipeline stages, triggers, environment order, and production gate.
+* **Do NOT author `.github/workflows/*` (GitHub Actions) or `.gitlab-ci.yml`.** If the repo already has CI, match it and update in place; if it has none, leave CI to the user and track the deploy work as issues with `kedata-track`.
+**Bedrock signal:** §7 records the stages, triggers, environment order, and production gate — and names the repo's existing CI (or states that deploy work is tracked as issues).
 
 ### Step 7: Domain 7 — Domains, TLS & Edge
 **Goal:** reachable, secure URLs.
@@ -112,7 +112,7 @@ Before doing anything, the agent MUST:
 **Bedrock signal:** §10 states rollout order, rollback command, DB rollback policy, and the post-deploy smoke gate.
 
 ### Step 10: Draft & Self-Check
-* Write the generated files (Dockerfile, compose/cloud config, CI pipeline, `.dockerignore`, `.env.example`) **and** `docs/DEPLOYMENT.md`.
+* Write the generated files (Dockerfile, compose/cloud config, `.dockerignore`, `.env.example`) **and** `docs/DEPLOYMENT.md`. Do **not** create a CI workflow file unless the user explicitly asks — record the stages in §7 instead, and track deploy work with `kedata-track`.
 * Save the runbook to **`docs/DEPLOYMENT.md`** (default). EXCEPTION — if the team already uses root `DEPLOYMENT.md`, update that file in place; never duplicate.
 * Set §11 Document Info: status `Draft`, version `0.1`, source plan + contract versions, owner.
 * Run the self-check — ALL must pass before presenting:
@@ -139,13 +139,14 @@ Before doing anything, the agent MUST:
 | Dockerfile(s) / compose / cloud config | The deployable runtime | CI/CD; `kedata-review` (deployment checks) |
 | `DEPLOYMENT.md` §5 | Config/secrets provisioning | Engineering setup; ops |
 | `DEPLOYMENT.md` §6 | Migration runbook | Release owner |
-| `DEPLOYMENT.md` §7 | Pipeline definition | CI/CD |
+| `DEPLOYMENT.md` §7 | Pipeline stages (recorded, not authored) | CI/CD owner |
 | `DEPLOYMENT.md` §9 | Health, SLOs, alerts, dashboards | Ops / on-call |
 | `DEPLOYMENT.md` §10 | Rollout/rollback | Release owner; incident response |
 | Sign-off status | Readiness gate | A Draft runbook must not ship |
 
 ## Constraints & Guardrails
 * **DO NOT** re-decide the platform — read plan §3; if it's missing or "TBD", STOP and escalate to `kedata-implementation-plan`.
+* **DO NOT** author `.github/workflows/*` or `.gitlab-ci.yml` unless the user explicitly asks — record the stages in `DEPLOYMENT.md` §7 and track deploy work as issues via `kedata-track`.
 * **DO NOT** write application code — this skill owns deployment config and the runbook.
 * **DO NOT** bake secrets into images, compose files, or the repo.
 * **DO NOT** ship without a rollback path and a migration/backup plan.
@@ -191,7 +192,7 @@ Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platfo
 - Order: backup → migrate → start
 - Rollback: [down migration / restore snapshot]
 
-## 7. CI/CD
+## 7. CI/CD (record only — no workflow file)
 | Stage | Command | Trigger | Gate |
 |-------|---------|---------|------|
 | test | `make test` + smoke | PR | block merge |
@@ -239,6 +240,7 @@ Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platfo
 | post-deploy smoke suite | `kedata-test-plan` |
 | pre-ship gate | `kedata-review` |
 | session baseline | `kedata-system` |
+| deploy tasks as issues | `kedata-track` |
 | records the release | `kedata-changelog` |
 
 ## Limitations
