@@ -45,7 +45,7 @@ flowchart TD
 
     TESTART --> SYS["[M] kedata-system<br/>session baseline"]
     SYS --> CODE["[S] kedata-backend-*<br/>+<br/>[S] kedata-frontend-*"]
-    CODE --> DEPLOY["[M] kedata-deploy<br/>Dockerfile · compose · CI/CD"]
+    CODE --> DEPLOY["[M] kedata-deploy<br/>Dockerfile · compose · runbook"]
     DEPLOY --> DEPART["docs/DEPLOYMENT.md<br/>+ infra files"]
     DEPART --> REV2["[M] kedata-review<br/>verify vs artifacts"]
     REV2 --> REPO["[M] kedata-repo<br/>open PR / MR"]
@@ -464,7 +464,7 @@ flowchart TD
 | 5 | `kedata-system` | `[M]` | `/kedata-system` | all artifacts | none (baseline) |
 | 6 | `kedata-backend-*` | `[S]` | `-go`/`-python`/`-node`/`-rust` | plan §4 | backend code |
 | 6 | `kedata-frontend-*` | `[S]` | `-react`/`-nuxt` | plan §4 + brief | frontend code |
-| 6.5 | `kedata-deploy` | `[M]` | `/kedata-deploy` | plan §3 + contracts | `DEPLOYMENT.md` + `Dockerfile`/compose/CI |
+| 6.5 | `kedata-deploy` | `[M]` | `/kedata-deploy` | plan §3 + contracts | `DEPLOYMENT.md` + `Dockerfile`/compose (CI recorded, not authored) |
 | 7 | `kedata-review` | `[M]` | `/kedata-review` | artifacts + diff | review verdict |
 | 8 | `kedata-repo` | `[M]` | `/kedata-repo` | diff + artifacts | PR / MR |
 | 8.5 | `kedata-changelog` | `[O]` | `/kedata-changelog` | merged PRs/commits/issues | `CHANGELOG.md` |

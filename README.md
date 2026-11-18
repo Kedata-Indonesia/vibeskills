@@ -39,7 +39,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-test-plan` | product | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
 | `kedata-qa-automation` | engineering | Run TEST_PLAN.md cases in a real browser with Playwright, against a URL the user provides or a running local environment. No test plan: stops and asks for `kedata-test-plan` |
 | `kedata-track` | engineering | Publish `IMPLEMENTATION_PLAN.md` tasks as GitHub/GitLab issues — milestones, blocking links, ACs — so state lives in the tracker, not a markdown file |
-| `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
+| `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, secrets, migrations, rollout/rollback; CI is recorded, never authored as a workflow |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
 | `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
 | `kedata-audit` | engineering | Repo-wide codebase audit → prioritized, deduplicated GitHub/GitLab issues (bugs, security, tech debt, test gaps) + AUDIT_REPORT.md |
@@ -138,7 +138,7 @@ For a new feature, run skills in order:
 5.6 `/kedata-qa-automation` — run the plan's cases in a real browser with Playwright, against a URL you provide or a running local environment. No test plan, and it stops and asks you to run `/kedata-test-plan` first.
 6. `/kedata-backend-go` · `/kedata-backend-python` · `/kedata-backend-node` · `/kedata-backend-rust` — implement per the chosen backend stack (plan §4)
 7. `/kedata-frontend-react` or `/kedata-frontend-nuxt` — implement per the chosen frontend stack (plan §4)
-8. `/kedata-deploy` — turn plan §3 into Dockerfile/compose/CI + a DEPLOYMENT.md runbook (rollout + rollback)
+8. `/kedata-deploy` — turn plan §3 into Dockerfile/compose + a DEPLOYMENT.md runbook (rollout + rollback; CI recorded, not authored)
 9. `/kedata-review` — review the PR before merging
 9.5 *(public page)* `/kedata-seo` — audit the built page or its URL for crawl, index, schema, and content quality. A finding that changes approved copy or a URL goes through `/kedata-change`.
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
