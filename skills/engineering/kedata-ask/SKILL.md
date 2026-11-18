@@ -25,7 +25,8 @@ Orient anyone — a new developer, a returning user, or an agent in a fresh sess
 | 1 | Requirements | `PRD.md` (interview) | `kedata-prd` |
 | 2 | Design | `DESIGN_BRIEF.md` (reads PRD.md, interview) | `kedata-design-brief` |
 | 2.5 | Visuals | build + gate the UI from the brief (or designer/LLM mockups) | `kedata-design-frontend` *(or external)* |
-| 3 | Planning | `IMPLEMENTATION_PLAN.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
+| 3 | Planning | `IMPLEMENTATION_PLAN.md` + `docs/decisions/ADR-*.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
+| 3.5 | Tracking *(optional)* | publish plan tasks as GitHub/GitLab issues (state, no artifact) | `kedata-track` |
 | 4 | Contracts | `API_CONTRACTS.md` + `DATA_CATALOG.md` + `ENVIRONMENT_VARIABLES.md` | `kedata-contracts` |
 | 4.5 | Test plan | `TEST_PLAN.md` (reads PRD §5/§18 + plan + contracts) | `kedata-test-plan` |
 | 5 | Engineering session | Loads the baseline rules (reads all artifacts once per session) | `kedata-system` |

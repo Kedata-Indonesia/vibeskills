@@ -56,6 +56,7 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 - **Step 8: Domain 8 — Risks & Rollout** — what breaks, what's the rollout order, and how do we roll back. Bedrock: §11 lists risks with mitigations, a rollout order, and a rollback plan.
 - **Step 9: Draft & Self-Check** — - [ ] All 12 sections filled (or explicitly "N/A" with reason)
 - **Step 10: Review & Sign-Off**
+- **Hand off:** an approved plan → `kedata-contracts` (then `kedata-test-plan`). Publish the tasks to the tracker with `kedata-track`. ADRs live in `docs/decisions/` and are changed only by appending a superseding ADR via `kedata-change`.
 
 
 ## Constraints & Guardrails

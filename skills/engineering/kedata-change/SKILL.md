@@ -77,7 +77,7 @@ Before doing anything, the agent MUST:
 * Re-map tasks: new tasks (owner/effort/milestone/AC), removed tasks, changed ACs.
 * Flag in-flight code affected by the change (needs re-work or is now redundant).
 * Flag completed code that now violates the change (needs a follow-up task).
-* Sync the issue tracker: link the change request, update affected issues.
+* Sync the issue tracker: link the change request, update affected issues, then re-run `kedata-track` to reconcile the board with the updated plan.
 **Bedrock signal:** §5 lists added/removed/changed tasks and any code that must be revisited.
 
 ### Step 6: Domain 6 — Re-Approval Gate

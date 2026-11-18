@@ -140,6 +140,7 @@ Before doing anything, the agent MUST:
 | `DEPLOYMENT.md` §5 | Config/secrets provisioning | Engineering setup; ops |
 | `DEPLOYMENT.md` §6 | Migration runbook | Release owner |
 | `DEPLOYMENT.md` §7 | Pipeline definition | CI/CD |
+| `DEPLOYMENT.md` §9 | Health, SLOs, alerts, dashboards | Ops / on-call |
 | `DEPLOYMENT.md` §10 | Rollout/rollback | Release owner; incident response |
 | Sign-off status | Readiness gate | A Draft runbook must not ship |
 
@@ -148,6 +149,7 @@ Before doing anything, the agent MUST:
 * **DO NOT** write application code — this skill owns deployment config and the runbook.
 * **DO NOT** bake secrets into images, compose files, or the repo.
 * **DO NOT** ship without a rollback path and a migration/backup plan.
+* **DO NOT** ship a runbook with no health endpoint, no SLO target, and no paging threshold — the runbook must tell on-call what "healthy" means and what wakes them.
 * **DO NOT** create a second Dockerfile/pipeline/compose file — update in place.
 * **DO NOT** use multi-level subdomains on Cloudflare (`app.kedata.id` ✓, `api.app.kedata.id` ✗); use SSL Full.
 * **DO NOT** renumber the sections — the numbering is a stable contract downstream references depend on.
@@ -203,7 +205,13 @@ Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platfo
 | web | app.kedata.id | LB | Cloudflare Full |
 
 ## 9. Observability & Health
-Health/liveness/readiness endpoints, log destination and level, metrics, minimum alarms, and **SLO targets** (availability and latency) with the alert thresholds that page a human.
+- **Health:** `GET /healthz` (liveness) and `GET /readyz` (checks dependencies) — exact paths and expected status codes.
+- **Logs:** destination, JSON format, level policy, and the request/trace id field every log carries.
+- **Metrics:** the four golden signals (latency, traffic, errors, saturation) per service; exporter (OTel / Prometheus / cloud).
+- **Traces:** sampling rate and the propagation header.
+- **SLOs:** availability and latency target per user-facing service, and the error budget that follows from them.
+- **Alerts:** thresholds tied to the SLOs — what **pages** a human vs what opens a **ticket**.
+- **Dashboards:** the link the on-call person opens first.
 
 ## 10. Rollout & Rollback
 - Rollout: staging → canary [%] → full
