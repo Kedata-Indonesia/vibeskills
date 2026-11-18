@@ -184,6 +184,20 @@ const { data, pending, error } = await useRegistrations(params)
 </template>
 ```
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| tasks and stack | `kedata-implementation-plan` |
+| visual contract | `kedata-design-brief` |
+| craft gate for public pages | `kedata-design-frontend` |
+| API shapes it consumes | `kedata-contracts` |
+| cases it must pass | `kedata-test-plan` |
+| merge gate | `kedata-review` |
+| ships what it builds | `kedata-deploy` |
+| session baseline | `kedata-system` |
+| records shipped changes | `kedata-changelog` |
+
 ## Limitations
 
 - Scoped to Kedata frontend work in Vue 3 + Nuxt 3.

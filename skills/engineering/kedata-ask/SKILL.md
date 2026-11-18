@@ -25,7 +25,8 @@ Orient anyone — a new developer, a returning user, or an agent in a fresh sess
 | 1 | Requirements | `PRD.md` (interview) | `kedata-prd` |
 | 2 | Design | `DESIGN_BRIEF.md` (reads PRD.md, interview) | `kedata-design-brief` |
 | 2.5 | Visuals | build + gate the UI from the brief (or designer/LLM mockups) | `kedata-design-frontend` *(or external)* |
-| 3 | Planning | `IMPLEMENTATION_PLAN.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
+| 3 | Planning | `IMPLEMENTATION_PLAN.md` + `docs/decisions/ADR-*.md` (reads PRD + brief, interview) | `kedata-implementation-plan` |
+| 3.5 | Tracking *(optional)* | publish plan tasks as GitHub/GitLab issues (state, no artifact) | `kedata-track` |
 | 4 | Contracts | `API_CONTRACTS.md` + `DATA_CATALOG.md` + `ENVIRONMENT_VARIABLES.md` | `kedata-contracts` |
 | 4.5 | Test plan | `TEST_PLAN.md` (reads PRD §5/§18 + plan + contracts) | `kedata-test-plan` |
 | 5 | Engineering session | Loads the baseline rules (reads all artifacts once per session) | `kedata-system` |
@@ -143,6 +144,14 @@ the stack skills implement and the review verifies coverage against.
 - `docs/IMPLEMENTATION_PLAN.md` ✅ · contracts ✅ · test plan ✅ · Go code present in `backend/`, no frontend yet
 - Stack from plan §4: Go + Gin backend, Nuxt frontend · plan §3: VM + Docker Compose
 - Next: implement the remaining frontend → **run `/kedata-frontend-nuxt`**; then configure deployment → **`/kedata-deploy`** (VM + Compose per plan §3); after both are done, run `/kedata-review` before opening the PR, then `/kedata-repo` to open the MR/PR.
+
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| session baseline once the stage is known | `kedata-system` |
+| brownfield repos with missing artifacts | `kedata-reverse` |
+| scope or requirement changes mid-pipeline | `kedata-change` |
 
 ## Limitations
 

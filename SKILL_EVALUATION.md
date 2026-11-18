@@ -131,7 +131,7 @@ skillevaluator validate skills/<category>/<skill> --tiers 1,2,3 --full \
 | `kedata-review` | engineering | 100.0 | 3,289 |
 | `kedata-seo` | engineering | 100.0 | 2,690 |
 | `kedata-system` | engineering | 100.0 | 4,342 |
-| `kedata-test-plan` | engineering | 100.0 | 3,699 |
+| `kedata-test-plan` | product | 100.0 | 3,699 |
 
 ---
 

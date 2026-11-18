@@ -75,6 +75,13 @@ Read the target code and the surrounding module before proposing changes. Have t
 
 Example: “removed 3 wrappers, −180 LOC, −2 dependencies; no behavior change.”
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| the principle it measures | `kedata-ponytail` |
+| the reference card | `kedata-ponytail-help` |
+
 ## Limitations
 
 - Scoped to reporting the gain of a simplification.

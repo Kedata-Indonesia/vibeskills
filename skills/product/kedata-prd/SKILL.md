@@ -50,7 +50,7 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 - **Step 5: Domain 5 — Data & Content Model** — the entities, fields, relationships, and indexes that everything else hangs on. Bedrock: §10 data model lists entities with fields, types, required flags, indexes, and relationships — matching the chosen DB (§7).
 - **Step 6: Domain 6 — API & Integrations** — the endpoints and third-party services the system depends on. Bedrock: §9 API overview lists endpoint / method / auth / description for every feature; §12 lists integrations with env vars.
 - **Step 7: Domain 7 — Edge Cases (Cross-Cutting Sweep)** — deliberately break the product before it ships. For EVERY feature, entity, and flow already discussed, run the edge-case checklist below. This is the step that turns a PRD into a spec a reviewer and QA can verify against. Bedrock: every P0 feature/entity has its edge cases recorded — either resolved into acceptance criteria (§5) or the §18 register, or explicitly flagged as an open question (§16). The user should feel mildly exhausted and significantly more confident.
-- **Step 8: Domain 8 — Non-Functional Requirements** — performance, security, responsive, availability targets — with implementation notes. Bedrock: §11 NFRs have targets AND implementation notes, and reference the real deployment target.
+- **Step 8: Domain 8 — Non-Functional Requirements** — performance, security, responsive, availability targets — with implementation notes. Run a light threat-model pass — trust boundaries, the top three abuse cases and their mitigations, and PII handling — and record it in §11. Bedrock: §11 NFRs have targets AND implementation notes, reference the real deployment target, and carry the Security & privacy row.
 - **Step 9: Domain 9 — Delivery & Risk** — milestones, team, and the risks worth writing down. Bedrock: §13 milestones are ordered with deliverables; §15 risks have mitigations; the failure criteria from Domain 1 is honored.
 - **Step 10: Draft & Self-Check** — - [ ] All 18 sections filled (or explicitly "N/A" with reason)
 - **Step 11: Review & Sign-Off**
@@ -71,6 +71,15 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 A complete PRD reaches this specificity: personas with role rules, numbered functional requirements (FR1.1, FR2.2…), NFRs with implementation notes, an entity schema with indexes, milestones mapped to features, a Decisions Record, and an Edge Cases register. The skeleton below is the **shape** — replace every `[bracket]` and placeholder description with the concrete, confirmed answers from the interview. No `[bracket]` may survive in the delivered PRD:
 
 > **Full example skeleton:** [`references/prd-template.md`](references/prd-template.md)
+
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| optional idea brief before the PRD | `kedata-brainstorm` |
+| visual contract from the PRD | `kedata-design-brief` |
+| break the PRD into tasks | `kedata-implementation-plan` |
+| requirement changes after approval | `kedata-change` |
 
 ## Limitations
 

@@ -202,6 +202,15 @@ Do these steps in order; steps 1–5 decide whether the page is any good. Full s
 
 Example: user asks for a landing page → read `DESIGN_BRIEF.md`, state the visual argument, propose two directions, build one, run the taste-skill gate at 1440 / 768 / 390px, then report.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| the visual contract it enforces | `kedata-design-brief` |
+| stack it pairs with | `kedata-frontend-react` |
+| stack it pairs with | `kedata-frontend-nuxt` |
+| frontend tasks reference its gate | `kedata-implementation-plan` |
+
 ## Limitations
 
 - Scoped to frontend design craft built on the approved DESIGN_BRIEF.md.

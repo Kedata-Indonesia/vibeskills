@@ -82,6 +82,14 @@ Never cut: validation at trust boundaries, error handling that prevents data los
 
 Example: “add a cache” → check whether the DB or stdlib already caches; reuse the existing layer; only then add the smallest cache.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| session baseline | `kedata-system` |
+| lean lens on a diff | `kedata-ponytail-review` |
+| lean lens on the repo | `kedata-ponytail-audit` |
+
 ## Limitations
 
 - Scoped to enforcing the smallest complete change.

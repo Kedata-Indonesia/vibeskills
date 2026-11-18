@@ -48,6 +48,7 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 - **Step 1: Domain 1 — Architecture Decision (Codebase Topology)** — decide how the codebase is organized BEFORE any task is sized. This is the most expensive decision to reverse — lock it now. Bedrock: §1 records the topology decision (monolith vs separate) WITH its rationale and the split-trigger criteria — no "TBD". §2 records the repo/workspace layout (monorepo vs polyrepo, folder structure).
 - **Step 2: Domain 2 — Deployment Platform & Operations Decision** — decide WHERE the product runs — VM + Docker Compose vs serverless Cloud Run — and understand the constraints before any task is sized. This decision is as expensive to reverse as codebase topology: it changes the Dockerfile vs docker-compose surface, statelessness rules, background-job handling, cost model, and ops burden. Bedrock: §3 records the platform decision (VM + Docker Compose / Cloud Run / hybrid) WITH its rationale, the constraint implications (statelessness, background jobs, timeouts) and how each is handled, the service/region/domain list, and the CI/CD approach — no "TBD".
 - **Step 3: Domain 3 — Supporting Architecture Decisions** — lock the supporting architecture so engineering doesn't improvise it. Bedrock: §4 records every supporting decision with a one-line rationale — including the Backend and Frontend framework rows, which must be confirmed (from PRD §7 or decided here), never blank.
+- **Step 3b: Decision Records (ADRs)** — for each load-bearing decision (§1 topology, §3 platform, §4 stack/data store/auth) write `docs/decisions/ADR-####.md` from [`references/adr-template.md`](references/adr-template.md), and link it from the plan section that records the decision. ADRs are **append-only** — never rewrite one; a changed decision gets a new ADR that supersedes the old (`Supersedes: ADR-####`). This is the durable answer to "why did we choose this?" that the plan's one-liners cannot carry.
 - **Step 4: Domain 4 — Task Breakdown** — turn every PRD feature into an ordered, owner-assigned task with acceptance criteria. Bedrock: §5 lists every task with owner, effort, priority, milestone, and acceptance criteria — and every PRD feature maps to at least one task (no orphan features).
 - **Step 5: Domain 5 — Dependency Order & Milestones** — an executable sequence, not a flat list. Bedrock: §9 orders tasks with no circular dependencies, milestone mapping, and a defined first-milestone DoD; §10 defines per-task and global Definition of Done.
 - **Step 6: Domain 6 — API Contract & Data Model Seeds** — the plan carries the exact endpoints and entities that will seed the contract docs. Bedrock: §6 and §7 reproduce the full endpoint and entity lists from the PRD, with first-milestone items flagged.
@@ -55,6 +56,7 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 - **Step 8: Domain 8 — Risks & Rollout** — what breaks, what's the rollout order, and how do we roll back. Bedrock: §11 lists risks with mitigations, a rollout order, and a rollback plan.
 - **Step 9: Draft & Self-Check** — - [ ] All 12 sections filled (or explicitly "N/A" with reason)
 - **Step 10: Review & Sign-Off**
+- **Hand off:** an approved plan → `kedata-contracts` (then `kedata-test-plan`). Publish the tasks to the tracker with `kedata-track`. ADRs live in `docs/decisions/` and are changed only by appending a superseding ADR via `kedata-change`.
 
 
 ## Constraints & Guardrails
@@ -63,6 +65,7 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 * **DO NOT** write code or implement tasks — this skill produces the plan, not the build.
 * **DO NOT** leave the architecture decision open — monolith vs separate FE/BE MUST be decided with rationale in §1.
 * **DO NOT** leave the deployment platform decision open — VM + Docker Compose vs Cloud Run MUST be decided with rationale in §3, including how the platform's constraints (statelessness, background jobs, timeouts) are handled.
+* **DO NOT** rewrite an ADR in place — append a new one that supersedes it (`Supersedes: ADR-####`) and mark the old `Superseded by ADR-####`; the history is the point.
 * **DO NOT** invent tasks without a PRD/brief/mockup source — untraceable tasks are scope creep.
 * **DO NOT** re-interview product fundamentals that the PRD already answers — extract, don't reinvent.
 * **DO NOT** skip the design brief if it exists — FE tasks need its screens/components.
@@ -74,6 +77,19 @@ Keep the interview one domain at a time; work through the steps in order. Detail
 A complete implementation plan reaches this specificity: a locked architecture decision with rationale and split triggers, a locked deployment platform with constraint handling, a task list where every task has owner/effort/priority/AC, an executable dependency order, and full endpoint/entity/env-var lists seeded from the PRD. The skeleton below is the **shape** — replace every `[bracket]` and placeholder description with the concrete, confirmed answers. No `[bracket]` may survive in the delivered plan:
 
 > **Full example skeleton:** [`references/implementation-plan-template.md`](references/implementation-plan-template.md)
+>
+> **Decision records:** [`references/adr-template.md`](references/adr-template.md) → `docs/decisions/ADR-####.md` (one per §1/§3/§4 decision).
+
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| requirements it plans from | `kedata-prd` |
+| visual contract for frontend tasks | `kedata-design-brief` |
+| next stage: seeds the contracts | `kedata-contracts` |
+| ACs become tests after contracts | `kedata-test-plan` |
+| publish plan tasks as issues | `kedata-track` |
+| artifacts it updates when scope shifts | `kedata-change` |
 
 ## Limitations
 

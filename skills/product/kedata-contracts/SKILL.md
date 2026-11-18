@@ -243,6 +243,21 @@ The reference docs that define "complete" for Kedata contracts are the shapes be
 ## 5. Open Questions
 - Q1: ...
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| plan that seeds endpoints/entities/env | `kedata-implementation-plan` |
+| tests derive from contracts | `kedata-test-plan` |
+| backend builds against contracts | `kedata-backend-go` |
+| backend builds against contracts | `kedata-backend-node` |
+| backend builds against contracts | `kedata-backend-python` |
+| backend builds against contracts | `kedata-backend-rust` |
+| frontend builds against contracts | `kedata-frontend-react` |
+| frontend builds against contracts | `kedata-frontend-nuxt` |
+| contract compliance | `kedata-review` |
+| contract shape changes | `kedata-change` |
+
 ## Limitations
 
 - Scoped to drafting API, data, and environment reference docs.

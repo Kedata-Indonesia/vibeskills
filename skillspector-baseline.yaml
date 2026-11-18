@@ -1,8 +1,7 @@
 # Reviewed SkillSpector baseline (v2) — accepted false positives.
-# Scope: bundled design corpus URLs/data (E1/TM1/PE3/LP3/EA4) and bounded-parser
-# "partial" analysis (AE1) in bundled scripts. Regenerate only after a reviewed re-scan.
-# Use: skillevaluator security-scan <skill> --skillspector-baseline skillspector-baseline.yaml
-# See SKILL_EVALUATION.md §5 (P5).
+# Scope: bundled design corpus (E1/TM1/PE3/LP3/EA4), bounded-parser "partial" (AE1),
+# and heuristic EA2 "autonomous" flags on documented trigger lines (kedata-changelog).
+# Regenerate only after a reviewed re-scan. See SKILL_EVALUATION.md §4.1/§5 (P5).
 version: 2
 scanner_version: 2.13.6
 rules: []
@@ -412,3 +411,8 @@ fingerprints:
   file: SKILL.md
   reason: Reviewed false positive (bundled corpus / reference guidance); see skillevaluator-policy.yaml
     + SKILL_EVALUATION.md P5
+- hash: sha256:a1d94d42e12edb5bb9ecc87a322d6fe98e7fdd98fea59932b7858b097247f5fb
+  rule_id: EA2
+  file: SKILL.md
+  reason: Reviewed false positive (EA2 on the 'Autonomous trigger' line); the skill
+    only runs on explicit user request

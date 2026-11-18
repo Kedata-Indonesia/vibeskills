@@ -212,6 +212,15 @@ Artifact: [API_CONTRACTS.md §1.2 / Review §12 / plan §3]
 Detected by: kedata-audit [run date]
 ```
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| per-diff review it complements | `kedata-review` |
+| lean lens on the same repo | `kedata-ponytail-audit` |
+| issues it files become PRs | `kedata-repo` |
+| fixes that are spec gaps | `kedata-change` |
+
 ## Limitations
 
 - Scoped to repo-wide discovery that files issues; it does not gate merges.

@@ -179,6 +179,14 @@ Each finding names how you would know the fix failed. A finding that changes app
 
 Example: `# SEO report: /pricing` with Critical / High / Medium / Low findings and a score.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| pre-ship quality gate | `kedata-review` |
+| write the SEO report | `kedata-writing` |
+| repo-wide findings | `kedata-audit` |
+
 ## Limitations
 
 - Scoped to technical and on-page SEO audit and fixes.

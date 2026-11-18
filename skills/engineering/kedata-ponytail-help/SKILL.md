@@ -69,6 +69,13 @@ Read the target code and the surrounding module before proposing changes. Have t
 
 Example: “I want to know what to delete” → run `kedata-ponytail-audit`.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| the principle it explains | `kedata-ponytail` |
+| the scoreboard | `kedata-ponytail-gain` |
+
 ## Limitations
 
 - Scoped to explaining and routing the ponytail skills.

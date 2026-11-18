@@ -67,6 +67,7 @@ Before doing anything, the agent MUST:
 **Goal:** apply changes top-down so each lower doc reads the updated one above.
 * Order: `IDEA_BRIEF? → PRD → DESIGN_BRIEF? → IMPLEMENTATION_PLAN → contracts (API/DATA/ENV) → TEST_PLAN → DEPLOYMENT?`.
 * Update the Decisions Record / version in each touched artifact; mark superseded decisions as `[SUPERSEDED by CR-n]`.
+* When a load-bearing decision flips (topology, platform, stack/data/auth), append a new `docs/decisions/ADR-####.md` that supersedes the old one (`Supersedes: ADR-####`) and link it from the plan section — do not rewrite the old ADR.
 * Keep numbering stable — never renumber sections; never create a second copy.
 * For removed scope: mark the removed items and the reason (audit trail); keep the record, never remove it silently.
 **Bedrock signal:** every artifact in the impact table is updated, version-bumped, and internally consistent with the one above it.
@@ -76,7 +77,7 @@ Before doing anything, the agent MUST:
 * Re-map tasks: new tasks (owner/effort/milestone/AC), removed tasks, changed ACs.
 * Flag in-flight code affected by the change (needs re-work or is now redundant).
 * Flag completed code that now violates the change (needs a follow-up task).
-* Sync the issue tracker: link the change request, update affected issues.
+* Sync the issue tracker: link the change request, update affected issues, then re-run `kedata-track` to reconcile the board with the updated plan.
 **Bedrock signal:** §5 lists added/removed/changed tasks and any code that must be revisited.
 
 ### Step 6: Domain 6 — Re-Approval Gate
@@ -167,6 +168,18 @@ Current baseline after change: PRD vX · Plan vY · Contracts vZ · Test Plan vW
 
 ## 7. Open Questions
 - Q1: …
+
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| first artifact in the cascade | `kedata-prd` |
+| plan and ADRs to update | `kedata-implementation-plan` |
+| contracts to cascade | `kedata-contracts` |
+| cases to revise | `kedata-test-plan` |
+| re-sync the board | `kedata-track` |
+| record the change | `kedata-changelog` |
+| resume the build after re-approval | `kedata-system` |
 
 ## Limitations
 

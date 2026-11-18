@@ -36,8 +36,9 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
 | `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
-| `kedata-test-plan` | engineering | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
+| `kedata-test-plan` | product | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
 | `kedata-qa-automation` | engineering | Run TEST_PLAN.md cases in a real browser with Playwright, against a URL the user provides or a running local environment. No test plan: stops and asks for `kedata-test-plan` |
+| `kedata-track` | engineering | Publish `IMPLEMENTATION_PLAN.md` tasks as GitHub/GitLab issues — milestones, blocking links, ACs — so state lives in the tracker, not a markdown file |
 | `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
 | `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
@@ -60,6 +61,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-design-frontend` | frontend | Anti-slop art direction for pages and app screens: reads DESIGN_BRIEF.md, deals one of 20 researched directions from a bundled library, enforces the house rules with a real-browser inspector, then looks at its own screenshots and fixes. Adapted from tasteskill v2 |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
+| `kedata-changelog` | engineering | Derive `CHANGELOG.md` from merged PRs, commits, and closed issues; keep an `Unreleased` section and cut a factual release at version time |
 | `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
 | `kedata-writing` | product | Prose for anything a project publishes — tender proposals, briefs, reports, documentation, READMEs, client emails, ID↔EN translation. Frames the reader and the decision first, keeps every claim in an evidence ledger, drafts in four passes, then passes a measured gate (`scripts/prose-check.mjs`) |
 
@@ -129,7 +131,8 @@ For a new feature, run skills in order:
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(optional)* `/kedata-design-frontend` — build the visuals with the anti-slop art direction: it reads DESIGN_BRIEF.md as the contract, deals a researched direction, builds, gates the result in a real browser, then fixes what it sees. Use it instead of — or to review — external designer mockups.
 3b. *(alternative)* designer creates mockups — external
-4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks
+4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks, and emit ADRs for the load-bearing decisions
+4.5 `/kedata-track` — publish the plan's tasks as GitHub/GitLab issues (milestones, blocking links, ACs). State lives in the tracker, not a markdown file
 5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
 5.5 `/kedata-test-plan` — turn PRD acceptance criteria + edge cases into a traceable TEST_PLAN.md
 5.6 `/kedata-qa-automation` — run the plan's cases in a real browser with Playwright, against a URL you provide or a running local environment. No test plan, and it stops and asks you to run `/kedata-test-plan` first.
@@ -139,6 +142,7 @@ For a new feature, run skills in order:
 9. `/kedata-review` — review the PR before merging
 9.5 *(public page)* `/kedata-seo` — audit the built page or its URL for crawl, index, schema, and content quality. A finding that changes approved copy or a URL goes through `/kedata-change`.
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
+10.5 `/kedata-changelog` — after merge (and at release), record what shipped in `CHANGELOG.md` from the merged PRs/commits/issues
 
 **Anytime:** `/kedata-writing` — prose a client or a reviewer will read: tender proposals, reports, documentation, READMEs, emails, and ID↔EN translation. It reads the approved artifacts as facts, keeps an evidence ledger, and measures the draft before delivery.
 **Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.
@@ -159,7 +163,7 @@ skills/
 │           └── openai.yaml       # optional — display metadata
 ├── frontend/               # frontend skills: language standards + design-frontend (art direction + gate)
 ├── engineering/            # cross-cutting engineering skills (system, review, repo)
-└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts, writing)
+└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts, test-plan, writing)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.

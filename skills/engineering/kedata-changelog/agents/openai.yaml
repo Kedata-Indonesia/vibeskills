@@ -1,0 +1,3 @@
+interface:
+  display_name: "Kedata Changelog"
+  short_description: "Derive CHANGELOG.md from merged PRs, commits, and closed issues; keep an Unreleased section and cut a factual release on version."
