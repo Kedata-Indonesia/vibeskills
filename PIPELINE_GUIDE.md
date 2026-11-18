@@ -456,7 +456,8 @@ flowchart TD
 | 1 | `kedata-prd` | `[M]` | `/kedata-prd` | `IDEA_BRIEF.md`? | `PRD.md` |
 | 2 | `kedata-design-brief` | `[O]` | `/kedata-design-brief` | `PRD.md` | `DESIGN_BRIEF.md` |
 | 2.5 | `kedata-design-frontend` | `[O]` | `/kedata-design-frontend` | `DESIGN_BRIEF.md` + `PRD.md` | implemented visuals + inspector report (or `[E]` mockups) |
-| 3 | `kedata-implementation-plan` | `[M]` | `/kedata-implementation-plan` | `PRD.md` + brief | `IMPLEMENTATION_PLAN.md` |
+| 3 | `kedata-implementation-plan` | `[M]` | `/kedata-implementation-plan` | `PRD.md` + brief | `IMPLEMENTATION_PLAN.md` + `docs/decisions/ADR-*.md` |
+| 3.5 | `kedata-track` | `[O]` | `/kedata-track` | `IMPLEMENTATION_PLAN.md` §5/§9 | GitHub/GitLab issues + milestones (state; no markdown artifact) |
 | 4 | `kedata-contracts` | `[M]` | `/kedata-contracts` | plan + PRD | `API_CONTRACTS.md`, `DATA_CATALOG.md`, `ENVIRONMENT_VARIABLES.md` |
 | 4.5 | `kedata-test-plan` | `[M]` | `/kedata-test-plan` | PRD + plan + contracts | `TEST_PLAN.md` |
 | 4.6 | `kedata-qa-automation` | `[O]` | `/kedata-qa-automation` | `TEST_PLAN.md` + contracts + catalog | `tests/e2e/` + `test-results/` evidence |

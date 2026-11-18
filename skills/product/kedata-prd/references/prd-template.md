@@ -44,6 +44,7 @@ Response envelope `{ "data": {}, "message": "", "error": "" }` under `/api/v1/`.
 
 ## 11. Non-Functional Requirements
 | Requirement | Target | Implementation |
+| Security & privacy | [auth/authz model; data classification; PII handling; top 3 abuse cases + mitigations] | [controls] |
 
 ## 12. Third-Party Integrations & Env Vars
 | Service | Purpose | Env Vars |

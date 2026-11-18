@@ -38,6 +38,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
 | `kedata-test-plan` | product | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
 | `kedata-qa-automation` | engineering | Run TEST_PLAN.md cases in a real browser with Playwright, against a URL the user provides or a running local environment. No test plan: stops and asks for `kedata-test-plan` |
+| `kedata-track` | engineering | Publish `IMPLEMENTATION_PLAN.md` tasks as GitHub/GitLab issues — milestones, blocking links, ACs — so state lives in the tracker, not a markdown file |
 | `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
 | `kedata-reverse` | engineering | Brownfield onboarding: reverse-engineer PRD, contracts, and a baseline plan from existing code so the pipeline can run |
@@ -129,7 +130,8 @@ For a new feature, run skills in order:
 2. `/kedata-design-brief` — draft the DESIGN_BRIEF.md (feeds mockup design via LLM)
 3. *(optional)* `/kedata-design-frontend` — build the visuals with the anti-slop art direction: it reads DESIGN_BRIEF.md as the contract, deals a researched direction, builds, gates the result in a real browser, then fixes what it sees. Use it instead of — or to review — external designer mockups.
 3b. *(alternative)* designer creates mockups — external
-4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks
+4. `/kedata-implementation-plan` — lock architecture + deployment platform + break the work into tasks, and emit ADRs for the load-bearing decisions
+4.5 `/kedata-track` — publish the plan's tasks as GitHub/GitLab issues (milestones, blocking links, ACs). State lives in the tracker, not a markdown file
 5. `/kedata-contracts` — draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md (contract-first when FE/BE split)
 5.5 `/kedata-test-plan` — turn PRD acceptance criteria + edge cases into a traceable TEST_PLAN.md
 5.6 `/kedata-qa-automation` — run the plan's cases in a real browser with Playwright, against a URL you provide or a running local environment. No test plan, and it stops and asks you to run `/kedata-test-plan` first.

@@ -28,3 +28,15 @@ Required shape: what was asked → what was done → what was found → what it 
 ## Executive summary (any document)
 - Written last, from the finished document, in ≤ 250 words.
 - Contains: the decision required, the three supporting facts, the main risk. No new information.
+
+## Release notes / changelog (`CHANGELOG.md`)
+- Group by release, newest first; each entry is a user-visible change, not a commit list.
+- Lead with what the reader can now do or must now do; put breaking changes and migration steps first of all.
+- One line per change, imperative, no internal jargon; link the issue/PR so a skeptic can verify.
+- Never rewrite a shipped release's notes — append the next release on top.
+
+## Handover / onboarding document
+- Reader is a new owner who has never seen the project: what it is, who it serves, how it runs, where to look next.
+- Point to the sources of truth (`PRD.md`, `IMPLEMENTATION_PLAN.md`, `API_CONTRACTS.md`, `DEPLOYMENT.md`) rather than restating them.
+- Include the run/operate path: environments, secrets location, deploy and rollback commands, known risks, and who to ask.
+- State the open questions and the next milestone; an onboarding doc that hides the gaps is worse than none.

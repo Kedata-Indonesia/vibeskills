@@ -1,0 +1,3 @@
+interface:
+  display_name: "Kedata Track"
+  short_description: "Publish IMPLEMENTATION_PLAN.md tasks as GitHub/GitLab issues with milestones, blocking links, and ACs; state lives in the tracker, not a markdown file."

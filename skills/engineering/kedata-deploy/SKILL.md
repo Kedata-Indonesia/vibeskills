@@ -203,7 +203,7 @@ Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platfo
 | web | app.kedata.id | LB | Cloudflare Full |
 
 ## 9. Observability & Health
-Health endpoints, log destination, minimum alarms.
+Health/liveness/readiness endpoints, log destination and level, metrics, minimum alarms, and **SLO targets** (availability and latency) with the alert thresholds that page a human.
 
 ## 10. Rollout & Rollback
 - Rollout: staging → canary [%] → full

@@ -67,6 +67,7 @@ Before doing anything, the agent MUST:
 **Goal:** apply changes top-down so each lower doc reads the updated one above.
 * Order: `IDEA_BRIEF? → PRD → DESIGN_BRIEF? → IMPLEMENTATION_PLAN → contracts (API/DATA/ENV) → TEST_PLAN → DEPLOYMENT?`.
 * Update the Decisions Record / version in each touched artifact; mark superseded decisions as `[SUPERSEDED by CR-n]`.
+* When a load-bearing decision flips (topology, platform, stack/data/auth), append a new `docs/decisions/ADR-####.md` that supersedes the old one (`Supersedes: ADR-####`) and link it from the plan section — do not rewrite the old ADR.
 * Keep numbering stable — never renumber sections; never create a second copy.
 * For removed scope: mark the removed items and the reason (audit trail); keep the record, never remove it silently.
 **Bedrock signal:** every artifact in the impact table is updated, version-bumped, and internally consistent with the one above it.
