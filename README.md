@@ -36,7 +36,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-system` | engineering | Baseline AI development rules: read docs first, plan → confirm → code → test → verify, house conventions, deployment awareness |
 | `kedata-ask` | engineering | Where is this codebase? Inspects artifacts, maps the pipeline stage, and tells you the next step + which skill to run |
 | `kedata-contracts` | product | Draft API_CONTRACTS.md + DATA_CATALOG.md + ENVIRONMENT_VARIABLES.md from the approved plan — contract-first for split FE/BE |
-| `kedata-test-plan` | engineering | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
+| `kedata-test-plan` | product | Turn PRD acceptance criteria + edge cases + contracts into a traceable TEST_PLAN.md (cases, fixtures, environments, exit criteria) |
 | `kedata-qa-automation` | engineering | Run TEST_PLAN.md cases in a real browser with Playwright, against a URL the user provides or a running local environment. No test plan: stops and asks for `kedata-test-plan` |
 | `kedata-deploy` | engineering | Turn the plan's platform decision (§3) into real deploy artifacts + DEPLOYMENT.md — Dockerfile, compose/Cloud Run, CI/CD, secrets, migrations, rollout/rollback |
 | `kedata-change` | engineering | Change control: classify a scope/spec change and cascade the edits through PRD → brief → plan → contracts → test plan with version bumps |
@@ -159,7 +159,7 @@ skills/
 │           └── openai.yaml       # optional — display metadata
 ├── frontend/               # frontend skills: language standards + design-frontend (art direction + gate)
 ├── engineering/            # cross-cutting engineering skills (system, review, repo)
-└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts, writing)
+└── product/                # artifact-producing skills (prd, design-brief, implementation-plan, contracts, test-plan, writing)
 ```
 
 **Category depth rule:** the CLI supports exactly two levels under `skills/` — `skills/<category>/<skill-name>/SKILL.md`. Do NOT nest deeper (e.g. `skills/engineering/backend/…`): skills at a shallower level make the scanner stop descending, and deeper skills are silently skipped during discovery.
