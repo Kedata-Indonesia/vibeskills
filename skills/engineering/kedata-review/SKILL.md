@@ -206,6 +206,18 @@ Great work! 🎉
 
 Trivial change — all checks pass. Merging.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| plan and task ACs | `kedata-implementation-plan` |
+| contract compliance | `kedata-contracts` |
+| matrix coverage | `kedata-test-plan` |
+| lean lens on the same diff | `kedata-ponytail-review` |
+| opens the PR/MR after review | `kedata-repo` |
+| repo-wide findings | `kedata-audit` |
+| spec gaps found in review | `kedata-change` |
+
 ## Limitations
 
 - Scoped to reviewing a single diff against the artifacts.

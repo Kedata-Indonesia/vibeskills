@@ -189,6 +189,16 @@ A complete reconstruction reaches this specificity: every route/entity/env var c
 ## 7. Recommended Next Step
 See Step 9 for the sign-off and hand-off.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| reconstructed requirements | `kedata-prd` |
+| reconstructed API/data docs | `kedata-contracts` |
+| baseline plan | `kedata-implementation-plan` |
+| orient after reconstruction | `kedata-ask` |
+| cascade later changes | `kedata-change` |
+
 ## Limitations
 
 - Scoped to reconstructing artifacts from an existing codebase.

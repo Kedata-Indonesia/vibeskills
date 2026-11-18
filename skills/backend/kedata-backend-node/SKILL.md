@@ -136,6 +136,18 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 })
 ```
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| tasks and stack | `kedata-implementation-plan` |
+| API/data it must match | `kedata-contracts` |
+| cases it must pass | `kedata-test-plan` |
+| merge gate | `kedata-review` |
+| ships what it builds | `kedata-deploy` |
+| session baseline | `kedata-system` |
+| records shipped changes | `kedata-changelog` |
+
 ## Limitations
 
 - Scoped to Kedata backend work in Node.js + Express.

@@ -221,6 +221,16 @@ Claim sentence. Evidence sentence with a source. Implication sentence.
 
 Before delivery, the file passes `node scripts/prose-check.mjs` with exit code 0 and every human gate in Step 6 is ticked.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| requirements as facts | `kedata-prd` |
+| design facts | `kedata-design-brief` |
+| API facts | `kedata-contracts` |
+| release notes it can polish | `kedata-changelog` |
+| link the document from the PR | `kedata-repo` |
+
 ## Limitations
 - Owns prose only: it does not re-interview product scope or design screens — route those to `kedata-prd`, `kedata-design-brief`, or `kedata-change`.
 - `scripts/prose-check.mjs` measures sentence/paragraph length and banned patterns; it cannot judge whether a claim is true or a document answers the right question — those stay human gates.

@@ -61,6 +61,7 @@ npx skills@latest add /path/to/vibeskills
 | `kedata-design-frontend` | frontend | Anti-slop art direction for pages and app screens: reads DESIGN_BRIEF.md, deals one of 20 researched directions from a bundled library, enforces the house rules with a real-browser inspector, then looks at its own screenshots and fixes. Adapted from tasteskill v2 |
 | `kedata-implementation-plan` | product | Product→engineering handoff: locks architecture (monolith vs split), task breakdown with ACs, dependency order, definition of done |
 | `kedata-repo` | engineering | GitHub/GitLab communication: draft + open PR/MR in the house template, link issues, gather repo context via gh/glab + helper script |
+| `kedata-changelog` | engineering | Derive `CHANGELOG.md` from merged PRs, commits, and closed issues; keep an `Unreleased` section and cut a factual release at version time |
 | `kedata-seo` | engineering | Search and AI-citation audit of a page or a small site: crawl, index, on-page, schema, content, Core Web Vitals. Adapted from claude-seo; no plugin runtime, no paid data |
 | `kedata-writing` | product | Prose for anything a project publishes — tender proposals, briefs, reports, documentation, READMEs, client emails, ID↔EN translation. Frames the reader and the decision first, keeps every claim in an evidence ledger, drafts in four passes, then passes a measured gate (`scripts/prose-check.mjs`) |
 
@@ -141,6 +142,7 @@ For a new feature, run skills in order:
 9. `/kedata-review` — review the PR before merging
 9.5 *(public page)* `/kedata-seo` — audit the built page or its URL for crawl, index, schema, and content quality. A finding that changes approved copy or a URL goes through `/kedata-change`.
 10. `/kedata-repo` — open the PR/MR with the house template (GitHub `gh` / GitLab `glab`)
+10.5 `/kedata-changelog` — after merge (and at release), record what shipped in `CHANGELOG.md` from the merged PRs/commits/issues
 
 **Anytime:** `/kedata-writing` — prose a client or a reviewer will read: tender proposals, reports, documentation, READMEs, emails, and ID↔EN translation. It reads the approved artifacts as facts, keeps an evidence ledger, and measures the draft before delivery.
 **Anytime:** `/kedata-change` — when requirements move, cascade the change through the artifacts (PRD → brief → plan → contracts → test plan) before work resumes.

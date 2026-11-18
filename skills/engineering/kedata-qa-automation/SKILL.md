@@ -107,6 +107,15 @@ Before opening a browser, the agent MUST:
 
 Example: turn a PRD §5 acceptance criterion into a Playwright test that runs in CI.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| cases it runs | `kedata-test-plan` |
+| endpoints it exercises | `kedata-contracts` |
+| evidence the review cites | `kedata-review` |
+| session baseline | `kedata-system` |
+
 ## Limitations
 
 - Scoped to automated QA testing aligned to the test plan.

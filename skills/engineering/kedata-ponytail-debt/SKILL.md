@@ -73,6 +73,13 @@ ledger to `docs/PONYTAIL_DEBT.md`. One-shot.
 
 Example output row: `| Area | Debt | Cost | Suggested fix |` for each area.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| the principle behind the ledger | `kedata-ponytail` |
+| review that surfaces shortcuts | `kedata-ponytail-review` |
+
 ## Limitations
 
 - Scoped to tech-debt discovery and reporting.

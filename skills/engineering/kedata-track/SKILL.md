@@ -67,6 +67,7 @@ Before publishing, the agent MUST:
 | Scope change → plan update → re-sync | `kedata-change` |
 | Repo-wide findings → issues | `kedata-audit` |
 | Baseline context | `kedata-system` |
+| Issues the release documents | `kedata-changelog` |
 
 ## Examples
 A plan task:

@@ -110,6 +110,14 @@ A complete design brief reaches this specificity: a named brand personality with
 
 > **Full example skeleton:** [`references/design-brief-template.md`](references/design-brief-template.md)
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| requirements the brief must serve | `kedata-prd` |
+| craft layer that builds and gates the UI | `kedata-design-frontend` |
+| frontend tasks need the brief | `kedata-implementation-plan` |
+
 ## Limitations
 
 - Scoped to drafting the visual/UX DESIGN_BRIEF.md.

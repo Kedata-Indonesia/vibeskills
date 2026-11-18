@@ -145,6 +145,14 @@ the stack skills implement and the review verifies coverage against.
 - Stack from plan §4: Go + Gin backend, Nuxt frontend · plan §3: VM + Docker Compose
 - Next: implement the remaining frontend → **run `/kedata-frontend-nuxt`**; then configure deployment → **`/kedata-deploy`** (VM + Compose per plan §3); after both are done, run `/kedata-review` before opening the PR, then `/kedata-repo` to open the MR/PR.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| session baseline once the stage is known | `kedata-system` |
+| brownfield repos with missing artifacts | `kedata-reverse` |
+| scope or requirement changes mid-pipeline | `kedata-change` |
+
 ## Limitations
 
 - Scoped to read-only orientation over the pipeline artifacts.

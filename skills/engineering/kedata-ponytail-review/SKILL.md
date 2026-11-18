@@ -128,6 +128,13 @@ Lists findings, changes no code.
 
 Example: “this PR adds a factory for one implementation” → flag it; recommend direct construction.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| full review it pairs with | `kedata-review` |
+| the principle it enforces | `kedata-ponytail` |
+
 ## Limitations
 
 - Scoped to reviewing a diff against the ponytail principle.

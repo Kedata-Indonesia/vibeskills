@@ -230,6 +230,17 @@ Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platfo
 | Open questions | Q1 … / Q2 … |
 | File location | `docs/DEPLOYMENT.md` |
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| platform decision in §3 | `kedata-implementation-plan` |
+| env vars and config | `kedata-contracts` |
+| post-deploy smoke suite | `kedata-test-plan` |
+| pre-ship gate | `kedata-review` |
+| session baseline | `kedata-system` |
+| records the release | `kedata-changelog` |
+
 ## Limitations
 
 - Scoped to turning the plan's platform decision into deploy artifacts.

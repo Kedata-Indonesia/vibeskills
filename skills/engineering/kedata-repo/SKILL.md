@@ -51,6 +51,7 @@ Run the helper via `run_script("scripts/repo-context.sh")` (or `bash scripts/rep
 * **GitHub (`gh`):** open with `gh pr create --base <base> --title "<summary>" --body "<body>"` (or write body to a file and use `--body-file`). Link the issue with `Closes #123` in the body.
 * **GitLab (`glab`):** open with `glab mr create --target-branch <base> --title "<summary>" --description "<body>"`.
 * **Git-only:** output the full body in a code block for copy-paste, and tell the user where to open the PR/MR.
+* **After merge:** if the repo keeps a `CHANGELOG.md`, add the change to its `## [Unreleased]` section via `kedata-changelog` (one user-visible line, citing this PR/MR).
 * If any mandatory item is unchecked, tell the user which checks still need attention before merge — do not open a PR/MR with a knowingly failing checklist.
 
 ## Constraints & Guardrails
@@ -111,6 +112,16 @@ Add password reset flow for users who forgot their passwords.
 
 ## Related Issues
 Closes #123
+
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| verdict before opening the PR/MR | `kedata-review` |
+| issues the PR closes | `kedata-track` |
+| records the merged change | `kedata-changelog` |
+| linked change requests | `kedata-change` |
+| issues filed by audit | `kedata-audit` |
 
 ## Limitations
 

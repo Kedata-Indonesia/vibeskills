@@ -246,6 +246,16 @@ Changes summary (before accepting work):
 - [ ] Swagger UI shows new endpoints
 ```
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| locate the pipeline stage first | `kedata-ask` |
+| the plan it implements | `kedata-implementation-plan` |
+| gate before merge | `kedata-review` |
+| scope changes mid-build | `kedata-change` |
+| board state during the build | `kedata-track` |
+
 ## Limitations
 
 - Scoped to the engineering session baseline.

@@ -467,6 +467,7 @@ flowchart TD
 | 6.5 | `kedata-deploy` | `[M]` | `/kedata-deploy` | plan §3 + contracts | `DEPLOYMENT.md` + `Dockerfile`/compose/CI |
 | 7 | `kedata-review` | `[M]` | `/kedata-review` | artifacts + diff | review verdict |
 | 8 | `kedata-repo` | `[M]` | `/kedata-repo` | diff + artifacts | PR / MR |
+| 8.5 | `kedata-changelog` | `[O]` | `/kedata-changelog` | merged PRs/commits/issues | `CHANGELOG.md` |
 | — | `kedata-change` | `[X]` | `/kedata-change` | change request + artifacts | `CHANGE_REQUEST.md` + updated artifacts |
 | — | `kedata-audit` | `[X]` | `/kedata-audit` | whole repo + artifacts + backlog | `AUDIT_REPORT.md` + GitHub/GitLab issues |
 | — | `kedata-ponytail` | `[X]` | `/kedata-ponytail` | the task at hand | none (session discipline: lite/full/ultra) |

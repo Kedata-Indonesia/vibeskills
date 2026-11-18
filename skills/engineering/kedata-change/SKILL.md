@@ -169,6 +169,18 @@ Current baseline after change: PRD vX · Plan vY · Contracts vZ · Test Plan vW
 ## 7. Open Questions
 - Q1: …
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| first artifact in the cascade | `kedata-prd` |
+| plan and ADRs to update | `kedata-implementation-plan` |
+| contracts to cascade | `kedata-contracts` |
+| cases to revise | `kedata-test-plan` |
+| re-sync the board | `kedata-track` |
+| record the change | `kedata-changelog` |
+| resume the build after re-approval | `kedata-system` |
+
 ## Limitations
 
 - Scoped to change control across the approved artifacts.

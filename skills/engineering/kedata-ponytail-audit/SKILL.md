@@ -130,6 +130,13 @@ One-shot report, changes no code.
 
 Example output row: `| File | Lines | Issue | Deletion candidate |` for each finding.
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| full audit it pairs with | `kedata-audit` |
+| the principle it enforces | `kedata-ponytail` |
+
 ## Limitations
 
 - Scoped to a read-only over-engineering audit.

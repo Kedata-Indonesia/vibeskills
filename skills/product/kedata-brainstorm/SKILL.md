@@ -76,6 +76,12 @@ A complete idea brief reaches this specificity: a named beachhead segment, order
 
 > **Full example skeleton:** [`references/idea-brief-template.md`](references/idea-brief-template.md)
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| turn the validated idea into a PRD | `kedata-prd` |
+
 ## Limitations
 
 - Scoped to business validation of a raw idea.

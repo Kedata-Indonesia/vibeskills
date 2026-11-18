@@ -72,6 +72,15 @@ A complete PRD reaches this specificity: personas with role rules, numbered func
 
 > **Full example skeleton:** [`references/prd-template.md`](references/prd-template.md)
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| optional idea brief before the PRD | `kedata-brainstorm` |
+| visual contract from the PRD | `kedata-design-brief` |
+| break the PRD into tasks | `kedata-implementation-plan` |
+| requirement changes after approval | `kedata-change` |
+
 ## Limitations
 
 - Scoped to drafting the PRD.

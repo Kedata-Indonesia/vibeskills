@@ -212,6 +212,17 @@ What is in scope (features/milestones) and explicitly out (with reason).
 | Open questions | Q1 … / Q2 … |
 | File location | `docs/TEST_PLAN.md` |
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| acceptance criteria and edge cases it traces | `kedata-prd` |
+| tasks and exit criteria | `kedata-implementation-plan` |
+| endpoints/fields the cases exercise | `kedata-contracts` |
+| runs the plan in a browser | `kedata-qa-automation` |
+| review verifies the matrix | `kedata-review` |
+| cases invalidated by change | `kedata-change` |
+
 ## Limitations
 
 - Scoped to turning the PRD and contracts into a traceable test plan.

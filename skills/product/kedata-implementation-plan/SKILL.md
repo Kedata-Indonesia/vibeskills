@@ -80,6 +80,17 @@ A complete implementation plan reaches this specificity: a locked architecture d
 >
 > **Decision records:** [`references/adr-template.md`](references/adr-template.md) → `docs/decisions/ADR-####.md` (one per §1/§3/§4 decision).
 
+## Related Skills
+
+| Need | Skill |
+|---|---|
+| requirements it plans from | `kedata-prd` |
+| visual contract for frontend tasks | `kedata-design-brief` |
+| next stage: seeds the contracts | `kedata-contracts` |
+| ACs become tests after contracts | `kedata-test-plan` |
+| publish plan tasks as issues | `kedata-track` |
+| artifacts it updates when scope shifts | `kedata-change` |
+
 ## Limitations
 
 - Scoped to the product-to-engineering plan.
