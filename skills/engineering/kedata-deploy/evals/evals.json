@@ -12,6 +12,18 @@
       ],
       "expected_skill": "kedata-deploy",
       "expected_script": null
+    },
+    {
+      "id": "kedata-deploy-002",
+      "prompt": "Our plan §3 locks us into a single VM with Docker Compose. I want two compose files: one that brings up the whole stack (app plus Postgres and Redis), and one that runs only the app against our shared dev Postgres and Redis. Host ports must be configurable so they do not clash on anyone's machine, and the DB/cache endpoints must come from env.",
+      "expected_output": "Two compose files: docker-compose.yml as the full stack (app plus Postgres/Redis with volumes and healthchecks) and docker-compose.dev.yml with only the application service(s), reaching the DB/cache through env vars. Every published host port is env-parameterized with a default (for example ${APP_HOST_PORT:-8080}), and the third-party endpoints/credentials are supplied via env and listed in .env.example, not hard-coded.",
+      "assertions": [
+        "The response defines docker-compose.yml as the full stack (app plus the database and cache) and docker-compose.dev.yml with only the application service(s).",
+        "Every published host port uses env interpolation with a default (for example ${APP_HOST_PORT:-8080} and ${DB_HOST_PORT:-5432}), so host ports are configurable and do not clash.",
+        "Database and cache connection details come from environment variables (with defaults or required markers) in both files, and are not hard-coded."
+      ],
+      "expected_skill": "kedata-deploy",
+      "expected_script": null
     }
   ],
   "generation": {
