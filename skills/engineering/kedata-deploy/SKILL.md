@@ -1,7 +1,7 @@
 ---
 name: kedata-deploy
 description: "Use when turning plan §3 into Dockerfile/compose/Cloud Run and a DEPLOYMENT.md runbook. Do NOT re-decide the platform or author CI workflows."
-version: 1.0.0
+version: 1.1.0
 author: Kedata Indonesia
 metadata:
   author: Kedata Indonesia <infra@kedata.online>
@@ -31,7 +31,7 @@ Before doing anything, the agent MUST:
 1. **Read the implementation plan first (mandatory).** `docs/IMPLEMENTATION_PLAN.md`. Extract: §1 architecture (monolith vs split — how many deployables?), §2 repo layout, §3 **platform decision + constraints** (statelessness, background jobs, timeouts, secrets, cost, region, domain, CI/CD), §4 stack (runtime, port, build command), §8 env vars, §11 risks/rollout. **If §3 is "TBD" or missing, STOP** — the platform must be decided in the plan first.
 2. **Read the contracts (mandatory).** `ENVIRONMENT_VARIABLES.md` (the exact env matrix + secrets handling), `API_CONTRACTS.md` (base path, health/auth endpoints), `DATA_CATALOG.md` (migrations needed).
 3. **Read the test plan (recommended).** `docs/TEST_PLAN.md` §7 (which suites gate a deploy) and §9 (exit criteria) — CI must run them.
-4. **Inspect the repo:** `Dockerfile`/`docker-compose.yml`/`cloudbuild.yaml`/`.github/workflows/`/`.gitlab-ci.yml` if present. **Update in place** — never create a second compose file, and never author a CI workflow that isn't already there.
+4. **Inspect the repo:** `Dockerfile`/`docker-compose.yml`/`docker-compose.dev.yml`/`cloudbuild.yaml`/`.github/workflows/`/`.gitlab-ci.yml` if present. **Update in place** — the compose set is at most the two files in `references/compose-layout.md`, and never author a CI workflow that isn't already there.
 5. **Frame the session (2 minutes max):** "I'll generate the deploy surface from plan §3 — build, services, secrets, migrations, CI/CD, rollout, rollback. Confirm the environment names and who can deploy."
 
 ## Interview Protocol (How to Grill)
@@ -56,15 +56,18 @@ Before doing anything, the agent MUST:
 * One multi-stage `Dockerfile` per service (builder → slim runtime).
 * Non-root user; no secrets baked into layers; `.dockerignore` written.
 * **Cloud Run rules:** listen on `$PORT`; one process per container; stateless (no local FS writes); health/readiness endpoint.
-* **VM rules:** compose service with `restart: unless-stopped`, volumes for persistent data, healthcheck.
+* **VM rules:** compose service with `restart: unless-stopped`, volumes for persistent data, healthcheck, and the published host port mapped from an env var (`${APP_HOST_PORT:-8080}:8080`).
 **Bedrock signal:** every service has a Dockerfile that respects its platform's entrypoint/port/statelessness rules.
 
 ### Step 3: Domain 3 — Service Topology & Compose/Cloud Config
 **Goal:** the actual runtime wiring.
-* **VM + Docker Compose:** one `docker-compose.yml` for the whole stack (app + DB/worker/analytics as decided); named volumes; healthchecks; restart policies; networks.
+* **VM + Docker Compose:** keep to the two-file convention in `references/compose-layout.md`:
+  * `docker-compose.yml` — the **full stack**: app + DB/worker/third-party as decided, named volumes, healthchecks, restart policies, networks. One command brings it up.
+  * `docker-compose.dev.yml` — the **service(s) only**: no DB/third-party containers; their endpoints are reached through env vars. Used against a shared or hosted dev dependency.
+* **Env-driven wiring:** every third-party endpoint (DB, cache, queue, external API) and every published host port comes from env with a default — `${DB_HOST_PORT:-5432}`, `${APP_HOST_PORT:-8080}`, `${DATABASE_URL:?set DATABASE_URL}`. Nothing is hard-coded; `.env.example` lists each var with a safe default.
 * **Cloud Run:** service definitions (`cloudbuild.yaml` or deploy script): image, region, `$PORT`, min/max instances, memory/CPU, concurrency, timeout, env + secret refs.
 * **Hybrid:** compose for the worker VM, Cloud Run for the app — record the split.
-**Bedrock signal:** §3/§4 show the full topology matching plan §3, including every side service and its healthcheck.
+**Bedrock signal:** §3/§4 show the two compose files matching plan §3 — every published port and third-party endpoint configurable via env with a default — or the Cloud Run service definitions, including every side service and its healthcheck.
 
 ### Step 4: Domain 4 — Config & Secrets
 **Goal:** correct config per environment, no leaks.
@@ -112,21 +115,22 @@ Before doing anything, the agent MUST:
 **Bedrock signal:** §10 states rollout order, rollback command, DB rollback policy, and the post-deploy smoke gate.
 
 ### Step 10: Draft & Self-Check
-* Write the generated files (Dockerfile, compose/cloud config, `.dockerignore`, `.env.example`) **and** `docs/DEPLOYMENT.md`. Do **not** create a CI workflow file unless the user explicitly asks — record the stages in §7 instead, and track deploy work with `kedata-track`.
+* Write the generated files (Dockerfile, the compose set, cloud config, `.dockerignore`, `.env.example`) **and** `docs/DEPLOYMENT.md`. Do **not** create a CI workflow file unless the user explicitly asks — record the stages in §7 instead, and track deploy work with `kedata-track`.
 * Save the runbook to **`docs/DEPLOYMENT.md`** (default). EXCEPTION — if the team already uses root `DEPLOYMENT.md`, update that file in place; never duplicate.
 * Set §11 Document Info: status `Draft`, version `0.1`, source plan + contract versions, owner.
 * Run the self-check — ALL must pass before presenting:
   - [ ] Platform matches plan §3 exactly — no re-decision
   - [ ] Every deployable has a build path + Dockerfile + healthcheck
   - [ ] Cloud Run: `$PORT`, statelessness, timeout/job handling, Secret Manager all addressed
-  - [ ] VM: compose covers the whole stack, volumes, restart policy, backups, patching owner
+  - [ ] VM: `docker-compose.yml` covers the full stack (volumes, restart, healthchecks); `docker-compose.dev.yml` is service-only with deps via env; every published host port and third-party endpoint is env-configurable with a default
+  - [ ] VM ops: backups and patching owner assigned
   - [ ] Every env var from `ENVIRONMENT_VARIABLES.md` is provisioned per environment
   - [ ] No secrets in images, compose files, or the repo; `.env.example` current
   - [ ] Migrations are a deploy step with backup + rollback
   - [ ] CI runs the TEST_PLAN §7 suites and gates merge/deploy
   - [ ] Domains/TLS follow the Cloudflare rule; CORS is specific
   - [ ] Rollout order, rollback command, and post-deploy smoke defined
-  - [ ] No duplicate pipeline/compose files
+  - [ ] No duplicate or competing pipeline/compose files (only the two-file compose set)
 
 ### Step 11: Review & Sign-Off
 * Present with a tight summary: platform, services, pipeline stages, secrets method, rollout/rollback, and the riskiest deploy risk.
@@ -151,7 +155,8 @@ Before doing anything, the agent MUST:
 * **DO NOT** bake secrets into images, compose files, or the repo.
 * **DO NOT** ship without a rollback path and a migration/backup plan.
 * **DO NOT** ship a runbook with no health endpoint, no SLO target, and no paging threshold — the runbook must tell on-call what "healthy" means and what wakes them.
-* **DO NOT** create a second Dockerfile/pipeline/compose file — update in place.
+* **DO NOT** create duplicate or competing Dockerfiles/pipelines/compose files — one Dockerfile per service and at most the two-file compose set (`docker-compose.yml` + `docker-compose.dev.yml`); update in place.
+* **DO NOT** hard-code host ports or third-party endpoints in compose — parameterize them via env with defaults (`${VAR:-default}`; secrets/URIs use `${VAR:?message}`); see `references/compose-layout.md`.
 * **DO NOT** use multi-level subdomains on Cloudflare (`app.kedata.id` ✓, `api.app.kedata.id` ✗); use SSL Full.
 * **DO NOT** renumber the sections — the numbering is a stable contract downstream references depend on.
 
@@ -175,11 +180,11 @@ What this runbook covers; link to plan §3 and the contracts.
 Per service: Dockerfile path, base image, non-root user, `.dockerignore`. Platform rules applied.
 
 ## 4. Topology
-**VM + Compose:** services, volumes, networks, restart policies, side services.
+**VM + Compose:** `docker-compose.yml` runs the full stack (app + DB/third-party, every port and endpoint from env); `docker-compose.dev.yml` runs the service(s) only with deps reached via env.
 **Cloud Run:** image, region, min/max instances, memory/CPU, concurrency, timeout.
 
 ```
-[compose snippet or cloud run service definitions]
+[compose snippet showing both files, or Cloud Run service definitions]
 ```
 
 ## 5. Config & Secrets
